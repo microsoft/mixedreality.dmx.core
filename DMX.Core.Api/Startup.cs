@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
-namespace DMX.Core.API
+namespace DMX.Core.Api
 {
     public class Startup
     {
@@ -27,7 +27,7 @@ namespace DMX.Core.API
                     name: "v1",
                     info: new OpenApiInfo
                     {
-                        Title = "DMX.Core.API",
+                        Title = "DMX.Core.Api",
                         Version = "v1"
                     });
             });
@@ -44,7 +44,7 @@ namespace DMX.Core.API
                 {
                     options.SwaggerEndpoint(
                         url: "/swagger/v1/swagger.json",
-                        name: "DMX.Core.API v1");
+                        name: "DMX.Core.Api v1");
                 });
             }
 

@@ -5,7 +5,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace DMX.Core.API
+namespace DMX.Core.Api
 {
     public class Program
     {

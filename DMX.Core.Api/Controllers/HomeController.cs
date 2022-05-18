@@ -4,7 +4,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace DMX.Core.API.Controllers
+namespace DMX.Core.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
