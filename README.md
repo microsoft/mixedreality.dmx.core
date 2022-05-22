@@ -1,7 +1,4 @@
-# Project
-
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+# DMX Core API
 
 As the maintainer of this project, please make a few updates:
 
