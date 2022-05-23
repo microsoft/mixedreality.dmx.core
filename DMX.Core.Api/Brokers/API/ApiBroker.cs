@@ -25,6 +25,9 @@ namespace DMX.Core.Api.Brokers.API
         private async ValueTask<T> GetAsync<T>(string relativeUrl) => 
             await this.apiClient.GetContentAsync<T>(relativeUrl);
 
+        private async ValueTask<T> PostAync<T>(string relativeUrl, T content) =>
+            await this.apiClient.PostContentAsync<T>(relativeUrl, content);
+
         private IRESTFulApiFactoryClient GetApiClient(IConfiguration configuration)
         {
             LocalConfigurations localConfigurations = configuration.Get<LocalConfigurations>();
