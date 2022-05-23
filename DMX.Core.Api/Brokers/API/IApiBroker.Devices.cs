@@ -10,6 +10,6 @@ namespace DMX.Core.Api.Brokers.API
 {
     public partial interface IApiBroker
     {
-        ValueTask<List<Device>> GetAvailableDevices();
+        ValueTask<List<Device>> GetAvailableDevicesAsync();
     }
 }

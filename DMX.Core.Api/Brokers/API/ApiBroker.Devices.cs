@@ -12,6 +12,6 @@ namespace DMX.Core.Api.Brokers.API
     {
         private const string RelativeUrl = "api/GetAvailableDevicesAsync";
 
-        public async ValueTask<List<Device>> GetAvailableDevices() => await this.GetAsync<List<Device>>(RelativeUrl);
+        public async ValueTask<List<Device>> GetAvailableDevicesAsync() => await this.GetAsync<List<Device>>(RelativeUrl);
     }
 }
