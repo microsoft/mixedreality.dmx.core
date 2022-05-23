@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using DMX.Core.Api.Brokers.API;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -31,6 +32,9 @@ namespace DMX.Core.Api
                         Version = "v1"
                     });
             });
+
+            services.AddHttpClient();
+            services.AddScoped<IApiBroker, ApiBroker>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
