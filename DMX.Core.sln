@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMX.Core.Api", "DMX.Core.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMX.Core.Api.Tests.Acceptance", "DMX.Core.Api.Tests.Acceptance\DMX.Core.Api.Tests.Acceptance.csproj", "{ECF33ABC-7544-4A27-8E6A-311B7A05AB49}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMX.Core.Api.Tests.Unit", "DMX.Core.Api.Tests.Unit\DMX.Core.Api.Tests.Unit.csproj", "{1A19BAFF-CCDA-4755-955F-20229F597628}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{ECF33ABC-7544-4A27-8E6A-311B7A05AB49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECF33ABC-7544-4A27-8E6A-311B7A05AB49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECF33ABC-7544-4A27-8E6A-311B7A05AB49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A19BAFF-CCDA-4755-955F-20229F597628}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A19BAFF-CCDA-4755-955F-20229F597628}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A19BAFF-CCDA-4755-955F-20229F597628}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A19BAFF-CCDA-4755-955F-20229F597628}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
