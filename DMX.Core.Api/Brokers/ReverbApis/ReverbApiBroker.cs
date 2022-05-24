@@ -15,11 +15,13 @@ namespace DMX.Core.Api.Brokers.ReverbApis
     {
         private readonly IRESTFulApiFactoryClient apiClient;
         private readonly HttpClient httpClient;
+        private readonly string accessKey;
 
         public ReverbApiBroker(HttpClient httpClient, IConfiguration configuration)
         {
             this.httpClient = httpClient;
             this.apiClient = GetApiClient(configuration);
+            this.accessKey = GetApiAccessToken(configuration);
         }
 
         private async ValueTask<T> GetAsync<T>(string relativeUrl) => 
@@ -36,6 +38,13 @@ namespace DMX.Core.Api.Brokers.ReverbApis
             this.httpClient.BaseAddress = new Uri(apiBaseUrl);
 
             return new RESTFulApiFactoryClient(this.httpClient);
+        }
+
+        private string GetApiAccessToken(IConfiguration configuration)
+        {
+            LocalConfigurations localConfigurations = configuration.Get<LocalConfigurations>();
+
+            return localConfigurations.ApiConfigurations.AccessKey;
         }
     }
 }
