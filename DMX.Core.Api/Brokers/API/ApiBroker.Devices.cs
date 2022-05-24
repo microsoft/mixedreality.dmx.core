@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Devices;
+using DMX.Core.Api.Models.Devices.External.ExternalDevices;
 
 namespace DMX.Core.Api.Brokers.API
 {
@@ -12,6 +12,6 @@ namespace DMX.Core.Api.Brokers.API
     {
         private const string RelativeUrl = "api/GetAvailableDevicesAsync";
 
-        public async ValueTask<List<Device>> GetAvailableDevicesAsync() => await this.GetAsync<List<Device>>(RelativeUrl);
+        public async ValueTask<List<ExternalDevice>> GetAvailableDevicesAsync() => await this.GetAsync<List<ExternalDevice>>(RelativeUrl);
     }
 }

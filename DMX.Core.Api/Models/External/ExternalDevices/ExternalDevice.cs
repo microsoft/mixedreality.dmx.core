@@ -5,9 +5,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace DMX.Core.Api.Models.Devices
+namespace DMX.Core.Api.Models.Devices.External.ExternalDevices
 {
-    public class Device
+    public class ExternalDevice
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -19,6 +19,6 @@ namespace DMX.Core.Api.Models.Devices
         public DateTimeOffset LastActivityTimeUtc { get; set; }
         public DateTimeOffset ReservationReleaseTimeUtc { get; set; }
         public IDictionary<string, string> Properties { get; set; }
-        public IList<DeviceCommand> Commands { get; set; }
+        public IList<ExternalDeviceCommand> Commands { get; set; }
     }
 }

@@ -4,9 +4,9 @@
 
 using System.Collections.Generic;
 
-namespace DMX.Core.Api.Models.Devices
+namespace DMX.Core.Api.Models.Devices.External.ExternalDevices
 {
-    public class DeviceCommand
+    public class ExternalDeviceCommand
     {
         public string Name { get; set; }
         public string Description { get; set; }
