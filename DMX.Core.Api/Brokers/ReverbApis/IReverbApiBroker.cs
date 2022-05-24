@@ -2,9 +2,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-namespace DMX.Core.Api.Brokers.API
+namespace DMX.Core.Api.Brokers.ReverbApis
 {
-    public partial interface IApiBroker
+    public partial interface IReverbApiBroker
     {
     }
 }

@@ -6,12 +6,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Devices.External.ExternalDevices;
 
-namespace DMX.Core.Api.Brokers.API
+namespace DMX.Core.Api.Brokers.ReverbApis
 {
-    public partial class ApiBroker
+    public partial interface IReverbApiBroker
     {
-        private const string RelativeUrl = "api/GetAvailableDevicesAsync";
-
-        public async ValueTask<List<ExternalDevice>> GetAvailableDevicesAsync() => await this.GetAsync<List<ExternalDevice>>(RelativeUrl);
+        ValueTask<List<ExternalDevice>> GetAvailableDevicesAsync(string reverbServiceId);
     }
 }

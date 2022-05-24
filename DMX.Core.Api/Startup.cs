@@ -2,7 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using DMX.Core.Api.Brokers.API;
+using DMX.Core.Api.Brokers.ReverbApis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -34,7 +34,7 @@ namespace DMX.Core.Api
             });
 
             services.AddHttpClient();
-            services.AddScoped<IApiBroker, ApiBroker>();
+            services.AddTransient<IReverbApiBroker, ReverbApiBroker>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -9,14 +9,14 @@ using DMX.Core.Api.Models.Configurations;
 using Microsoft.Extensions.Configuration;
 using RESTFulSense.Clients;
 
-namespace DMX.Core.Api.Brokers.API
+namespace DMX.Core.Api.Brokers.ReverbApis
 {
-    public partial class ApiBroker : IApiBroker
+    public partial class ReverbApiBroker : IReverbApiBroker
     {
         private readonly IRESTFulApiFactoryClient apiClient;
         private readonly HttpClient httpClient;
 
-        public ApiBroker(HttpClient httpClient, IConfiguration configuration)
+        public ReverbApiBroker(HttpClient httpClient, IConfiguration configuration)
         {
             this.httpClient = httpClient;
             this.apiClient = GetApiClient(configuration);
@@ -25,8 +25,8 @@ namespace DMX.Core.Api.Brokers.API
         private async ValueTask<T> GetAsync<T>(string relativeUrl) => 
             await this.apiClient.GetContentAsync<T>(relativeUrl);
 
-        private async ValueTask<T> PostAync<T>(string relativeUrl, T content) =>
-            await this.apiClient.PostContentAsync<T>(relativeUrl, content);
+        private async ValueTask<U> PostAync<T, U>(string relativeUrl, T content) =>
+            await this.apiClient.PostContentAsync<T, U>(relativeUrl, content);
 
         private IRESTFulApiFactoryClient GetApiClient(IConfiguration configuration)
         {
