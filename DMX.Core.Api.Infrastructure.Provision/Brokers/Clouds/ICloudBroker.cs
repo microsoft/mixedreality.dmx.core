@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
 {
-    internal interface ICloudBroker
+    internal partial interface ICloudBroker
     {
     }
 }

@@ -19,5 +19,8 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
                 .WithRegion(Region.USWest)
                 .CreateAsync();
         }
+
+        public async ValueTask<bool> CheckResourceGroupExistsAsync(string resourceGroupName) =>
+            await this.azure.ResourceGroups.ContainAsync(resourceGroupName);
     }
 }

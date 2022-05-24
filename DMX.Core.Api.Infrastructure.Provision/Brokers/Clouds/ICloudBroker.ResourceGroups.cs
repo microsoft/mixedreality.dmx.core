@@ -11,8 +11,10 @@ using Microsoft.Azure.Management.ResourceManager.Fluent;
 
 namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
 {
-    internal partial interface IcloudBroker
+    internal partial interface ICloudBroker
     {
         ValueTask<IResourceGroup> CreateResourceGroupAsync(string resourceGroupName);
+
+        ValueTask<bool> CheckResourceGroupExistsAsync(string resourceGroupName);
     }
 }
