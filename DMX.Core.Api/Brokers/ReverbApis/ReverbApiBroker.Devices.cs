@@ -2,9 +2,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Devices.External.ExternalDevices;
+using DMX.Core.Api.Models.External.ExternalLabs;
 
 namespace DMX.Core.Api.Brokers.ReverbApis
 {
@@ -12,17 +11,17 @@ namespace DMX.Core.Api.Brokers.ReverbApis
     {
         private const string ReverbServiceType = "AzureIotHub";
 
-        public async ValueTask<List<ExternalDevice>> GetAvailableDevicesAsync(string reverbServiceId)
+        public async ValueTask<ExternalLabCollection> GetAvailableDevicesAsync(string reverbServiceId)
         {
-            string relativeUrl = "api/GetAvailableDevicesAsync";
+            const string RelativeUrl = "api/GetAvailableDevicesAsync";
 
-            var ReverbServiceProperties = new
+            ExternalLabServiceRequest ReverbServiceProperties = new ExternalLabServiceRequest
             {
                 ServiceType = ReverbServiceType,
                 ServiceId = reverbServiceId
             };
 
-            return await this.PostAync<List<ExternalDevice>>(relativeUrl, ReverbServiceProperties);
+            return await this.PostAync<ExternalLabServiceRequest, ExternalLabCollection>($"{RelativeUrl}?code={this.accessKey}", ReverbServiceProperties);
         }
     }
 }

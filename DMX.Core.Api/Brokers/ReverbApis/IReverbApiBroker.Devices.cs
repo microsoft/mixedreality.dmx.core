@@ -2,14 +2,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Devices.External.ExternalDevices;
+using DMX.Core.Api.Models.External.ExternalLabs;
 
 namespace DMX.Core.Api.Brokers.ReverbApis
 {
     public partial interface IReverbApiBroker
     {
-        ValueTask<List<ExternalDevice>> GetAvailableDevicesAsync(string reverbServiceId);
+        ValueTask<ExternalLabCollection> GetAvailableDevicesAsync(string reverbServiceId);
     }
 }
