@@ -14,7 +14,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
     internal partial interface ICloudBroker
     {
         ValueTask<IResourceGroup> CreateResourceGroupAsync(string resourceGroupName);
-
         ValueTask<bool> CheckResourceGroupExistsAsync(string resourceGroupName);
+        ValueTask DeleteResourceGroupAsync(string resourceGroupName);
     }
 }
