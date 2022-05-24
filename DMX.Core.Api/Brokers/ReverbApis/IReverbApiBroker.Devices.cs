@@ -9,6 +9,6 @@ namespace DMX.Core.Api.Brokers.ReverbApis
 {
     public partial interface IReverbApiBroker
     {
-        ValueTask<ExternalLabCollection> GetAvailableDevicesAsync(string reverbServiceId);
+        ValueTask<ExternalLabsCollection> GetAvailableDevicesAsync(string reverbServiceId);
     }
 }
