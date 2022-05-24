@@ -15,9 +15,9 @@ namespace DMX.Core.Api.Models.Devices.External.ExternalDevices
         public bool IsEnabled { get; set; }
         public bool IsConnected { get; set; }
         public bool IsReserved { get; set; }
-        public DateTimeOffset StatusUpdatedTimeUtc { get; set; }
-        public DateTimeOffset LastActivityTimeUtc { get; set; }
-        public DateTimeOffset ReservationReleaseTimeUtc { get; set; }
+        public DateTimeOffset? StatusUpdatedTimeUtc { get; set; }
+        public DateTimeOffset? LastActivityTimeUtc { get; set; }
+        public DateTimeOffset? ReservationReleaseTimeUtc { get; set; }
         public IDictionary<string, string> Properties { get; set; }
         public IList<ExternalDeviceCommand> Commands { get; set; }
     }
