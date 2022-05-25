@@ -45,9 +45,15 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
         private static ExternalLabsCollection CreateRandomLabCollection() =>
             CreateExternalLabCollectionFiller().Create();
 
+        private static DateTimeOffset GetRandomDateTimeOffset() =>
+            new DateTimeRange(earliestDate: new DateTime()).GetValue();
+
         private static Filler<ExternalLabsCollection> CreateExternalLabCollectionFiller()
         {
             var filler = new Filler<ExternalLabsCollection>();
+
+            filler.Setup()
+                .OnType<DateTimeOffset?>().Use(GetRandomDateTimeOffset());
 
             return filler;
         }
