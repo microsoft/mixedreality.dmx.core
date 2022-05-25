@@ -3,6 +3,8 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.ReverbApis;
@@ -41,6 +43,25 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     actualExternalLabsServiceInformation)
                         .AreEqual;
         }
+
+        private static List<dynamic> CreateRandomLabsProperties()
+        {
+            int randomCount = GetRandomNumber();
+
+            return Enumerable.Range(start: 0, count: randomCount)
+                .Select(item =>
+                    new
+                    {
+                        Id = GetRandomString(),
+                        Name = GetRandomString()
+                    }).ToList<dynamic>();
+        }
+
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 10).GetValue();
 
         private static ExternalLabsCollection CreateRandomLabCollection() =>
             CreateExternalLabCollectionFiller().Create();
