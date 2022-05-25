@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.ReverbApis;
@@ -33,9 +34,17 @@ namespace DMX.Core.Api.Services.Foundations
                 ServiceType = "AzureIotHub"
             };
 
-            await this.reverbApiBroker.GetAvailableDevicesAsync(externalLabsServiceInformation);
+            ExternalLabsCollection externalLabsCollection = 
+                await this.reverbApiBroker.GetAvailableDevicesAsync(externalLabsServiceInformation);
 
-            return default;
+            List<ExternalLab> externalLabs = externalLabsCollection.Devices.ToList();
+
+            return externalLabs.Select(externalLab =>
+                new Lab
+                {
+                    ExternalId = externalLab.Id,
+                    Name = externalLab.Name,
+                }).ToList();
         }
     }
 }
