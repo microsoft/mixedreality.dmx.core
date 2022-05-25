@@ -7,7 +7,6 @@ using Microsoft.Azure.Management.AppService.Fluent;
 using Microsoft.Azure.Management.AppService.Fluent.AppServicePlan.Definition;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Core;
-using OperatingSystem = Microsoft.Azure.Management.AppService.Fluent.OperatingSystem;
 
 namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
 {
