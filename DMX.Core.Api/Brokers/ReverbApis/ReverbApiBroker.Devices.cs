@@ -9,19 +9,13 @@ namespace DMX.Core.Api.Brokers.ReverbApis
 {
     public partial class ReverbApiBroker
     {
-        private const string ReverbServiceType = "AzureIotHub";
-
-        public async ValueTask<ExternalLabsCollection> GetAvailableDevicesAsync(string reverbServiceId)
+        public async ValueTask<ExternalLabsCollection> GetAvailableDevicesAsync(ExternalLabsServiceInformation externalLabsServiceInformation)
         {
             const string RelativeUrl = "api/GetAvailableDevicesAsync";
 
-            ExternalLabsServiceInformation ReverbServiceProperties = new ExternalLabsServiceInformation
-            {
-                ServiceType = ReverbServiceType,
-                ServiceId = reverbServiceId
-            };
-
-            return await this.PostAync<ExternalLabsServiceInformation, ExternalLabsCollection>($"{RelativeUrl}?code={this.accessKey}", ReverbServiceProperties);
+            return await this.PostAync<ExternalLabsServiceInformation, ExternalLabsCollection>(
+                relativeUrl: $"{RelativeUrl}?code={this.accessKey}",
+                content: externalLabsServiceInformation);
         }
     }
 }
