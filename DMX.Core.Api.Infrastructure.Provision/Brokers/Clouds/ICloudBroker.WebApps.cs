@@ -3,20 +3,17 @@
 // ---------------------------------------------------------------
 
 using System.Threading.Tasks;
-using DMX.Core.Api.Infrastructure.Provision.Models.Storages;
+using Microsoft.Azure.Management.AppService.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
-using Microsoft.Azure.Management.Sql.Fluent;
 
 namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
 {
     internal partial interface ICloudBroker
     {
-        ValueTask<ISqlServer> CreateSqlServerAsync(
-            string sqlServerName,
+        ValueTask<IWebApp> CreateWebAppAsync(
+            string webAppName,
+            string connectionString,
+            IAppServicePlan appServicePlan,
             IResourceGroup resourceGroup);
-        ValueTask<ISqlDatabase> CreateSqlDatabaseAsync(
-            string sqlDatabaseName,
-            ISqlServer sqlServer);
-        public SqlDatabaseAccess GetSqlDatabaseAccess();
     }
 }

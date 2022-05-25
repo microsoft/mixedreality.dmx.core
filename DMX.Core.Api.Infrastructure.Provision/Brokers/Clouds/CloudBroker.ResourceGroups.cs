@@ -9,7 +9,7 @@ using Microsoft.Azure.Management.ResourceManager.Fluent.Models;
 
 namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
 {
-    public partial class CloudBroker 
+    public partial class CloudBroker
     {
         public async ValueTask<bool> CheckResourceGroupExistsAsync(string resourceGroupName) =>
             await this.azure.ResourceGroups.ContainAsync(resourceGroupName);
