@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.ReverbApis;
+using DMX.Core.Api.Models.External.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
 using Microsoft.Extensions.Logging;
 
@@ -24,9 +25,17 @@ namespace DMX.Core.Api.Services.Foundations
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<List<Lab>> RetrieveAllLabsAsync()
+        public async ValueTask<List<Lab>> RetrieveAllLabsAsync()
         {
-            throw new System.NotImplementedException();
+            var externalLabsServiceInformation = new ExternalLabsServiceInformation
+            {
+                ServiceId = "Bondi-HW-Lab",
+                ServiceType = "AzureIotHub"
+            };
+
+            await this.reverbApiBroker.GetAvailableDevicesAsync(externalLabsServiceInformation);
+
+            return default;
         }
     }
 }
