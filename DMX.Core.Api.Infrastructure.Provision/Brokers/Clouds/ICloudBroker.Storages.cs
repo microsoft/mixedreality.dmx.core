@@ -17,6 +17,6 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
         ValueTask<ISqlDatabase> CreateSqlDatabaseAsync(
             string sqlDatabaseName,
             ISqlServer sqlServer);
-        public SqlDatabaseAccess GetSqlDatabaseAccess();
+        SqlDatabaseAccess GetSqlDatabaseAccess();
     }
 }
