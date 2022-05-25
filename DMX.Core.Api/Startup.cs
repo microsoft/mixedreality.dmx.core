@@ -21,6 +21,8 @@ namespace DMX.Core.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHttpClient();
+            services.AddTransient<IReverbApiBroker, ReverbApiBroker>();
 
             services.AddSwaggerGen(c =>
             {
@@ -32,9 +34,6 @@ namespace DMX.Core.Api
                         Version = "v1"
                     });
             });
-
-            services.AddHttpClient();
-            services.AddTransient<IReverbApiBroker, ReverbApiBroker>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
