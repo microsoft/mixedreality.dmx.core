@@ -4,6 +4,7 @@
 
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.ReverbApis;
+using DMX.Core.Api.Services.Foundations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,7 @@ namespace DMX.Core.Api
             services.AddLogging();
             services.AddTransient<ILoggingBroker, LoggingBroker>();
             services.AddTransient<IReverbApiBroker, ReverbApiBroker>();
+            services.AddTransient<ILabService, LabService>();
 
             services.AddSwaggerGen(c =>
             {
