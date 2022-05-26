@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.ReverbApis;
 using DMX.Core.Api.Models.External.ExternalLabs;
@@ -13,7 +14,10 @@ using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Services.Foundations;
 using KellermanSoftware.CompareNetObjects;
 using Moq;
+using RESTFulSense.Exceptions;
 using Tynamix.ObjectFiller;
+using Xeptions;
+using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations
 {
@@ -35,6 +39,19 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
+        public static TheoryData CriticalDependencyException()
+        {
+            string someMessage = GetRandomString();
+            var someResponseMessage = new HttpResponseMessage();
+
+            return new TheoryData<Xeption>()
+            {
+                new HttpResponseUrlNotFoundException(someResponseMessage, someMessage),
+                new HttpResponseUnauthorizedException(someResponseMessage, someMessage),
+                new HttpResponseForbiddenException(someResponseMessage, someMessage)
+            };
+        }
+
         private Expression<Func<ExternalLabsServiceInformation, bool>> SameInformationAs(
             ExternalLabsServiceInformation expectedExternalLabsServiceInformation)
         {
@@ -43,6 +60,14 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     expectedExternalLabsServiceInformation,
                     actualExternalLabsServiceInformation)
                         .AreEqual;
+        }
+
+        private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException)
+        {
+            return actualException =>
+                actualException.Message == expectedException.Message &&
+                actualException.InnerException.Message == expectedException.InnerException.Message &&
+                (actualException.InnerException as Xeption).DataEquals(expectedException.InnerException.Data);
         }
 
         private static List<dynamic> CreateRandomLabsProperties()
