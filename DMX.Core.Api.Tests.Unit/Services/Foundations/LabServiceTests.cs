@@ -9,6 +9,7 @@ using System.Linq.Expressions;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.ReverbApis;
 using DMX.Core.Api.Models.External.ExternalLabs;
+using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Services.Foundations;
 using KellermanSoftware.CompareNetObjects;
 using Moq;
@@ -47,15 +48,25 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
         private static List<dynamic> CreateRandomLabsProperties()
         {
             int randomCount = GetRandomNumber();
+            bool randomIsConnected = GetRandomBoolean();
+            
+            LabStatus randomLabStatus = randomIsConnected 
+                ? LabStatus.Available 
+                : LabStatus.Offline;
 
             return Enumerable.Range(start: 0, count: randomCount)
                 .Select(item =>
                     new
                     {
                         Id = GetRandomString(),
-                        Name = GetRandomString()
+                        Name = GetRandomString(),
+                        IsConnected = randomIsConnected,
+                        LabStatus = randomLabStatus
                     }).ToList<dynamic>();
         }
+
+        private static bool GetRandomBoolean() =>
+            new SequenceGeneratorBoolean().GetValue();
 
         private static string GetRandomString() =>
             new MnemonicString().GetValue();

@@ -30,7 +30,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     new ExternalLab
                     {
                         Id = randomProperty.Id,
-                        Name = randomProperty.Name
+                        Name = randomProperty.Name,
+                        IsConnected = randomProperty.IsConnected
                     }).ToArray()
             };
 
@@ -41,7 +42,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                 new Lab
                 {
                     ExternalId = randomproperty.Id,
-                    Name = randomproperty.Name
+                    Name = randomproperty.Name,
+                    Status = randomproperty.LabStatus
                 }).ToList();
 
             var externalLabsServiceInformation =
