@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,7 +45,58 @@ namespace DMX.Core.Api.Services.Foundations
                     ExternalId = externalLab.Id,
                     Name = externalLab.Name,
                     Status = this.RetrieveLabStatus(externalLab),
+                    Devices = this.RetrieveDevices(externalLab)
                 }).ToList();
+        }
+
+        private List<LabDevice> RetrieveDevices(ExternalLab externalLab)
+        {
+            var devices = new List<LabDevice>();
+
+            if (externalLab.Properties.ContainsKey(@"Host\\isconnected"))
+            {
+                devices.Add(new LabDevice
+                {
+                    Category = LabDeviceCategory.Host,
+                    Type = LabDeviceType.PC,
+
+                    Status = bool.Parse(externalLab.Properties[@"Host\\isconnected"])
+                        ? LabDeviceStatus.Online
+                        : LabDeviceStatus.Offline,
+                });
+            }
+
+            if (externalLab.Properties.ContainsKey(@"Phone\\isconnected"))
+            {
+                devices.Add(new LabDevice
+                {
+                    Name = externalLab.Properties[@"Phone\\name"],
+                    Category = LabDeviceCategory.Attachment,
+                    Type = LabDeviceType.Phone,
+
+                    Status = bool.Parse(externalLab.Properties[@"Phone\\isconnected"])
+                        ? LabDeviceStatus.Online
+                        : LabDeviceStatus.Offline,
+                });
+
+            }
+
+            if (externalLab.Properties.ContainsKey(@"HMD\\isconnected"))
+            {
+                devices.Add(new LabDevice
+                {
+                    Name = externalLab.Properties[@"HMD\\name"],
+                    Category = LabDeviceCategory.Attachment,
+                    Type = LabDeviceType.HeadMountedDisplay,
+
+                    Status = bool.Parse(externalLab.Properties[@"HMD\\isconnected"])
+                        ? LabDeviceStatus.Online
+                        : LabDeviceStatus.Offline,
+                });
+
+            }
+
+            return devices;
         }
 
         private LabStatus RetrieveLabStatus(ExternalLab lab)
