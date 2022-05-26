@@ -25,7 +25,7 @@ namespace DMX.Core.Api
             services.AddHttpClient();
             services.AddLogging();
             services.AddTransient<ILoggingBroker, LoggingBroker>();
-            services.AddTransient<IReverbApiBroker, ReverbApiBroker>();
+            services.AddTransient<ILabApiBroker, LabApiBroker>();
 
             services.AddSwaggerGen(c =>
             {

@@ -7,7 +7,7 @@ using DMX.Core.Api.Models.External.ExternalLabs;
 
 namespace DMX.Core.Api.Brokers.LabApis
 {
-    public partial class ReverbApiBroker
+    public partial class LabApiBroker
     {
         public async ValueTask<ExternalLabsCollection> GetAvailableDevicesAsync(
             ExternalLabsServiceInformation externalLabsServiceInformation)
