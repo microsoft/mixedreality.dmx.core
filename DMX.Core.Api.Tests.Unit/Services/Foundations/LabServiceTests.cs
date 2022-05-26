@@ -14,6 +14,7 @@ using DMX.Core.Api.Services.Foundations;
 using KellermanSoftware.CompareNetObjects;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations
 {
@@ -48,26 +49,41 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
         private static List<dynamic> CreateRandomLabsProperties()
         {
             int randomCount = GetRandomNumber();
-            bool randomIsConnected = GetRandomBoolean();
-            bool randomIsReserved = GetRandomBoolean();
-
-            LabStatus randomLabStatus = (randomIsConnected, randomIsReserved) switch
+            
+            var allCases = new List<dynamic>
             {
-                (false, _) => LabStatus.Offline,
-                (true, true) => LabStatus.Reserved,
-                _ => LabStatus.Available
+                new
+                {
+                    Id = GetRandomString(),
+                    Name = GetRandomString(),
+                    IsConnected = true,
+                    IsReserved = false,
+                    LabStatus = LabStatus.Available
+                },
+
+                new
+                {
+                    Id = GetRandomString(),
+                    Name = GetRandomString(),
+                    IsConnected = true,
+                    IsReserved = true,
+                    LabStatus = LabStatus.Reserved
+                },
+
+                new
+                {
+                    Id = GetRandomString(),
+                    Name = GetRandomString(),
+                    IsConnected = false,
+                    IsReserved = GetRandomBoolean(),
+                    LabStatus = LabStatus.Offline
+                }
             };
 
             return Enumerable.Range(start: 0, count: randomCount)
-                .Select(item =>
-                    new
-                    {
-                        Id = GetRandomString(),
-                        Name = GetRandomString(),
-                        IsConnected = randomIsConnected,
-                        IsReserved = randomIsReserved,
-                        LabStatus = randomLabStatus
-                    }).ToList<dynamic>();
+                .Select(iterator => allCases)
+                    .SelectMany(@case => @case)
+                        .ToList();
         }
 
         private static bool GetRandomBoolean() => new Random().Next(2) == 1;
