@@ -102,12 +102,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
         public async Task ShouldThrowServiceExceptionOnRetrieveIfErrorOccursAndLogItAsync()
         {
             // given
-            var someResponseMessage = new HttpResponseMessage();
-            string someMessage = GetRandomString();
-            var httpResponseException = new HttpResponseException(someResponseMessage, someMessage);
+            var serviceException = new Exception();
 
             var failedExternalLabServiceException =
-                new FailedLabServiceException(httpResponseException);
+                new FailedLabServiceException(serviceException);
 
             var expectedLabServiceException =
                 new LabServiceException(failedExternalLabServiceException);
@@ -115,7 +113,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
             this.reverbApiBrokerMock.Setup(broker =>
                 broker.GetAvailableDevicesAsync(
                     It.IsAny<ExternalLabsServiceInformation>()))
-                        .ThrowsAsync(httpResponseException);
+                        .ThrowsAsync(serviceException);
 
             // when
             ValueTask<List<Lab>> retrieveAllLabsTask =

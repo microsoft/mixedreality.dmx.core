@@ -53,7 +53,7 @@ namespace DMX.Core.Api.Services.Foundations
                     }).ToList();
             }
 
-            catch(Exception exception) when (exception
+            catch (Exception exception) when (exception
                 is HttpResponseUrlNotFoundException
                 or HttpResponseUnauthorizedException
                 or HttpResponseForbiddenException)
@@ -61,16 +61,24 @@ namespace DMX.Core.Api.Services.Foundations
                 var failedLabDependencyException = new FailedLabDependencyException(exception);
                 var labDependencyException = new LabDependencyException(failedLabDependencyException);
                 this.loggingBroker.LogCritical(labDependencyException);
-                
+
                 throw labDependencyException;
             }
-            catch(HttpResponseException httpResponseException) 
+            catch (HttpResponseException httpResponseException)
             {
                 var failedLabDependencyException = new FailedLabDependencyException(httpResponseException);
                 var labDependencyException = new LabDependencyException(failedLabDependencyException);
                 this.loggingBroker.LogError(labDependencyException);
-                
+
                 throw labDependencyException;
+            }
+            catch (Exception exception)
+            {
+                var failedLabServiceException = new FailedLabServiceException(exception);
+                var labServiceException = new LabServiceException(failedLabServiceException);
+                this.loggingBroker.LogError(labServiceException);
+
+                throw labServiceException;
             }
         }
 
