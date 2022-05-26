@@ -49,7 +49,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
         private static List<dynamic> CreateRandomLabsProperties()
         {
             int randomCount = GetRandomNumber();
-            
+
+            (IDictionary<string, string> randomProperties, List<LabDevice> randomDevices) =
+                GetRandomLabProperties();
+
+
             var allCases = new List<dynamic>
             {
                 new
@@ -58,7 +62,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     Name = GetRandomString(),
                     IsConnected = true,
                     IsReserved = false,
-                    LabStatus = LabStatus.Available
+                    LabStatus = LabStatus.Available,
+                    Properties = randomProperties,
+                    Devices = randomDevices
                 },
 
                 new
@@ -67,7 +73,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     Name = GetRandomString(),
                     IsConnected = true,
                     IsReserved = true,
-                    LabStatus = LabStatus.Reserved
+                    LabStatus = LabStatus.Reserved,
+                    Properties = randomProperties,
+                    Devices = randomDevices
                 },
 
                 new
@@ -76,7 +84,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     Name = GetRandomString(),
                     IsConnected = false,
                     IsReserved = GetRandomBoolean(),
-                    LabStatus = LabStatus.Offline
+                    LabStatus = LabStatus.Offline,
+                    Properties = randomProperties,
+                    Devices = randomDevices
                 }
             };
 
@@ -108,6 +118,63 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                 .OnType<DateTimeOffset?>().Use(GetRandomDateTimeOffset());
 
             return filler;
+        }
+
+        private static (IDictionary<string, string>, List<LabDevice>) GetRandomLabProperties()
+        {
+            string randomPhoneName = GetRandomString();
+            string randomHMDName = GetRandomString();
+            bool randomHostConnectionStatus = GetRandomBoolean();
+            bool randomPhoneConnectionStatus = GetRandomBoolean();
+            bool randomHMDConnectionStatus = GetRandomBoolean();
+
+
+            Dictionary<string, string> externalDeviceProperties= new Dictionary<string, string>
+            {
+                { @"Host\\isconnected", $"{randomHostConnectionStatus}" },
+                { @"Phone\\name", randomPhoneName },
+                { @"Phone\\isconnected", $"{randomPhoneConnectionStatus}" },
+                { @"HMD\\name", randomHMDName },
+                { @"HMD\\isconnected", $"{randomHMDConnectionStatus}" },
+            };
+
+            List<LabDevice> labDevices = new List<LabDevice>
+            {
+                new LabDevice
+                {
+                    Name = null,
+                    Type = LabDeviceType.PC,
+                    Category = LabDeviceCategory.Host,
+
+                    Status = randomHostConnectionStatus 
+                        ? LabDeviceStatus.Online 
+                        : LabDeviceStatus.Offline,
+                },
+
+                new LabDevice
+                {
+                    Name = randomPhoneName,
+                    Type = LabDeviceType.Phone,
+                    Category = LabDeviceCategory.Attachment,
+
+                    Status = randomPhoneConnectionStatus 
+                        ? LabDeviceStatus.Online 
+                        : LabDeviceStatus.Offline,
+                },
+
+                new LabDevice
+                {
+                    Name = randomHMDName,
+                    Type = LabDeviceType.HeadMountedDisplay,
+                    Category = LabDeviceCategory.Attachment,
+
+                    Status = randomHMDConnectionStatus 
+                        ? LabDeviceStatus.Online 
+                        : LabDeviceStatus.Offline,
+                },
+            };
+
+            return (externalDeviceProperties, labDevices);
         }
     }
 }

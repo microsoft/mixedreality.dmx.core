@@ -32,7 +32,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                         Id = randomProperty.Id,
                         Name = randomProperty.Name,
                         IsConnected = randomProperty.IsConnected,
-                        IsReserved = randomProperty.IsReserved
+                        IsReserved = randomProperty.IsReserved,
+                        Properties = randomProperty.Properties
                     }).ToArray()
             };
 
@@ -44,7 +45,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                 {
                     ExternalId = randomproperty.Id,
                     Name = randomproperty.Name,
-                    Status = randomproperty.LabStatus
+                    Status = randomproperty.LabStatus,
+                    Devices = randomproperty.Devices
                 }).ToList();
 
             var externalLabsServiceInformation =
