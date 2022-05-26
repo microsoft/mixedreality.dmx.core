@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,8 @@ using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.ReverbApis;
 using DMX.Core.Api.Models.External.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Labs.Exceptions;
+using RESTFulSense.Exceptions;
 
 namespace DMX.Core.Api.Services.Foundations
 {
@@ -27,25 +30,40 @@ namespace DMX.Core.Api.Services.Foundations
 
         public async ValueTask<List<Lab>> RetrieveAllLabsAsync()
         {
-            var externalLabsServiceInformation = new ExternalLabsServiceInformation
+            try
             {
-                ServiceId = "Bondi-HW-Lab",
-                ServiceType = "AzureIotHub"
-            };
-
-            ExternalLabsCollection externalLabsCollection =
-                await this.reverbApiBroker.GetAvailableDevicesAsync(externalLabsServiceInformation);
-
-            List<ExternalLab> externalLabs = externalLabsCollection.Devices.ToList();
-
-            return externalLabs.Select(externalLab =>
-                new Lab
+                var externalLabsServiceInformation = new ExternalLabsServiceInformation
                 {
-                    ExternalId = externalLab.Id,
-                    Name = externalLab.Name,
-                    Status = this.RetrieveLabStatus(externalLab),
-                    Devices = this.RetrieveDevices(externalLab)
-                }).ToList();
+                    ServiceId = "Bondi-HW-Lab",
+                    ServiceType = "AzureIotHub"
+                };
+
+                ExternalLabsCollection externalLabsCollection =
+                    await this.reverbApiBroker.GetAvailableDevicesAsync(externalLabsServiceInformation);
+
+                List<ExternalLab> externalLabs = externalLabsCollection.Devices.ToList();
+
+                return externalLabs.Select(externalLab =>
+                    new Lab
+                    {
+                        ExternalId = externalLab.Id,
+                        Name = externalLab.Name,
+                        Status = this.RetrieveLabStatus(externalLab),
+                        Devices = this.RetrieveDevices(externalLab)
+                    }).ToList();
+            }
+
+            catch(Exception exception) when (exception
+                is HttpResponseUrlNotFoundException
+                or HttpResponseUnauthorizedException
+                or HttpResponseForbiddenException)
+            {
+                var failedLabDependencyException = new FailedLabDependencyException(exception);
+                var labDependencyException = new LabDependencyException(failedLabDependencyException);
+                this.loggingBroker.LogCritical(labDependencyException);
+                
+                throw labDependencyException;
+            }
         }
 
         private List<LabDevice> RetrieveDevices(ExternalLab externalLab)
