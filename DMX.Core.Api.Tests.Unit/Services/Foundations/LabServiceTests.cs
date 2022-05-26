@@ -14,7 +14,6 @@ using DMX.Core.Api.Services.Foundations;
 using KellermanSoftware.CompareNetObjects;
 using Moq;
 using Tynamix.ObjectFiller;
-using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations
 {
@@ -129,7 +128,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
             bool randomHMDConnectionStatus = GetRandomBoolean();
 
 
-            Dictionary<string, string> externalDeviceProperties= new Dictionary<string, string>
+            Dictionary<string, string> externalDeviceProperties = new Dictionary<string, string>
             {
                 { @"Host\\isconnected", $"{randomHostConnectionStatus}" },
                 { @"Phone\\name", randomPhoneName },
@@ -146,8 +145,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     Type = LabDeviceType.PC,
                     Category = LabDeviceCategory.Host,
 
-                    Status = randomHostConnectionStatus 
-                        ? LabDeviceStatus.Online 
+                    Status = randomHostConnectionStatus
+                        ? LabDeviceStatus.Online
                         : LabDeviceStatus.Offline,
                 },
 
@@ -157,8 +156,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     Type = LabDeviceType.Phone,
                     Category = LabDeviceCategory.Attachment,
 
-                    Status = randomPhoneConnectionStatus 
-                        ? LabDeviceStatus.Online 
+                    Status = randomPhoneConnectionStatus
+                        ? LabDeviceStatus.Online
                         : LabDeviceStatus.Offline,
                 },
 
@@ -168,8 +167,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     Type = LabDeviceType.HeadMountedDisplay,
                     Category = LabDeviceCategory.Attachment,
 
-                    Status = randomHMDConnectionStatus 
-                        ? LabDeviceStatus.Online 
+                    Status = randomHMDConnectionStatus
+                        ? LabDeviceStatus.Online
                         : LabDeviceStatus.Offline,
                 },
             };

@@ -5,11 +5,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Brokers.ReverbApis;
 using DMX.Core.Api.Models.External.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
-using DMX.Core.Api.Services.Foundations;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -62,7 +59,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                         .ReturnsAsync(retrievedExternalLabsCollection);
 
             // when
-            List<Lab> actualLabs = 
+            List<Lab> actualLabs =
                 await this.labService.RetrieveAllLabsAsync();
 
             // then
