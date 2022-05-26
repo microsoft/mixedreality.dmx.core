@@ -9,7 +9,7 @@ using DMX.Core.Api.Models.Configurations;
 using Microsoft.Extensions.Configuration;
 using RESTFulSense.Clients;
 
-namespace DMX.Core.Api.Brokers.ReverbApis
+namespace DMX.Core.Api.Brokers.LabApis
 {
     public partial class ReverbApiBroker : IReverbApiBroker
     {

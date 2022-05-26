@@ -5,7 +5,7 @@
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.External.ExternalLabs;
 
-namespace DMX.Core.Api.Brokers.ReverbApis
+namespace DMX.Core.Api.Brokers.LabApis
 {
     public partial class ReverbApiBroker
     {

@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------
 
 using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Brokers.ReverbApis;
+using DMX.Core.Api.Brokers.LabApis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
