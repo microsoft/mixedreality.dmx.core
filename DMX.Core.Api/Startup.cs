@@ -2,6 +2,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using DMX.Core.Api.Brokers.Loggings;
+using DMX.Core.Api.Brokers.ReverbApis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +22,10 @@ namespace DMX.Core.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHttpClient();
+            services.AddLogging();
+            services.AddTransient<ILoggingBroker, LoggingBroker>();
+            services.AddTransient<IReverbApiBroker, ReverbApiBroker>();
 
             services.AddSwaggerGen(c =>
             {
