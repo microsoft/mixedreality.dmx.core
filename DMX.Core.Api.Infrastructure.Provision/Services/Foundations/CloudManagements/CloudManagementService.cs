@@ -17,6 +17,12 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
         private readonly ICloudBroker cloudBroker;
         private readonly ILoggingBroker loggingBroker;
 
+        public CloudManagementService()
+        {
+            this.cloudBroker = new CloudBroker();
+            this.loggingBroker = new LoggingBroker(); 
+        }
+
         public async ValueTask<IResourceGroup> ProvisionResourceGroupAsync(
             string projectName,
             string environment)
