@@ -64,6 +64,14 @@ namespace DMX.Core.Api.Services.Foundations
                 
                 throw labDependencyException;
             }
+            catch(HttpResponseException httpResponseException) 
+            {
+                var failedLabDependencyException = new FailedLabDependencyException(httpResponseException);
+                var labDependencyException = new LabDependencyException(failedLabDependencyException);
+                this.loggingBroker.LogError(labDependencyException);
+                
+                throw labDependencyException;
+            }
         }
 
         private List<LabDevice> RetrieveDevices(ExternalLab externalLab)
