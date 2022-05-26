@@ -31,7 +31,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     {
                         Id = randomProperty.Id,
                         Name = randomProperty.Name,
-                        IsConnected = randomProperty.IsConnected
+                        IsConnected = randomProperty.IsConnected,
+                        IsReserved = randomProperty.IsReserved
                     }).ToArray()
             };
 

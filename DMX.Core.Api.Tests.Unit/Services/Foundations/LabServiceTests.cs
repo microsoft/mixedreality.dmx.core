@@ -65,12 +65,12 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                         Id = GetRandomString(),
                         Name = GetRandomString(),
                         IsConnected = randomIsConnected,
+                        IsReserved = randomIsReserved,
                         LabStatus = randomLabStatus
                     }).ToList<dynamic>();
         }
 
-        private static bool GetRandomBoolean() =>
-            new SequenceGeneratorBoolean().GetValue();
+        private static bool GetRandomBoolean() => new Random().Next(2) == 1;
 
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
