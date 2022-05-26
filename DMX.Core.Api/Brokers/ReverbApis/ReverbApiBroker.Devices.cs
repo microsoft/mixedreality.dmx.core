@@ -9,7 +9,7 @@ namespace DMX.Core.Api.Brokers.ReverbApis
 {
     public partial class ReverbApiBroker
     {
-        public async ValueTask<ExternalLabCollection> GetAvailableDevicesAsync(
+        public async ValueTask<ExternalLabCollection> GetAvailableLabsAsync(
             ExternalLabServiceInformation externalLabsServiceInformation)
         {
             const string RelativeUrl = "api/GetAvailableDevicesAsync";
