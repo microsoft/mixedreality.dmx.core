@@ -44,7 +44,12 @@ namespace DMX.Core.Api.Services.Foundations
                 {
                     ExternalId = externalLab.Id,
                     Name = externalLab.Name,
+                    Status = this.RetrieveLabStatus(externalLab),
                 }).ToList();
         }
+
+        private LabStatus RetrieveLabStatus(ExternalLab lab) =>
+           lab.IsConnected ? LabStatus.Available : LabStatus.Offline;
+
     }
 }
