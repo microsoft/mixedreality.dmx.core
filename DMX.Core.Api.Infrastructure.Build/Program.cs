@@ -7,7 +7,7 @@ using ADotNet.Models.Pipelines.GithubPipelines.DotNets;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks.SetupDotNetTaskV1s;
 
-GithubPipeline githubPipeline = new GithubPipeline
+var githubPipeline = new GithubPipeline
 {
     Name = "DMX Core Build",
 
