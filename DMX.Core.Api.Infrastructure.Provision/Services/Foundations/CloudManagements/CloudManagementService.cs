@@ -5,6 +5,7 @@
 using System.Threading.Tasks;
 using DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds;
 using DMX.Core.Api.Infrastructure.Provision.Brokers.Loggings;
+using Microsoft.Azure.Management.AppService.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
 
 namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManagements
@@ -31,6 +32,22 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
                 message: $"Provisioning {resourceGroupName} Completed.");
 
             return resourceGroup;
+        }
+
+        public async ValueTask<IAppServicePlan> ProvisionAppServicePlanAsync(
+            string projectName,
+            string environment,
+            IResourceGroup resourceGroup)
+        {
+            string appServicePlanName = $"{projectName}-PLAN-{environment}".ToUpper();
+            this.loggingBroker.LogActivity(message: $"Provisioning {appServicePlanName} ...");
+
+            IAppServicePlan appServicePlan = await this.cloudBroker.CreatePlanAsync(
+                appServicePlanName, resourceGroup);
+
+            this.loggingBroker.LogActivity(message: $"Provisioning {appServicePlanName} complete.");
+
+            return appServicePlan;
         }
     }
 }
