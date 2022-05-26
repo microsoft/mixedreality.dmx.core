@@ -30,5 +30,11 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
             string projectName,
             string environment,
             ISqlServer sqlServer);
+        ValueTask<IWebApp> ProvisionWebAppAsync(
+            string projectName,
+            string environment,
+            string databaseConnectionString,
+            IAppServicePlan appServicePlan,
+            IResourceGroup resourceGroup);
     }
 }
