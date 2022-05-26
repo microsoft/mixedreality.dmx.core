@@ -49,10 +49,14 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
         {
             int randomCount = GetRandomNumber();
             bool randomIsConnected = GetRandomBoolean();
-            
-            LabStatus randomLabStatus = randomIsConnected 
-                ? LabStatus.Available 
-                : LabStatus.Offline;
+            bool randomIsReserved = GetRandomBoolean();
+
+            LabStatus randomLabStatus = (randomIsConnected, randomIsReserved) switch
+            {
+                (false, _) => LabStatus.Offline,
+                (true, true) => LabStatus.Reserved,
+                _ => LabStatus.Available
+            };
 
             return Enumerable.Range(start: 0, count: randomCount)
                 .Select(item =>
