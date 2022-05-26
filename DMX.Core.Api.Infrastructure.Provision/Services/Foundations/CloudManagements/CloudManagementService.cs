@@ -67,5 +67,23 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
 
             return sqlServer;
         }
+
+        public async ValueTask<ISqlDatabase> ProvisionSqlDatabaseAsync(
+            string projectName,
+            string environment,
+            ISqlServer sqlServer)
+        {
+            string databaseName = $"{projectName}-db-{environment}".ToLower();
+            this.loggingBroker.LogActivity(message: $"Provisioning {databaseName} ...");
+
+            ISqlDatabase sqlDatabase = await this.cloudBroker.CreateSqlDatabaseAsync(
+                databaseName,
+                sqlServer);
+
+            this.loggingBroker.LogActivity(message: $"Provisioning {databaseName} complete.");
+
+            return sqlDatabase;
+
+        }
     }
 }
