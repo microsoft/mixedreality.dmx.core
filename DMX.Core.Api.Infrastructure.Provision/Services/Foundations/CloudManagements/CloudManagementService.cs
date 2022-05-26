@@ -5,6 +5,7 @@
 using System.Threading.Tasks;
 using DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds;
 using DMX.Core.Api.Infrastructure.Provision.Brokers.Loggings;
+using DMX.Core.Api.Infrastructure.Provision.Models.Storages;
 using Microsoft.Azure.Management.AppService.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
 using Microsoft.Azure.Management.Sql.Fluent;
@@ -68,7 +69,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
             return sqlServer;
         }
 
-        public async ValueTask<ISqlDatabase> ProvisionSqlDatabaseAsync(
+        public async ValueTask<SqlDatabase> ProvisionSqlDatabaseAsync(
             string projectName,
             string environment,
             ISqlServer sqlServer)
@@ -82,8 +83,22 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
 
             this.loggingBroker.LogActivity(message: $"Provisioning {databaseName} complete.");
 
-            return sqlDatabase;
+            return new SqlDatabase
+            {
+                Database = sqlDatabase,
+                ConnectionString = GenerateConnectionString(sqlDatabase)
+            };
 
+        }
+
+        private string GenerateConnectionString(ISqlDatabase sqlDatabase)
+        {
+            SqlDatabaseAccess access = this.cloudBroker.GetSqlDatabaseAccess();
+
+            return $"Server=tcp:{sqlDatabase.SqlServerName}.database.windows.net,1433;" +
+                $"Initial Catalog={sqlDatabase.Name};" +
+                $"User ID={access.AdminName};" +
+                $"Password={access.AdminAccess};";
         }
     }
 }
