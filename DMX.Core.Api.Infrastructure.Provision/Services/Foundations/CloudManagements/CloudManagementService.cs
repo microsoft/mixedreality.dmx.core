@@ -7,6 +7,7 @@ using DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds;
 using DMX.Core.Api.Infrastructure.Provision.Brokers.Loggings;
 using Microsoft.Azure.Management.AppService.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
+using Microsoft.Azure.Management.Sql.Fluent;
 
 namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManagements
 {
@@ -48,6 +49,23 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
             this.loggingBroker.LogActivity(message: $"Provisioning {appServicePlanName} complete.");
 
             return appServicePlan;
+        }
+
+        public async ValueTask<ISqlServer> ProvisionSqlServerAsync(
+            string projectName,
+            string environment,
+            IResourceGroup resourceGroup)
+        {
+            string sqlServerName = $"{projectName}-dbserver-{environment}".ToLower();
+            this.loggingBroker.LogActivity(message: $"Provisioning {sqlServerName} ...");
+
+            ISqlServer sqlServer = await this.cloudBroker.CreateSqlServerAsync(
+                sqlServerName,
+                resourceGroup);
+
+            this.loggingBroker.LogActivity(message: $"Provisioning {sqlServerName} complete.");
+
+            return sqlServer;
         }
     }
 }
