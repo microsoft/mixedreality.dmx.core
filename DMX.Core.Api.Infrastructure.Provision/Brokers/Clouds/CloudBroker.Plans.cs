@@ -20,6 +20,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
                 .Define(planName)
                     .WithRegion(Region.USWest)
                         .WithExistingResourceGroup(resourceGroup);
+
             return await appServicePlanWithPricing.WithPricingTier(PricingTier.StandardS1)
                 .WithOperatingSystem(OperatingSystem.Windows)
                     .CreateAsync();
