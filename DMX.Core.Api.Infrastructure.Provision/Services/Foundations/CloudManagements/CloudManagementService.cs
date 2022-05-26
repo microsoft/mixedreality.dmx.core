@@ -14,7 +14,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
         private readonly ICloudBroker cloudBroker;
         private readonly ILoggingBroker loggingBroker;
 
-        public async ValueTask<IResourceGroup> CreateResourceGroupAsync(
+        public async ValueTask<IResourceGroup> ProvisionResourceGroupAsync(
             string projectName,
             string environment)
         {
