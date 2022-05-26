@@ -9,7 +9,6 @@ using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.ReverbApis;
 using DMX.Core.Api.Models.External.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
-using Microsoft.Extensions.Logging;
 
 namespace DMX.Core.Api.Services.Foundations
 {
@@ -48,8 +47,14 @@ namespace DMX.Core.Api.Services.Foundations
                 }).ToList();
         }
 
-        private LabStatus RetrieveLabStatus(ExternalLab lab) =>
-           lab.IsConnected ? LabStatus.Available : LabStatus.Offline;
-
+        private LabStatus RetrieveLabStatus(ExternalLab lab)
+        {
+            return (lab.IsConnected, lab.IsReserved) switch
+            {
+                (false, _) => LabStatus.Offline,
+                (true, false) => LabStatus.Available,
+                _ => LabStatus.Reserved,
+            };
+        }
     }
 }
