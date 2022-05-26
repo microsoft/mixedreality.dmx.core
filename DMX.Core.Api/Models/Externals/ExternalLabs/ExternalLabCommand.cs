@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 
-namespace DMX.Core.Api.Models.External.ExternalLabs
+namespace DMX.Core.Api.Models.Externals.ExternalLabs
 {
     public class ExternalLabCommand
     {

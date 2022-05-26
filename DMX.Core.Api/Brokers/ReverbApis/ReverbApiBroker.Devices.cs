@@ -3,18 +3,18 @@
 // ---------------------------------------------------------------
 
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.External.ExternalLabs;
+using DMX.Core.Api.Models.Externals.ExternalLabs;
 
 namespace DMX.Core.Api.Brokers.ReverbApis
 {
     public partial class ReverbApiBroker
     {
-        public async ValueTask<ExternalLabsCollection> GetAvailableDevicesAsync(
-            ExternalLabsServiceInformation externalLabsServiceInformation)
+        public async ValueTask<ExternalLabCollection> GetAvailableDevicesAsync(
+            ExternalLabServiceInformation externalLabsServiceInformation)
         {
             const string RelativeUrl = "api/GetAvailableDevicesAsync";
 
-            return await this.PostAync<ExternalLabsServiceInformation, ExternalLabsCollection>(
+            return await this.PostAync<ExternalLabServiceInformation, ExternalLabCollection>(
                 relativeUrl: $"{RelativeUrl}?code={this.accessKey}",
                 content: externalLabsServiceInformation);
         }
