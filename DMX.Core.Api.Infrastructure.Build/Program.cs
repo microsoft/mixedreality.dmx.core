@@ -29,7 +29,7 @@ GithubPipeline githubPipeline = new GithubPipeline
         Build = new BuildJob
         {
             RunsOn = BuildMachines.Windows2022,
-            
+
             Steps = new List<GithubTask>
             {
                 new CheckoutTaskV2
