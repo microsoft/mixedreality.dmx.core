@@ -152,14 +152,13 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
             bool randomPhoneConnectionStatus = GetRandomBoolean();
             bool randomHMDConnectionStatus = GetRandomBoolean();
 
-
             Dictionary<string, string> externalDeviceProperties = new Dictionary<string, string>
             {
-                { @"Host\\isconnected", $"{randomHostConnectionStatus}" },
-                { @"Phone\\name", randomPhoneName },
-                { @"Phone\\isconnected", $"{randomPhoneConnectionStatus}" },
-                { @"HMD\\name", randomHMDName },
-                { @"HMD\\isconnected", $"{randomHMDConnectionStatus}" },
+                { @"Host\isconnected", $"{randomHostConnectionStatus}" },
+                { @"Phone\name", randomPhoneName },
+                { @"Phone\isconnected", $"{randomPhoneConnectionStatus}" },
+                { @"HMD\name", randomHMDName },
+                { @"HMD\isconnected", $"{randomHMDConnectionStatus}" },
             };
 
             List<LabDevice> labDevices = new List<LabDevice>
