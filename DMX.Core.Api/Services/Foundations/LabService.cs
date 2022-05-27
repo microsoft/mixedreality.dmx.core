@@ -56,43 +56,43 @@ namespace DMX.Core.Api.Services.Foundations
         {
             var devices = new List<LabDevice>();
 
-            if (externalLab.Properties.ContainsKey(@"Host\\isconnected"))
+            if (externalLab.Properties.ContainsKey(@"Host\isconnected"))
             {
                 devices.Add(new LabDevice
                 {
                     Category = LabDeviceCategory.Host,
                     Type = LabDeviceType.PC,
 
-                    Status = bool.Parse(externalLab.Properties[@"Host\\isconnected"])
+                    Status = bool.Parse(externalLab.Properties[@"Host\isconnected"])
                         ? LabDeviceStatus.Online
                         : LabDeviceStatus.Offline,
                 });
             }
 
-            if (externalLab.Properties.ContainsKey(@"Phone\\isconnected"))
+            if (externalLab.Properties.ContainsKey(@"Phone\isconnected"))
             {
                 devices.Add(new LabDevice
                 {
-                    Name = externalLab.Properties[@"Phone\\name"],
+                    Name = externalLab.Properties[@"Phone\name"],
                     Category = LabDeviceCategory.Attachment,
                     Type = LabDeviceType.Phone,
 
-                    Status = bool.Parse(externalLab.Properties[@"Phone\\isconnected"])
+                    Status = bool.Parse(externalLab.Properties[@"Phone\isconnected"])
                         ? LabDeviceStatus.Online
                         : LabDeviceStatus.Offline,
                 });
 
             }
 
-            if (externalLab.Properties.ContainsKey(@"HMD\\isconnected"))
+            if (externalLab.Properties.ContainsKey(@"HMD\isconnected"))
             {
                 devices.Add(new LabDevice
                 {
-                    Name = externalLab.Properties[@"HMD\\name"],
+                    Name = externalLab.Properties[@"HMD\name"],
                     Category = LabDeviceCategory.Attachment,
                     Type = LabDeviceType.HeadMountedDisplay,
 
-                    Status = bool.Parse(externalLab.Properties[@"HMD\\isconnected"])
+                    Status = bool.Parse(externalLab.Properties[@"HMD\isconnected"])
                         ? LabDeviceStatus.Online
                         : LabDeviceStatus.Offline,
                 });
