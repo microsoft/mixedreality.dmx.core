@@ -24,7 +24,7 @@ namespace DMX.Core.Api.Brokers.LabApis
             this.accessKey = GetApiAccessToken(configuration);
         }
 
-        private async ValueTask<T> GetAsync<T>(string relativeUrl) => 
+        private async ValueTask<T> GetAsync<T>(string relativeUrl) =>
             await this.apiClient.GetContentAsync<T>(relativeUrl);
 
         private async ValueTask<U> PostAync<T, U>(string relativeUrl, T content) =>

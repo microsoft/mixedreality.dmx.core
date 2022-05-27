@@ -10,7 +10,7 @@ namespace DMX.Core.Api.Tests.Acceptance.Brokers
     {
         private const string HomeRelativeUrl = "api/home";
 
-        public async ValueTask<string> GetHomeMessageAsync() => 
+        public async ValueTask<string> GetHomeMessageAsync() =>
             await this.apiFactoryClient.GetContentStringAsync(HomeRelativeUrl);
     }
 }
