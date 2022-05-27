@@ -10,6 +10,6 @@ namespace DMX.Core.Api.Brokers.ReverbApis
     public partial interface IReverbApiBroker
     {
         ValueTask<ExternalLabCollection> GetAvailableLabsAsync(
-            ExternalLabServiceInformation externalLabsServiceInformation);
+            ExternalLabServiceInformation externalLabServiceInformation);
     }
 }
