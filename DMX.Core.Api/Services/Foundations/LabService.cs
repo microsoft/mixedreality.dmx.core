@@ -2,29 +2,26 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Brokers.ReverbApis;
 using DMX.Core.Api.Models.External.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
-using DMX.Core.Api.Models.Labs.Exceptions;
-using RESTFulSense.Exceptions;
 
 namespace DMX.Core.Api.Services.Foundations
 {
     public partial class LabService : ILabService
     {
-        private readonly IReverbApiBroker reverbApiBroker;
+        private readonly ILabApiBroker labApiBroker;
         private readonly ILoggingBroker loggingBroker;
 
         public LabService(
-            IReverbApiBroker reverbApiBroker,
+            ILabApiBroker labApiBroker,
             ILoggingBroker loggingBroker)
         {
-            this.reverbApiBroker = reverbApiBroker;
+            this.labApiBroker = labApiBroker;
             this.loggingBroker = loggingBroker;
         }
 
@@ -38,7 +35,7 @@ namespace DMX.Core.Api.Services.Foundations
             };
 
             ExternalLabsCollection externalLabsCollection =
-                await this.reverbApiBroker.GetAvailableDevicesAsync(externalLabsServiceInformation);
+                await this.labApiBroker.GetAvailableDevicesAsync(externalLabsServiceInformation);
 
             List<ExternalLab> externalLabs = externalLabsCollection.Devices.ToList();
 
