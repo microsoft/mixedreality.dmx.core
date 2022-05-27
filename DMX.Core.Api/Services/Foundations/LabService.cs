@@ -2,16 +2,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.ReverbApis;
-using DMX.Core.Api.Models.External.ExternalLabs;
+using DMX.Core.Api.Models.Externals.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
-using DMX.Core.Api.Models.Labs.Exceptions;
-using RESTFulSense.Exceptions;
 
 namespace DMX.Core.Api.Services.Foundations
 {
@@ -31,16 +28,16 @@ namespace DMX.Core.Api.Services.Foundations
         public ValueTask<List<Lab>> RetrieveAllLabsAsync() =>
         TryCatch(async () =>
         {
-            var externalLabsServiceInformation = new ExternalLabsServiceInformation
+            var externalLabServiceInformation = new ExternalLabServiceInformation
             {
                 ServiceId = "Bondi-HW-Lab",
                 ServiceType = "AzureIotHub"
             };
 
-            ExternalLabsCollection externalLabsCollection =
-                await this.reverbApiBroker.GetAvailableDevicesAsync(externalLabsServiceInformation);
+            ExternalLabCollection externalLabCollection =
+                await this.reverbApiBroker.GetAvailableLabsAsync(externalLabServiceInformation);
 
-            List<ExternalLab> externalLabs = externalLabsCollection.Devices.ToList();
+            List<ExternalLab> externalLabs = externalLabCollection.ExternalLabs.ToList();
 
             return externalLabs.Select(externalLab =>
                 new Lab
