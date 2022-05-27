@@ -37,13 +37,13 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
             ExternalLabsCollection retrievedExternalLabsCollection =
                 randomExternalLabsCollection;
 
-            List<Lab> expectedLabs = randomLabProperties.Select(randomproperty =>
+            List<Lab> expectedLabs = randomLabProperties.Select(randomProperty =>
                 new Lab
                 {
-                    ExternalId = randomproperty.Id,
-                    Name = randomproperty.Name,
-                    Status = randomproperty.LabStatus,
-                    Devices = randomproperty.Devices
+                    ExternalId = randomProperty.Id,
+                    Name = randomProperty.Name,
+                    Status = randomProperty.LabStatus,
+                    Devices = randomProperty.Devices
                 }).ToList();
 
             var externalLabsServiceInformation =
