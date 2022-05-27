@@ -33,7 +33,6 @@ namespace DMX.Core.Api.Brokers.ReverbApis
         private IRESTFulApiFactoryClient GetApiClient(IConfiguration configuration)
         {
             LocalConfigurations localConfigurations = configuration.Get<LocalConfigurations>();
-
             string apiBaseUrl = localConfigurations.ApiConfigurations.Url;
             this.httpClient.BaseAddress = new Uri(apiBaseUrl);
 
