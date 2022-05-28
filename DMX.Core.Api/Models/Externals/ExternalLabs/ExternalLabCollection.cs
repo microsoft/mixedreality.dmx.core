@@ -4,11 +4,11 @@
 
 using Newtonsoft.Json;
 
-namespace DMX.Core.Api.Models.External.ExternalLabs
+namespace DMX.Core.Api.Models.Externals.ExternalLabs
 {
-    public class ExternalLabsCollection
+    public class ExternalLabCollection
     {
         [JsonProperty("Data")]
-        public ExternalLab[] Devices { get; set; }
+        public ExternalLab[] ExternalLabs { get; set; }
     }
 }
