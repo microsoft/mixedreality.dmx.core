@@ -31,9 +31,9 @@ namespace DMX.Core.Api.Controllers
 
                 return Ok(allLabs);
             }
-            catch (LabDependencyException labDepdnencyException)
+            catch (LabDependencyException labDependencyException)
             {
-                return InternalServerError(labDepdnencyException);
+                return InternalServerError(labDependencyException);
             }
             catch (LabServiceException labServiceException)
             {
