@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.External.ExternalLabs;
+using DMX.Core.Api.Models.Externals.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
 using FluentAssertions;
 using Moq;
@@ -21,9 +21,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
             // given
             List<dynamic> randomLabProperties = CreateRandomLabsProperties();
 
-            var randomExternalLabsCollection = new ExternalLabsCollection
+            var randomExternalLabCollection = new ExternalLabCollection
             {
-                Devices = randomLabProperties.Select(randomProperty =>
+                ExternalLabs = randomLabProperties.Select(randomProperty =>
                     new ExternalLab
                     {
                         Id = randomProperty.Id,
@@ -34,8 +34,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     }).ToArray()
             };
 
-            ExternalLabsCollection retrievedExternalLabsCollection =
-                randomExternalLabsCollection;
+            ExternalLabCollection retrievedExternalLabCollection =
+                randomExternalLabCollection;
 
             List<Lab> expectedLabs = randomLabProperties.Select(randomProperty =>
                 new Lab
@@ -46,17 +46,17 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     Devices = randomProperty.Devices
                 }).ToList();
 
-            var externalLabsServiceInformation =
-                new ExternalLabsServiceInformation
+            var externalLabServiceInformation =
+                new ExternalLabServiceInformation
                 {
                     ServiceId = "Bondi-HW-Lab",
                     ServiceType = "AzureIotHub"
                 };
 
             this.reverbApiBrokerMock.Setup(broker =>
-                broker.GetAvailableDevicesAsync(It.Is(
-                    SameInformationAs(externalLabsServiceInformation))))
-                        .ReturnsAsync(retrievedExternalLabsCollection);
+                broker.GetAvailableLabsAsync(It.Is(
+                    SameInformationAs(externalLabServiceInformation))))
+                        .ReturnsAsync(retrievedExternalLabCollection);
 
             // when
             List<Lab> actualLabs =
@@ -66,8 +66,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
             actualLabs.Should().BeEquivalentTo(expectedLabs);
 
             this.reverbApiBrokerMock.Verify(broker =>
-                broker.GetAvailableDevicesAsync(It.Is(
-                    SameInformationAs(externalLabsServiceInformation))),
+                broker.GetAvailableLabsAsync(It.Is(
+                    SameInformationAs(externalLabServiceInformation))),
                         Times.Once);
 
             this.reverbApiBrokerMock.VerifyNoOtherCalls();
