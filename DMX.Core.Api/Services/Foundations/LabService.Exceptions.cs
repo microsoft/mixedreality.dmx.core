@@ -22,12 +22,24 @@ namespace DMX.Core.Api.Services.Foundations
             {
                 return await returningLabFunction();
             }
-            catch (Exception exception) when (exception
-                is HttpResponseUrlNotFoundException
-                or HttpResponseUnauthorizedException
-                or HttpResponseForbiddenException)
+            catch (HttpResponseUrlNotFoundException httpResponseUrlNotFoundException)
             {
-                var failedLabDependencyException = new FailedLabDependencyException(exception);
+                var failedLabDependencyException =
+                    new FailedLabDependencyException(httpResponseUrlNotFoundException);
+
+                throw CreateAndLogCriticalDependencyException(failedLabDependencyException);
+            }
+            catch (HttpResponseUnauthorizedException httpResponseUnauthorizedException)
+            {
+                var failedLabDependencyException =
+                    new FailedLabDependencyException(httpResponseUnauthorizedException);
+
+                throw CreateAndLogCriticalDependencyException(failedLabDependencyException);
+            }
+            catch (HttpResponseForbiddenException httpResponseForbiddenException)
+            {
+                var failedLabDependencyException =
+                    new FailedLabDependencyException(httpResponseForbiddenException);
 
                 throw CreateAndLogCriticalDependencyException(failedLabDependencyException);
             }
