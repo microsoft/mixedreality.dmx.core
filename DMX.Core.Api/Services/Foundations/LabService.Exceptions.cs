@@ -14,13 +14,13 @@ namespace DMX.Core.Api.Services.Foundations
 {
     public partial class LabService
     {
-        private delegate ValueTask<List<Lab>> ReturningLabFunction();
+        private delegate ValueTask<List<Lab>> ReturningLabsFunction();
 
-        private async ValueTask<List<Lab>> TryCatch(ReturningLabFunction returningLabFunction)
+        private async ValueTask<List<Lab>> TryCatch(ReturningLabsFunction returningLabsFunction)
         {
             try
             {
-                return await returningLabFunction();
+                return await returningLabsFunction();
             }
             catch (HttpResponseUrlNotFoundException httpResponseUrlNotFoundException)
             {
