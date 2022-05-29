@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,6 +29,13 @@ namespace DMX.Core.Api.Services.Foundations
         public ValueTask<List<Lab>> RetrieveAllLabsAsync() =>
         TryCatch(async () =>
         {
+            List<ExternalLab> externalLabs = await RetrieveExternalLabsAsync();
+
+            return externalLabs.Select(AsLab).ToList();
+        });
+
+        private async ValueTask<List<ExternalLab>> RetrieveExternalLabsAsync()
+        {
             var externalLabServiceInformation = new ExternalLabServiceInformation
             {
                 ServiceId = "Bondi-HW-Lab",
@@ -35,71 +43,27 @@ namespace DMX.Core.Api.Services.Foundations
             };
 
             ExternalLabCollection externalLabCollection =
-                await this.reverbApiBroker.GetAvailableLabsAsync(externalLabServiceInformation);
+                await this.reverbApiBroker.GetAvailableLabsAsync(
+                    externalLabServiceInformation);
 
-            List<ExternalLab> externalLabs = externalLabCollection.ExternalLabs.ToList();
+            List<ExternalLab> externalLabs =
+                externalLabCollection.ExternalLabs.ToList();
 
-            return externalLabs.Select(externalLab =>
-                new Lab
-                {
-                    ExternalId = externalLab.Id,
-                    Name = externalLab.Name,
-                    Status = this.RetrieveLabStatus(externalLab),
-                    Devices = this.RetrieveDevices(externalLab)
-                }).ToList();
-        });
-
-        private List<LabDevice> RetrieveDevices(ExternalLab externalLab)
-        {
-            var devices = new List<LabDevice>();
-
-            if (externalLab.Properties.ContainsKey(@"Host\isconnected"))
-            {
-                devices.Add(new LabDevice
-                {
-                    Category = LabDeviceCategory.Host,
-                    Type = LabDeviceType.PC,
-
-                    Status = bool.Parse(externalLab.Properties[@"Host\isconnected"])
-                        ? LabDeviceStatus.Online
-                        : LabDeviceStatus.Offline,
-                });
-            }
-
-            if (externalLab.Properties.ContainsKey(@"Phone\isconnected"))
-            {
-                devices.Add(new LabDevice
-                {
-                    Name = externalLab.Properties[@"Phone\name"],
-                    Category = LabDeviceCategory.Attachment,
-                    Type = LabDeviceType.Phone,
-
-                    Status = bool.Parse(externalLab.Properties[@"Phone\isconnected"])
-                        ? LabDeviceStatus.Online
-                        : LabDeviceStatus.Offline,
-                });
-
-            }
-
-            if (externalLab.Properties.ContainsKey(@"HMD\isconnected"))
-            {
-                devices.Add(new LabDevice
-                {
-                    Name = externalLab.Properties[@"HMD\name"],
-                    Category = LabDeviceCategory.Attachment,
-                    Type = LabDeviceType.HeadMountedDisplay,
-
-                    Status = bool.Parse(externalLab.Properties[@"HMD\isconnected"])
-                        ? LabDeviceStatus.Online
-                        : LabDeviceStatus.Offline,
-                });
-
-            }
-
-            return devices;
+            return externalLabs;
         }
 
-        private LabStatus RetrieveLabStatus(ExternalLab lab)
+        private readonly Func<ExternalLab, Lab> AsLab = externalLab =>
+        {
+            return new Lab
+            {
+                ExternalId = externalLab.Id,
+                Name = externalLab.Name,
+                Status = RetrieveLabStatus(externalLab),
+                Devices = RetrieveDevices(externalLab)
+            };
+        };
+
+        private static LabStatus RetrieveLabStatus(ExternalLab lab)
         {
             return (lab.IsConnected, lab.IsReserved) switch
             {
@@ -107,6 +71,67 @@ namespace DMX.Core.Api.Services.Foundations
                 (true, false) => LabStatus.Available,
                 _ => LabStatus.Reserved,
             };
+        }
+
+        private static List<LabDevice> RetrieveDevices(ExternalLab externalLab)
+        {
+            var devices = new List<LabDevice>();
+            
+            FindAddLabDevice(
+                devices: devices,
+                externalLab: externalLab,
+                deviceName: "Host",
+                category: LabDeviceCategory.Host,
+                type: LabDeviceType.PC);
+            
+            FindAddLabDevice(
+                devices: devices,
+                externalLab: externalLab,
+                deviceName: "Phone",
+                category: LabDeviceCategory.Attachment,
+                type: LabDeviceType.Phone);
+            
+            FindAddLabDevice(
+                devices: devices,
+                externalLab: externalLab,
+                deviceName: "HMD",
+                category: LabDeviceCategory.Attachment,
+                type: LabDeviceType.HeadMountedDisplay);
+
+            return devices;
+        }
+
+        private static void FindAddLabDevice(
+            List<LabDevice> devices,
+            ExternalLab externalLab,
+            string deviceName,
+            LabDeviceCategory category,
+            LabDeviceType type)
+        {
+            bool isDeviceExist = externalLab.Properties.Any(property =>
+                property.Key.Contains(deviceName));
+
+            externalLab.Properties.TryGetValue(
+                key: @$"{deviceName}\isconnected",
+                value: out string isConnected);
+            
+            externalLab.Properties.TryGetValue(
+                key: @$"{deviceName}\name",
+                value: out string name);
+
+            if (isDeviceExist)
+            {
+                devices.Add(new LabDevice
+                {
+                    Name = name,
+                    Category = category,
+                    Type = type,
+
+                    Status = bool.Parse(isConnected)
+                        ? LabDeviceStatus.Online
+                        : LabDeviceStatus.Offline,
+                });
+            }
         }
     }
 }
