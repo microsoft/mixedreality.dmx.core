@@ -28,8 +28,7 @@ namespace DMX.Core.Api
 
             services.AddHttpClient();
             services.AddLogging();
-            services.AddTransient<ILoggingBroker, LoggingBroker>();
-            services.AddTransient<IReverbApiBroker, ReverbApiBroker>();
+            AddBrokers(services);
             services.AddTransient<ILabService, LabService>();
 
             services.AddSwaggerGen(c =>
@@ -63,6 +62,12 @@ namespace DMX.Core.Api
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
+        }
+
+        private static void AddBrokers(IServiceCollection services)
+        {
+            services.AddTransient<ILoggingBroker, LoggingBroker>();
+            services.AddTransient<IReverbApiBroker, ReverbApiBroker>();
         }
     }
 }
