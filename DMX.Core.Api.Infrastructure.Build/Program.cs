@@ -7,7 +7,7 @@ using ADotNet.Models.Pipelines.GithubPipelines.DotNets;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks.SetupDotNetTaskV1s;
 
-GithubPipeline githubPipeline = new GithubPipeline
+var githubPipeline = new GithubPipeline
 {
     Name = "DMX Core Build",
 
@@ -29,7 +29,7 @@ GithubPipeline githubPipeline = new GithubPipeline
         Build = new BuildJob
         {
             RunsOn = BuildMachines.Windows2022,
-            
+
             Steps = new List<GithubTask>
             {
                 new CheckoutTaskV2
