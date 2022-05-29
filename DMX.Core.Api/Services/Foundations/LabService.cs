@@ -109,7 +109,7 @@ namespace DMX.Core.Api.Services.Foundations
             LabDeviceType type)
         {
             bool isDeviceExist = externalLab.Properties.Any(property =>
-                property.Key.Contains(deviceName));
+                property.Key.Contains(@$"{deviceName}\"));
 
             externalLab.Properties.TryGetValue(
                 key: @$"{deviceName}\isconnected",
