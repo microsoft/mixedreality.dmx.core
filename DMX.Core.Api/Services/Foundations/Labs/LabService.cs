@@ -11,7 +11,7 @@ using DMX.Core.Api.Brokers.ReverbApis;
 using DMX.Core.Api.Models.Externals.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
 
-namespace DMX.Core.Api.Services.Foundations
+namespace DMX.Core.Api.Services.Foundations.Labs
 {
     public partial class LabService : ILabService
     {

@@ -10,7 +10,7 @@ using DMX.Core.Api.Models.Labs.Exceptions;
 using RESTFulSense.Exceptions;
 using Xeptions;
 
-namespace DMX.Core.Api.Services.Foundations
+namespace DMX.Core.Api.Services.Foundations.Labs
 {
     public partial class LabService
     {

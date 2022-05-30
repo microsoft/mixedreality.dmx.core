@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Models.Labs.Exceptions;
-using DMX.Core.Api.Services.Foundations;
+using DMX.Core.Api.Services.Foundations.Labs;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
