@@ -29,7 +29,7 @@ namespace DMX.Core.Api
             services.AddHttpClient();
             services.AddLogging();
             AddBrokers(services);
-            services.AddTransient<ILabService, LabService>();
+            AddServices(services);
 
             services.AddSwaggerGen(c =>
             {
@@ -68,6 +68,11 @@ namespace DMX.Core.Api
         {
             services.AddTransient<ILoggingBroker, LoggingBroker>();
             services.AddTransient<IReverbApiBroker, ReverbApiBroker>();
+        }
+
+        private static void AddServices(IServiceCollection services)
+        {
+            services.AddTransient<ILabService, LabService>();
         }
     }
 }
