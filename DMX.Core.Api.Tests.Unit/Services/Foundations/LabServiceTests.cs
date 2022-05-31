@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Net.Http;
 using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Models.External.ExternalLabs;
+using DMX.Core.Api.Models.Externals.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Services.Foundations;
 using KellermanSoftware.CompareNetObjects;
@@ -52,13 +52,13 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
             };
         }
 
-        private Expression<Func<ExternalLabsServiceInformation, bool>> SameInformationAs(
-            ExternalLabsServiceInformation expectedExternalLabsServiceInformation)
+        private Expression<Func<ExternalLabServiceInformation, bool>> SameInformationAs(
+            ExternalLabServiceInformation expectedExternalLabServiceInformation)
         {
-            return actualExternalLabsServiceInformation =>
+            return actualExternalLabServiceInformation =>
                 this.compareLogic.Compare(
-                    expectedExternalLabsServiceInformation,
-                    actualExternalLabsServiceInformation)
+                    expectedExternalLabServiceInformation,
+                    actualExternalLabServiceInformation)
                         .AreEqual;
         }
 
@@ -128,15 +128,15 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 10).GetValue();
 
-        private static ExternalLabsCollection CreateRandomLabCollection() =>
+        private static ExternalLabCollection CreateRandomLabCollection() =>
             CreateExternalLabCollectionFiller().Create();
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
 
-        private static Filler<ExternalLabsCollection> CreateExternalLabCollectionFiller()
+        private static Filler<ExternalLabCollection> CreateExternalLabCollectionFiller()
         {
-            var filler = new Filler<ExternalLabsCollection>();
+            var filler = new Filler<ExternalLabCollection>();
 
             filler.Setup()
                 .OnType<DateTimeOffset?>().Use(GetRandomDateTimeOffset());

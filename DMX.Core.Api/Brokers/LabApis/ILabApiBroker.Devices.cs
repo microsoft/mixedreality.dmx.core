@@ -3,13 +3,13 @@
 // ---------------------------------------------------------------
 
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.External.ExternalLabs;
+using DMX.Core.Api.Models.Externals.ExternalLabs;
 
 namespace DMX.Core.Api.Brokers.LabApis
 {
     public partial interface ILabApiBroker
     {
-        ValueTask<ExternalLabsCollection> GetAvailableDevicesAsync(
-            ExternalLabsServiceInformation externalLabsServiceInformation);
+        ValueTask<ExternalLabCollection> GetAvailableLabsAsync(
+            ExternalLabServiceInformation externalLabServiceInformation);
     }
 }

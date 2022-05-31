@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Models.External.ExternalLabs;
+using DMX.Core.Api.Models.Externals.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
 
 namespace DMX.Core.Api.Services.Foundations
@@ -28,16 +28,16 @@ namespace DMX.Core.Api.Services.Foundations
         public ValueTask<List<Lab>> RetrieveAllLabsAsync() =>
         TryCatch(async () =>
         {
-            var externalLabsServiceInformation = new ExternalLabsServiceInformation
+            var externalLabServiceInformation = new ExternalLabServiceInformation
             {
                 ServiceId = "Bondi-HW-Lab",
                 ServiceType = "AzureIotHub"
             };
 
-            ExternalLabsCollection externalLabsCollection =
-                await this.labApiBroker.GetAvailableDevicesAsync(externalLabsServiceInformation);
+            ExternalLabCollection externalLabCollection =
+                await this.labApiBroker.GetAvailableLabsAsync(externalLabServiceInformation);
 
-            List<ExternalLab> externalLabs = externalLabsCollection.Devices.ToList();
+            List<ExternalLab> externalLabs = externalLabCollection.ExternalLabs.ToList();
 
             return externalLabs.Select(externalLab =>
                 new Lab

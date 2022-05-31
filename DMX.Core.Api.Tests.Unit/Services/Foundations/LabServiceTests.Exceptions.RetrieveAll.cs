@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.External.ExternalLabs;
+using DMX.Core.Api.Models.Externals.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Models.Labs.Exceptions;
 using Moq;
@@ -31,8 +31,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                 new LabDependencyException(failedExternalLabDependencyException);
 
             this.labApiBrokerMock.Setup(broker =>
-                broker.GetAvailableDevicesAsync(
-                    It.IsAny<ExternalLabsServiceInformation>()))
+                broker.GetAvailableLabsAsync(
+                    It.IsAny<ExternalLabServiceInformation>()))
                         .ThrowsAsync(criticalDependencyException);
 
             // when
@@ -44,8 +44,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                 retrieveAllLabsTask.AsTask());
 
             this.labApiBrokerMock.Verify(broker =>
-                broker.GetAvailableDevicesAsync(
-                    It.IsAny<ExternalLabsServiceInformation>()),
+                broker.GetAvailableLabsAsync(
+                    It.IsAny<ExternalLabServiceInformation>()),
                         Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -72,8 +72,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                 new LabDependencyException(failedExternalLabDependencyException);
 
             this.labApiBrokerMock.Setup(broker =>
-                broker.GetAvailableDevicesAsync(
-                    It.IsAny<ExternalLabsServiceInformation>()))
+                broker.GetAvailableLabsAsync(
+                    It.IsAny<ExternalLabServiceInformation>()))
                         .ThrowsAsync(httpResponseException);
 
             // when
@@ -112,7 +112,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
 
             this.labApiBrokerMock.Setup(broker =>
                 broker.GetAvailableDevicesAsync(
-                    It.IsAny<ExternalLabsServiceInformation>()))
+                    It.IsAny<ExternalLabServiceInformation>()))
                         .ThrowsAsync(serviceException);
 
             // when
@@ -125,7 +125,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
 
             this.labApiBrokerMock.Verify(broker =>
                 broker.GetAvailableDevicesAsync(
-                    It.IsAny<ExternalLabsServiceInformation>()),
+                    It.IsAny<ExternalLabServiceInformation>()),
                         Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
