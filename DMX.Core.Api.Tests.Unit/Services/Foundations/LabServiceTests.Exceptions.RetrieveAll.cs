@@ -85,8 +85,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                 retrieveAllLabsTask.AsTask());
 
             this.labApiBrokerMock.Verify(broker =>
-                broker.GetAvailableDevicesAsync(
-                    It.IsAny<ExternalLabsServiceInformation>()),
+                broker.GetAvailableLabsAsync(
+                    It.IsAny<ExternalLabServiceInformation>()),
                         Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -111,7 +111,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                 new LabServiceException(failedExternalLabServiceException);
 
             this.labApiBrokerMock.Setup(broker =>
-                broker.GetAvailableDevicesAsync(
+                broker.GetAvailableLabsAsync(
                     It.IsAny<ExternalLabServiceInformation>()))
                         .ThrowsAsync(serviceException);
 
@@ -124,7 +124,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                 retrieveAllLabsTask.AsTask());
 
             this.labApiBrokerMock.Verify(broker =>
-                broker.GetAvailableDevicesAsync(
+                broker.GetAvailableLabsAsync(
                     It.IsAny<ExternalLabServiceInformation>()),
                         Times.Once);
 
