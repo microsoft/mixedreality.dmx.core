@@ -3,8 +3,8 @@
 // ---------------------------------------------------------------
 
 using System.Text.Json.Serialization;
+using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Brokers.ReverbApis;
 using DMX.Core.Api.Services.Foundations;
 using DMX.Core.Api.Services.Foundations.Labs;
 using Microsoft.AspNetCore.Builder;
@@ -68,7 +68,7 @@ namespace DMX.Core.Api
         private static void AddBrokers(IServiceCollection services)
         {
             services.AddTransient<ILoggingBroker, LoggingBroker>();
-            services.AddTransient<IReverbApiBroker, ReverbApiBroker>();
+            services.AddTransient<ILabApiBroker, LabApiBroker>();
         }
 
         private static void AddServices(IServiceCollection services) =>

@@ -7,8 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
+using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Brokers.ReverbApis;
 using DMX.Core.Api.Models.Externals.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Services.Foundations.Labs;
@@ -23,19 +23,19 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
 {
     public partial class LabServiceTests
     {
-        private readonly Mock<IReverbApiBroker> reverbApiBrokerMock;
+        private readonly Mock<ILabApiBroker> labApiBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly ICompareLogic compareLogic;
         private readonly ILabService labService;
 
         public LabServiceTests()
         {
-            this.reverbApiBrokerMock = new Mock<IReverbApiBroker>();
+            this.labApiBrokerMock = new Mock<ILabApiBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
             this.compareLogic = new CompareLogic();
 
             this.labService = new LabService(
-                reverbApiBroker: this.reverbApiBrokerMock.Object,
+                labApiBroker: this.labApiBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
