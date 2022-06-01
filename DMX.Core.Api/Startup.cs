@@ -70,9 +70,7 @@ namespace DMX.Core.Api
             services.AddTransient<ILabApiBroker, LabApiBroker>();
         }
 
-        private static void AddServices(IServiceCollection services)
-        {
+        private static void AddServices(IServiceCollection services) =>
             services.AddTransient<ILabService, LabService>();
-        }
     }
 }
