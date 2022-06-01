@@ -5,8 +5,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Brokers.ReverbApis;
 using DMX.Core.Api.Models.Externals.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
 
@@ -14,14 +14,14 @@ namespace DMX.Core.Api.Services.Foundations
 {
     public partial class LabService : ILabService
     {
-        private readonly IReverbApiBroker reverbApiBroker;
+        private readonly ILabApiBroker labApiBroker;
         private readonly ILoggingBroker loggingBroker;
 
         public LabService(
-            IReverbApiBroker reverbApiBroker,
+            ILabApiBroker labApiBroker,
             ILoggingBroker loggingBroker)
         {
-            this.reverbApiBroker = reverbApiBroker;
+            this.labApiBroker = labApiBroker;
             this.loggingBroker = loggingBroker;
         }
 
@@ -35,7 +35,7 @@ namespace DMX.Core.Api.Services.Foundations
             };
 
             ExternalLabCollection externalLabCollection =
-                await this.reverbApiBroker.GetAvailableLabsAsync(externalLabServiceInformation);
+                await this.labApiBroker.GetAvailableLabsAsync(externalLabServiceInformation);
 
             List<ExternalLab> externalLabs = externalLabCollection.ExternalLabs.ToList();
 

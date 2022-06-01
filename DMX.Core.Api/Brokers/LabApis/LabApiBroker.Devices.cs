@@ -5,9 +5,9 @@
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Externals.ExternalLabs;
 
-namespace DMX.Core.Api.Brokers.ReverbApis
+namespace DMX.Core.Api.Brokers.LabApis
 {
-    public partial class ReverbApiBroker
+    public partial class LabApiBroker
     {
         public async ValueTask<ExternalLabCollection> GetAvailableLabsAsync(
             ExternalLabServiceInformation externalLabServiceInformation)

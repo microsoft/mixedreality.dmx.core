@@ -9,15 +9,15 @@ using DMX.Core.Api.Models.Configurations;
 using Microsoft.Extensions.Configuration;
 using RESTFulSense.Clients;
 
-namespace DMX.Core.Api.Brokers.ReverbApis
+namespace DMX.Core.Api.Brokers.LabApis
 {
-    public partial class ReverbApiBroker : IReverbApiBroker
+    public partial class LabApiBroker : ILabApiBroker
     {
         private readonly IRESTFulApiFactoryClient apiClient;
         private readonly HttpClient httpClient;
         private readonly string accessKey;
 
-        public ReverbApiBroker(HttpClient httpClient, IConfiguration configuration)
+        public LabApiBroker(HttpClient httpClient, IConfiguration configuration)
         {
             this.httpClient = httpClient;
             this.apiClient = GetApiClient(configuration);
