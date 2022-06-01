@@ -77,7 +77,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
             (IDictionary<string, string> randomProperties, List<LabDevice> randomDevices) =
                 GetRandomLabProperties();
 
-
             var allCases = new List<dynamic>
             {
                 new
