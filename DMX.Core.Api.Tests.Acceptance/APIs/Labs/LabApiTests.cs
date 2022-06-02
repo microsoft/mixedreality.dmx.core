@@ -5,72 +5,35 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Net.Http;
-using DMX.Core.Api.Brokers.LabApis;
-using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Models.Externals.ExternalLabs;
-using DMX.Core.Api.Models.Labs;
-using DMX.Core.Api.Services.Foundations.Labs;
-using KellermanSoftware.CompareNetObjects;
-using Moq;
-using RESTFulSense.Exceptions;
+using DMX.Core.Api.Tests.Acceptance.Brokers;
+using DMX.Core.Api.Tests.Acceptance.Models.Labs;
 using Tynamix.ObjectFiller;
-using Xeptions;
+using WireMock.Server;
 using Xunit;
 
-namespace DMX.Core.Api.Tests.Unit.Services.Foundations
+namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
 {
-    public partial class LabServiceTests
+    [Collection(nameof(ApiTestCollection))]
+    public partial class LabApiTests
     {
-        private readonly Mock<ILabApiBroker> labApiBrokerMock;
-        private readonly Mock<ILoggingBroker> loggingBrokerMock;
-        private readonly ICompareLogic compareLogic;
-        private readonly ILabService labService;
+        private readonly DmxCoreApiBroker dmxCoreApiBroker;
+        private readonly WireMockServer wireMockServer;
 
-        public LabServiceTests()
+        public LabApiTests(DmxCoreApiBroker dmxCoreApiBroker)
         {
-            this.labApiBrokerMock = new Mock<ILabApiBroker>();
-            this.loggingBrokerMock = new Mock<ILoggingBroker>();
-            this.compareLogic = new CompareLogic();
-
-            this.labService = new LabService(
-                labApiBroker: this.labApiBrokerMock.Object,
-                loggingBroker: this.loggingBrokerMock.Object);
+            this.dmxCoreApiBroker = dmxCoreApiBroker;
+            this.wireMockServer = WireMockServer.Start(6122);
         }
 
-        public static TheoryData CriticalDependencyException()
-        {
-            string someMessage = GetRandomString();
-            var someResponseMessage = new HttpResponseMessage();
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 10).GetValue();
 
-            return new TheoryData<Xeption>()
-            {
-                new HttpResponseUrlNotFoundException(someResponseMessage, someMessage),
-                new HttpResponseUnauthorizedException(someResponseMessage, someMessage),
-                new HttpResponseForbiddenException(someResponseMessage, someMessage)
-            };
-        }
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
 
-        private Expression<Func<ExternalLabServiceInformation, bool>> SameInformationAs(
-            ExternalLabServiceInformation expectedExternalLabServiceInformation)
-        {
-            return actualExternalLabServiceInformation =>
-                this.compareLogic.Compare(
-                    expectedExternalLabServiceInformation,
-                    actualExternalLabServiceInformation)
-                        .AreEqual;
-        }
+        private static bool GetRandomBoolean() => new Random().Next(2) == 1;
 
-        private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException)
-        {
-            return actualException =>
-                actualException.Message == expectedException.Message &&
-                actualException.InnerException.Message == expectedException.InnerException.Message &&
-                (actualException.InnerException as Xeption).DataEquals(expectedException.InnerException.Data);
-        }
-
-        private static List<dynamic> CreateRandomLabsProperties()
+        private static List<dynamic> CreateRandomLabsData()
         {
             int randomCount = GetRandomNumber();
 
@@ -81,7 +44,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
             {
                 new
                 {
-                    Id = GetRandomString(),
+                    Id = Guid.NewGuid().ToString(),
                     Name = GetRandomString(),
                     IsConnected = true,
                     IsReserved = false,
@@ -92,7 +55,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
 
                 new
                 {
-                    Id = GetRandomString(),
+                    Id = Guid.NewGuid().ToString(),
                     Name = GetRandomString(),
                     IsConnected = true,
                     IsReserved = true,
@@ -103,7 +66,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
 
                 new
                 {
-                    Id = GetRandomString(),
+                    Id = Guid.NewGuid().ToString(),
                     Name = GetRandomString(),
                     IsConnected = false,
                     IsReserved = GetRandomBoolean(),
@@ -117,30 +80,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                 .Select(iterator => allCases)
                     .SelectMany(@case => @case)
                         .ToList();
-        }
-
-        private static bool GetRandomBoolean() => new Random().Next(2) == 1;
-
-        private static string GetRandomString() =>
-            new MnemonicString().GetValue();
-
-        private static int GetRandomNumber() =>
-            new IntRange(min: 2, max: 10).GetValue();
-
-        private static ExternalLabCollection CreateRandomLabCollection() =>
-            CreateExternalLabCollectionFiller().Create();
-
-        private static DateTimeOffset GetRandomDateTimeOffset() =>
-            new DateTimeRange(earliestDate: new DateTime()).GetValue();
-
-        private static Filler<ExternalLabCollection> CreateExternalLabCollectionFiller()
-        {
-            var filler = new Filler<ExternalLabCollection>();
-
-            filler.Setup()
-                .OnType<DateTimeOffset?>().Use(GetRandomDateTimeOffset());
-
-            return filler;
         }
 
         private static (IDictionary<string, string>, List<LabDevice>) GetRandomLabProperties()
