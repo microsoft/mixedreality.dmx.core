@@ -28,6 +28,9 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 10).GetValue();
 
+        private static int GetRandomPowerLevel() =>
+            new IntRange(min: 0, max: 101).GetValue();
+
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
@@ -89,14 +92,18 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
             bool randomHostConnectionStatus = GetRandomBoolean();
             bool randomPhoneConnectionStatus = GetRandomBoolean();
             bool randomHMDConnectionStatus = GetRandomBoolean();
+            int randomPhonePowerLevel = GetRandomPowerLevel();
+            int randomHMDPowerLevel = GetRandomPowerLevel();
 
             Dictionary<string, string> externalDeviceProperties = new Dictionary<string, string>
             {
                 { @"Host\isconnected", $"{randomHostConnectionStatus}" },
                 { @"Phone\name", randomPhoneName },
                 { @"Phone\isconnected", $"{randomPhoneConnectionStatus}" },
+                { @"Phone\powerlevel", $"{randomPhonePowerLevel}" },
                 { @"HMD\name", randomHMDName },
                 { @"HMD\isconnected", $"{randomHMDConnectionStatus}" },
+                { @"HMD\powerlevel", $"{randomHMDPowerLevel}" },
             };
 
             List<LabDevice> labDevices = new List<LabDevice>
@@ -106,6 +113,7 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
                     Name = null,
                     Type = LabDeviceType.PC,
                     Category = LabDeviceCategory.Host,
+                    PowerLevel = null,
 
                     Status = randomHostConnectionStatus
                         ? LabDeviceStatus.Online
@@ -117,6 +125,7 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
                     Name = randomPhoneName,
                     Type = LabDeviceType.Phone,
                     Category = LabDeviceCategory.Attachment,
+                    PowerLevel = randomPhonePowerLevel,
 
                     Status = randomPhoneConnectionStatus
                         ? LabDeviceStatus.Online
@@ -128,6 +137,7 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
                     Name = randomHMDName,
                     Type = LabDeviceType.HeadMountedDisplay,
                     Category = LabDeviceCategory.Attachment,
+                    PowerLevel = randomHMDPowerLevel,
 
                     Status = randomHMDConnectionStatus
                         ? LabDeviceStatus.Online
