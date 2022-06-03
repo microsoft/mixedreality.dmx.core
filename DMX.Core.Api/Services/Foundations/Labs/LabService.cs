@@ -119,6 +119,10 @@ namespace DMX.Core.Api.Services.Foundations.Labs
                 key: @$"{deviceName}\name",
                 value: out string name);
 
+            externalLab.Properties.TryGetValue(
+                key: @$"{deviceName}\powerlevel",
+                value: out string powerLevelText);
+
             if (isDeviceExist)
             {
                 devices.Add(new LabDevice
@@ -126,12 +130,22 @@ namespace DMX.Core.Api.Services.Foundations.Labs
                     Name = name,
                     Category = category,
                     Type = type,
+                    PowerLevel = GetPowerLevel(powerLevelText),
 
                     Status = bool.Parse(isConnected)
                         ? LabDeviceStatus.Online
                         : LabDeviceStatus.Offline,
                 });
             }
+        }
+
+        private static int? GetPowerLevel(string powerLevelText)
+        {
+            return powerLevelText switch
+            {
+                { } => Int32.Parse(powerLevelText),
+                _ => null,
+            };
         }
     }
 }
