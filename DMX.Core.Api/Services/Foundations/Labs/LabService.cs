@@ -6,8 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.LabApis;
+using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Models.Externals.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
 
@@ -76,21 +76,21 @@ namespace DMX.Core.Api.Services.Foundations.Labs
         private static List<LabDevice> RetrieveDevices(ExternalLab externalLab)
         {
             var devices = new List<LabDevice>();
-            
+
             FindAddLabDevice(
                 devices: devices,
                 externalLab: externalLab,
                 deviceName: "Host",
                 category: LabDeviceCategory.Host,
                 type: LabDeviceType.PC);
-            
+
             FindAddLabDevice(
                 devices: devices,
                 externalLab: externalLab,
                 deviceName: "Phone",
                 category: LabDeviceCategory.Attachment,
                 type: LabDeviceType.Phone);
-            
+
             FindAddLabDevice(
                 devices: devices,
                 externalLab: externalLab,
@@ -114,7 +114,7 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             externalLab.Properties.TryGetValue(
                 key: @$"{deviceName}\isconnected",
                 value: out string isConnected);
-            
+
             externalLab.Properties.TryGetValue(
                 key: @$"{deviceName}\name",
                 value: out string name);

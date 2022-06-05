@@ -5,7 +5,6 @@
 using System.Text.Json.Serialization;
 using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Services.Foundations;
 using DMX.Core.Api.Services.Foundations.Labs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
