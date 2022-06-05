@@ -10,24 +10,36 @@ using DMX.Core.Api.Models.Labs.Exceptions;
 using RESTFulSense.Exceptions;
 using Xeptions;
 
-namespace DMX.Core.Api.Services.Foundations
+namespace DMX.Core.Api.Services.Foundations.Labs
 {
     public partial class LabService
     {
-        private delegate ValueTask<List<Lab>> ReturningLabFunction();
+        private delegate ValueTask<List<Lab>> ReturningLabsFunction();
 
-        private async ValueTask<List<Lab>> TryCatch(ReturningLabFunction returningLabFunction)
+        private async ValueTask<List<Lab>> TryCatch(ReturningLabsFunction returningLabsFunction)
         {
             try
             {
-                return await returningLabFunction();
+                return await returningLabsFunction();
             }
-            catch (Exception exception) when (exception
-                is HttpResponseUrlNotFoundException
-                or HttpResponseUnauthorizedException
-                or HttpResponseForbiddenException)
+            catch (HttpResponseUrlNotFoundException httpResponseUrlNotFoundException)
             {
-                var failedLabDependencyException = new FailedLabDependencyException(exception);
+                var failedLabDependencyException =
+                    new FailedLabDependencyException(httpResponseUrlNotFoundException);
+
+                throw CreateAndLogCriticalDependencyException(failedLabDependencyException);
+            }
+            catch (HttpResponseUnauthorizedException httpResponseUnauthorizedException)
+            {
+                var failedLabDependencyException =
+                    new FailedLabDependencyException(httpResponseUnauthorizedException);
+
+                throw CreateAndLogCriticalDependencyException(failedLabDependencyException);
+            }
+            catch (HttpResponseForbiddenException httpResponseForbiddenException)
+            {
+                var failedLabDependencyException =
+                    new FailedLabDependencyException(httpResponseForbiddenException);
 
                 throw CreateAndLogCriticalDependencyException(failedLabDependencyException);
             }

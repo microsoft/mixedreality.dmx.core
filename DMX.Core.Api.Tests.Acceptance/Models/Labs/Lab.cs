@@ -3,16 +3,17 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 
-namespace DMX.Core.Api.Models.Labs
+namespace DMX.Core.Api.Tests.Acceptance.Models.Labs
 {
-    public class LabDevice
+    public class Lab
     {
         public Guid Id { get; set; }
+        public string ExternalId { get; set; }
         public string Name { get; set; }
-        public int? PowerLevel { get; set; }
-        public LabDeviceType Type { get; set; }
-        public LabDeviceStatus Status { get; set; }
-        public LabDeviceCategory Category { get; set; }
+        public string Description { get; set; }
+        public LabStatus Status { get; set; }
+        public List<LabDevice> Devices { get; set; }
     }
 }

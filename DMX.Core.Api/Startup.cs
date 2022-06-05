@@ -3,9 +3,9 @@
 // ---------------------------------------------------------------
 
 using System.Text.Json.Serialization;
+using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Brokers.ReverbApis;
-using DMX.Core.Api.Services.Foundations;
+using DMX.Core.Api.Services.Foundations.Labs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -28,13 +28,12 @@ namespace DMX.Core.Api
 
             services.AddHttpClient();
             services.AddLogging();
-            services.AddTransient<ILoggingBroker, LoggingBroker>();
-            services.AddTransient<IReverbApiBroker, ReverbApiBroker>();
-            services.AddTransient<ILabService, LabService>();
+            AddBrokers(services);
+            AddServices(services);
 
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(option =>
             {
-                c.SwaggerDoc(
+                option.SwaggerDoc(
                     name: "v1",
                     info: new OpenApiInfo
                     {
@@ -64,5 +63,14 @@ namespace DMX.Core.Api
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
+
+        private static void AddBrokers(IServiceCollection services)
+        {
+            services.AddTransient<ILoggingBroker, LoggingBroker>();
+            services.AddTransient<ILabApiBroker, LabApiBroker>();
+        }
+
+        private static void AddServices(IServiceCollection services) =>
+            services.AddTransient<ILabService, LabService>();
     }
 }
