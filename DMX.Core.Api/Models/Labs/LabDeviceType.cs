@@ -2,11 +2,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-namespace DMX.Core.Api.Models.External.ExternalLabs
+namespace DMX.Core.Api.Models.Labs
 {
-    public class ExternalLabsServiceInformation
+    public enum LabDeviceType
     {
-        public string ServiceType { get; set; }
-        public string ServiceId { get; set; }
+        PC,
+        HeadMountedDisplay,
+        Phone,
+        Other
     }
 }

@@ -2,13 +2,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using Newtonsoft.Json;
-
-namespace DMX.Core.Api.Models.External.ExternalLabs
+namespace DMX.Core.Api.Models.Labs
 {
-    public class ExternalLabsCollection
+    public enum LabDeviceStatus
     {
-        [JsonProperty("Data")]
-        public ExternalLab[] Devices { get; set; }
+        Online,
+        Offline
     }
 }
