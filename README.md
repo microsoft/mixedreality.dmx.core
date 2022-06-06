@@ -1,11 +1,7 @@
 # DMX Core API
 
-As the maintainer of this project, please make a few updates:
-
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+[![DMX Core Build](https://github.com/microsoft/mixedreality.dmx.core/actions/workflows/dotnet.yml/badge.svg)](https://github.com/microsoft/mixedreality.dmx.core/actions/workflows/dotnet.yml)
+[![The Standard - COMPLIANT](https://img.shields.io/badge/The_Standard-COMPLIANT-2ea44f)](https://github.com/hassanhabib/The-Standard)
 
 ## Contributing
 
