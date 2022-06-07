@@ -1,34 +1,18 @@
-﻿using System;
+﻿// ---------------------------------------------------------------
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// ---------------------------------------------------------------
+
 using System.Threading.Tasks;
-using DMX.Core.Api.Infrastructure.Provision.Models.Storages;
-using DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManagements;
-using Microsoft.Azure.Management.AppService.Fluent;
-using Microsoft.Azure.Management.Fluent;
-using Microsoft.Azure.Management.ResourceManager.Fluent;
-using Microsoft.Azure.Management.Sql.Fluent;
+using DMX.Core.Api.Infrastructure.Provision.Services.Processings.CloudManagements;
 
-public class Program
+namespace DMX.Core.Api.Infrastructure.Provision
 {
-    public async static Task Main(string[] args)
+    public class Program
     {
-        var cloudManagementService = new CloudManagementService();
-        var projectName = "DMX-CORE-API";
-        var environment = "DEV";
-
-        IResourceGroup resourceGroup = await cloudManagementService.ProvisionResourceGroupAsync(projectName, environment);
-        IAppServicePlan appServicePlan = await cloudManagementService.ProvisionAppServicePlanAsync(projectName, environment, resourceGroup);
-        ISqlServer sqlServer = await cloudManagementService.ProvisionSqlServerAsync(projectName, environment, resourceGroup);
-
-        SqlDatabase sqlDatabase = await cloudManagementService.ProvisionSqlDatabaseAsync(
-            projectName,
-            environment,
-            sqlServer);
-
-        var webApp = await cloudManagementService.ProvisionWebAppAsync(
-            projectName,
-            environment,
-            sqlDatabase.ConnectionString,
-            appServicePlan,
-            resourceGroup);
+        public static async Task Main(string[] args)
+        {
+            var cloudManagementProcessingService = new CloudManagementProcessingService();
+            await cloudManagementProcessingService.ProcessAsync();
+        }
     }
 }
