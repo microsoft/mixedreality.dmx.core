@@ -37,5 +37,9 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
             string databaseConnectionString,
             IAppServicePlan appServicePlan,
             IResourceGroup resourceGroup);
+
+        ValueTask DeprovisionResourceGroupAsync(
+            string projectName,
+            string environment);
     }
 }

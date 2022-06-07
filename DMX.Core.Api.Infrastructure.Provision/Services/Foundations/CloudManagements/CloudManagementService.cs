@@ -20,7 +20,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
         public CloudManagementService()
         {
             this.cloudBroker = new CloudBroker();
-            this.loggingBroker = new LoggingBroker(); 
+            this.loggingBroker = new LoggingBroker();
         }
 
         public async ValueTask<IResourceGroup> ProvisionResourceGroupAsync(
@@ -116,6 +116,25 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
             this.loggingBroker.LogActivity(message: $"Provisioning {webAppName} complete.");
 
             return webApp;
+        }
+
+        public async ValueTask DeprovisionResourceGroupAsync(string projectName, string environment)
+        {
+            string resourceGroupName = $"{projectName}-RESOURCES-{environment}".ToUpper();
+            this.loggingBroker.LogActivity(message: $"Checking for {resourceGroupName} ...");
+            bool isResourceGroupExist = await this.cloudBroker.CheckResourceGroupExistsAsync(resourceGroupName);
+
+            if(isResourceGroupExist)
+            {
+                this.loggingBroker.LogActivity(message: $"Deprovisioning {resourceGroupName} ...");
+                await this.cloudBroker.DeleteResourceGroupAsync(resourceGroupName);
+                this.loggingBroker.LogActivity(message: $"Deprovisioning {resourceGroupName} completed.");
+            }
+            else
+            {
+                this.loggingBroker.LogActivity(message: $"Could not find {resourceGroupName}.");
+            }
+
         }
 
         private string GenerateConnectionString(ISqlDatabase sqlDatabase)
