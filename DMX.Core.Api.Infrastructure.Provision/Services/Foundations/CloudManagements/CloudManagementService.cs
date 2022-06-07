@@ -124,7 +124,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
             this.loggingBroker.LogActivity(message: $"Checking for {resourceGroupName} ...");
             bool isResourceGroupExist = await this.cloudBroker.CheckResourceGroupExistsAsync(resourceGroupName);
 
-            if(isResourceGroupExist)
+            if (isResourceGroupExist)
             {
                 this.loggingBroker.LogActivity(message: $"Deprovisioning {resourceGroupName} ...");
                 await this.cloudBroker.DeleteResourceGroupAsync(resourceGroupName);
