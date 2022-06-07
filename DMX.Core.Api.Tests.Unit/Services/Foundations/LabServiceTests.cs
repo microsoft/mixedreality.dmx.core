@@ -62,7 +62,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                         .AreEqual;
         }
 
-        private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
         private static List<dynamic> CreateRandomLabsProperties()
