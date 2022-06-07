@@ -31,6 +31,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Processings.CloudManage
             await ProvisionResourcesAsync(configuration);
             await DeprovisionResourcesAsync(configuration);
         }
+
         private async Task ProvisionResourcesAsync(CloudManagementConfiguration configuration)
         {
             string projectName = configuration.ProjectName;
