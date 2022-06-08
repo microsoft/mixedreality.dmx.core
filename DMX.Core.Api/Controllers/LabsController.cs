@@ -22,7 +22,7 @@ namespace DMX.Core.Api.Controllers
             this.labService = labService;
 
         [HttpGet]
-        public async ValueTask<ActionResult<List<Lab>>> GetAllLabs()
+        public async ValueTask<ActionResult<List<Lab>>> GetAllLabsAsync()
         {
             try
             {
