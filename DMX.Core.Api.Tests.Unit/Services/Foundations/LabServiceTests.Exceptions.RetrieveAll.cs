@@ -93,10 +93,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
             actualLabDependencyException.Should().BeEquivalentTo(
                 expectedLabDependencyException);
 
-            // then
-            await Assert.ThrowsAsync<LabDependencyException>(() =>
-                retrieveAllLabsTask.AsTask());
-
             this.labApiBrokerMock.Verify(broker =>
                 broker.GetAvailableLabsAsync(
                     It.IsAny<ExternalLabServiceInformation>()),
