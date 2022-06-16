@@ -14,5 +14,7 @@ namespace DMX.Core.Api.Models.Labs
         public LabDeviceType Type { get; set; }
         public LabDeviceStatus Status { get; set; }
         public LabDeviceCategory Category { get; set; }
+        public Guid LabId { get; set; }
+        public Lab Lab { get; set; }
     }
 }

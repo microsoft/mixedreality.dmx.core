@@ -16,16 +16,13 @@ namespace DMX.Core.Api.Brokers.Storages
         public StorageBroker(IConfiguration configuration)
         {
             this.configuration = configuration;
-            this.Database.Migrate();
+            //this.Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<LabDevice>()
-                .HasOne(device => device.Lab)
-                .WithMany(lab => lab.Devices)
-                .HasForeignKey(device => device.LabId)
-                .OnDelete(DeleteBehavior.NoAction);
+            ConfigureLab(modelBuilder);
+            ConfigureLabDevice(modelBuilder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -35,8 +32,5 @@ namespace DMX.Core.Api.Brokers.Storages
 
             optionsBuilder.UseSqlServer(connectionString);
         }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder) =>
-            ConfigureLab(modelBuilder);
     }
 }
