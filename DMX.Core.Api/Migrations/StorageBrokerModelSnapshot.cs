@@ -42,7 +42,54 @@ namespace DMX.Core.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Labs");
+                    b.ToTable("Lab");
+                });
+
+            modelBuilder.Entity("DMX.Core.Api.Models.Labs.LabDevice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("LabId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PowerLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LabId");
+
+                    b.ToTable("LabDevices");
+                });
+
+            modelBuilder.Entity("DMX.Core.Api.Models.Labs.LabDevice", b =>
+                {
+                    b.HasOne("DMX.Core.Api.Models.Labs.Lab", "Lab")
+                        .WithMany("Devices")
+                        .HasForeignKey("LabId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Lab");
+                });
+
+            modelBuilder.Entity("DMX.Core.Api.Models.Labs.Lab", b =>
+                {
+                    b.Navigation("Devices");
                 });
 #pragma warning restore 612, 618
         }
