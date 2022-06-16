@@ -5,6 +5,7 @@
 using System.Text.Json.Serialization;
 using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
+using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Services.Foundations.Labs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,6 +29,7 @@ namespace DMX.Core.Api
 
             services.AddHttpClient();
             services.AddLogging();
+            services.AddDbContext<StorageBroker>();
             AddBrokers(services);
             AddServices(services);
 
@@ -68,6 +70,7 @@ namespace DMX.Core.Api
         {
             services.AddTransient<ILoggingBroker, LoggingBroker>();
             services.AddTransient<ILabApiBroker, LabApiBroker>();
+            services.AddTransient<IStorageBroker, StorageBroker>();
         }
 
         private static void AddServices(IServiceCollection services) =>
