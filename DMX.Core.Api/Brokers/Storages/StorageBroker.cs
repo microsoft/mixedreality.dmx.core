@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using DMX.Core.Api.Models.Labs;
 using EFxceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,7 +16,13 @@ namespace DMX.Core.Api.Brokers.Storages
         public StorageBroker(IConfiguration configuration)
         {
             this.configuration = configuration;
-            this.Database.Migrate();
+            //this.Database.Migrate();
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            ConfigureLab(modelBuilder);
+            ConfigureLabDevice(modelBuilder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -25,8 +32,5 @@ namespace DMX.Core.Api.Brokers.Storages
 
             optionsBuilder.UseSqlServer(connectionString);
         }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder) =>
-            ConfigureLab(modelBuilder);
     }
 }
