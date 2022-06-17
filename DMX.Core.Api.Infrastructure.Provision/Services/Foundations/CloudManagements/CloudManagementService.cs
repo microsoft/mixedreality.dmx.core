@@ -37,7 +37,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
                     resourceGroupName);
 
             this.loggingBroker.LogActivity(
-                message: $"Provisioning {resourceGroupName} Completed.");
+                message: $"Provisioning {resourceGroupName} completed.");
 
             return resourceGroup;
         }
