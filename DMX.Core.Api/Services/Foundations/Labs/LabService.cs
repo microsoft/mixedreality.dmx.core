@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
+using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Models.Externals.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
 
@@ -17,13 +18,16 @@ namespace DMX.Core.Api.Services.Foundations.Labs
     {
         private readonly ILabApiBroker labApiBroker;
         private readonly ILoggingBroker loggingBroker;
+        private readonly IStorageBroker storageBroker;
 
         public LabService(
             ILabApiBroker labApiBroker,
-            ILoggingBroker loggingBroker)
+            ILoggingBroker loggingBroker,
+            IStorageBroker storageBroker)
         {
             this.labApiBroker = labApiBroker;
             this.loggingBroker = loggingBroker;
+            this.storageBroker = storageBroker;
         }
 
         public ValueTask<List<Lab>> RetrieveAllLabsAsync() =>
@@ -33,6 +37,11 @@ namespace DMX.Core.Api.Services.Foundations.Labs
 
             return externalLabs.Select(AsLab).ToList();
         });
+
+        public ValueTask<Lab> AddLabAsync(Lab lab)
+        {
+            throw new NotImplementedException();
+        }
 
         private async ValueTask<List<ExternalLab>> RetrieveExternalLabsAsync()
         {

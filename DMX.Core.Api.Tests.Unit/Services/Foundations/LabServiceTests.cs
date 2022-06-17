@@ -7,12 +7,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
+using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
+using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Models.Externals.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Services.Foundations.Labs;
 using KellermanSoftware.CompareNetObjects;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using RESTFulSense.Exceptions;
 using Tynamix.ObjectFiller;
@@ -25,6 +29,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
     {
         private readonly Mock<ILabApiBroker> labApiBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
+        private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly ICompareLogic compareLogic;
         private readonly ILabService labService;
 
@@ -32,11 +37,13 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
         {
             this.labApiBrokerMock = new Mock<ILabApiBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
+            this.storageBrokerMock = new Mock<IStorageBroker>();
             this.compareLogic = new CompareLogic();
 
             this.labService = new LabService(
                 labApiBroker: this.labApiBrokerMock.Object,
-                loggingBroker: this.loggingBrokerMock.Object);
+                loggingBroker: this.loggingBrokerMock.Object,
+                storageBroker: this.storageBrokerMock.Object);
         }
 
         public static TheoryData CriticalDependencyException()
@@ -203,5 +210,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
 
             return (externalDeviceProperties, labDevices);
         }
+
+        private static Lab CreateRandomLab() =>
+            CreateLabFiller().Create();
+
+        private static Filler<Lab> CreateLabFiller() =>
+            new Filler<Lab>();
     }
 }
