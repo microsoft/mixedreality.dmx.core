@@ -4,7 +4,7 @@
 
 namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
 {
-    internal partial interface ICloudBroker
+    public partial interface ICloudBroker
     {
     }
 }
