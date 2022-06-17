@@ -38,10 +38,8 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             return externalLabs.Select(AsLab).ToList();
         });
 
-        public ValueTask<Lab> AddLabAsync(Lab lab)
-        {
-            throw new NotImplementedException();
-        }
+        public ValueTask<Lab> AddLabAsync(Lab lab) => 
+            new ValueTask<Lab>(lab);
 
         private async ValueTask<List<ExternalLab>> RetrieveExternalLabsAsync()
         {
