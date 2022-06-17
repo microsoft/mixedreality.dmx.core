@@ -37,7 +37,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
                     resourceGroupName);
 
             this.loggingBroker.LogActivity(
-                message: $"Provisioning {resourceGroupName} Completed.");
+                message: $"Provisioning {resourceGroupName} completed.");
 
             return resourceGroup;
         }
@@ -94,7 +94,6 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
                 Database = sqlDatabase,
                 ConnectionString = GenerateConnectionString(sqlDatabase)
             };
-
         }
 
         public async ValueTask<IWebApp> ProvisionWebAppAsync(
@@ -134,7 +133,6 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Foundations.CloudManage
             {
                 this.loggingBroker.LogActivity(message: $"Could not find {resourceGroupName}.");
             }
-
         }
 
         private string GenerateConnectionString(ISqlDatabase sqlDatabase)
