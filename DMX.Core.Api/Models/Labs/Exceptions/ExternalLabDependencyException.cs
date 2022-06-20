@@ -9,7 +9,7 @@ namespace DMX.Core.Api.Models.Labs.Exceptions
     public class ExternalLabDependencyException : Xeption
     {
         public ExternalLabDependencyException(Xeption innerException)
-            : base(message: "Lab external dependency error occurred, contact support.",
+            : base(message: "External lab dependency error occurred, contact support.",
                   innerException)
         { }
     }
