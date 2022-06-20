@@ -8,7 +8,7 @@ using DMX.Core.Api.Models.Labs;
 
 namespace DMX.Core.Api.Services.Foundations.Labs
 {
-    public interface ILabService
+    public interface IExternalLabService
     {
         ValueTask<List<Lab>> RetrieveAllLabsAsync();
     }

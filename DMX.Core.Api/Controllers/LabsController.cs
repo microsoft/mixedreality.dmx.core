@@ -16,9 +16,9 @@ namespace DMX.Core.Api.Controllers
     [Route("api/[controller]")]
     public class LabsController : RESTFulController
     {
-        private readonly ILabService labService;
+        private readonly IExternalLabService labService;
 
-        public LabsController(ILabService labService) =>
+        public LabsController(IExternalLabService labService) =>
             this.labService = labService;
 
         [HttpGet]

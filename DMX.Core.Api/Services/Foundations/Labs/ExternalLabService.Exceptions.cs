@@ -12,7 +12,7 @@ using Xeptions;
 
 namespace DMX.Core.Api.Services.Foundations.Labs
 {
-    public partial class LabService
+    public partial class ExternalLabService
     {
         private delegate ValueTask<List<Lab>> ReturningLabsFunction();
 

@@ -4,7 +4,7 @@
 
 namespace DMX.Core.Api.Brokers.LabApis
 {
-    public partial interface ILabApiBroker
+    public partial interface IExternalLabApiBroker
     {
     }
 }

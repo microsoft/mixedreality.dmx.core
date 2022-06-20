@@ -21,20 +21,20 @@ using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations
 {
-    public partial class LabServiceTests
+    public partial class ExternalLabServiceTest
     {
-        private readonly Mock<ILabApiBroker> labApiBrokerMock;
+        private readonly Mock<IExternalLabApiBroker> labApiBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly ICompareLogic compareLogic;
-        private readonly ILabService labService;
+        private readonly IExternalLabService labService;
 
-        public LabServiceTests()
+        public ExternalLabServiceTest()
         {
-            this.labApiBrokerMock = new Mock<ILabApiBroker>();
+            this.labApiBrokerMock = new Mock<IExternalLabApiBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
             this.compareLogic = new CompareLogic();
 
-            this.labService = new LabService(
+            this.labService = new ExternalLabService(
                 labApiBroker: this.labApiBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }

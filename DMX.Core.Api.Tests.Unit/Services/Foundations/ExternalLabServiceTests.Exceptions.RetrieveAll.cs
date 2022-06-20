@@ -17,7 +17,7 @@ using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations
 {
-    public partial class LabServiceTests
+    public partial class ExternalLabServiceTest
     {
         [Theory]
         [MemberData(nameof(CriticalDependencyException))]

@@ -13,13 +13,13 @@ using DMX.Core.Api.Models.Labs;
 
 namespace DMX.Core.Api.Services.Foundations.Labs
 {
-    public partial class LabService : ILabService
+    public partial class ExternalLabService : IExternalLabService
     {
-        private readonly ILabApiBroker labApiBroker;
+        private readonly IExternalLabApiBroker labApiBroker;
         private readonly ILoggingBroker loggingBroker;
 
-        public LabService(
-            ILabApiBroker labApiBroker,
+        public ExternalLabService(
+            IExternalLabApiBroker labApiBroker,
             ILoggingBroker loggingBroker)
         {
             this.labApiBroker = labApiBroker;

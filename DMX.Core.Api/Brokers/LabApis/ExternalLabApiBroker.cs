@@ -11,13 +11,13 @@ using RESTFulSense.Clients;
 
 namespace DMX.Core.Api.Brokers.LabApis
 {
-    public partial class LabApiBroker : ILabApiBroker
+    public partial class ExternalLabApiBroker : IExternalLabApiBroker
     {
         private readonly IRESTFulApiFactoryClient apiClient;
         private readonly HttpClient httpClient;
         private readonly string accessKey;
 
-        public LabApiBroker(HttpClient httpClient, IConfiguration configuration)
+        public ExternalLabApiBroker(HttpClient httpClient, IConfiguration configuration)
         {
             this.httpClient = httpClient;
             this.apiClient = GetApiClient(configuration);
