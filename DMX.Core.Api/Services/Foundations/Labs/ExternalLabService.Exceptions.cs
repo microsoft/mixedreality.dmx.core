@@ -24,36 +24,36 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             }
             catch (HttpResponseUrlNotFoundException httpResponseUrlNotFoundException)
             {
-                var failedLabDependencyException =
+                var failedExternalLabDependencyException =
                     new FailedExternalLabDependencyException(httpResponseUrlNotFoundException);
 
-                throw CreateAndLogCriticalDependencyException(failedLabDependencyException);
+                throw CreateAndLogCriticalDependencyException(failedExternalLabDependencyException);
             }
             catch (HttpResponseUnauthorizedException httpResponseUnauthorizedException)
             {
-                var failedLabDependencyException =
+                var failedExternalLabDependencyException =
                     new FailedExternalLabDependencyException(httpResponseUnauthorizedException);
 
-                throw CreateAndLogCriticalDependencyException(failedLabDependencyException);
+                throw CreateAndLogCriticalDependencyException(failedExternalLabDependencyException);
             }
             catch (HttpResponseForbiddenException httpResponseForbiddenException)
             {
-                var failedLabDependencyException =
+                var failedExternalLabDependencyException =
                     new FailedExternalLabDependencyException(httpResponseForbiddenException);
 
-                throw CreateAndLogCriticalDependencyException(failedLabDependencyException);
+                throw CreateAndLogCriticalDependencyException(failedExternalLabDependencyException);
             }
             catch (HttpResponseException httpResponseException)
             {
-                var failedLabDependencyException = new FailedExternalLabDependencyException(httpResponseException);
+                var failedExternalLabDependencyException = new FailedExternalLabDependencyException(httpResponseException);
 
-                throw CreateAndLogDependencyException(failedLabDependencyException);
+                throw CreateAndLogDependencyException(failedExternalLabDependencyException);
             }
             catch (Exception exception)
             {
-                var failedLabServiceException = new FailedExternalLabServiceException(exception);
+                var failedExternalLabServiceException = new FailedExternalLabServiceException(exception);
 
-                throw CreateAndLogServiceException(failedLabServiceException);
+                throw CreateAndLogServiceException(failedExternalLabServiceException);
             }
         }
 
@@ -75,10 +75,10 @@ namespace DMX.Core.Api.Services.Foundations.Labs
 
         private ExternaLabServiceException CreateAndLogServiceException(Xeption exception)
         {
-            var ExternalLabServiceException = new ExternaLabServiceException(exception);
-            this.loggingBroker.LogError(ExternalLabServiceException);
+            var externalLabServiceException = new ExternaLabServiceException(exception);
+            this.loggingBroker.LogError(externalLabServiceException);
 
-            return ExternalLabServiceException;
+            return externalLabServiceException;
         }
     }
 }
