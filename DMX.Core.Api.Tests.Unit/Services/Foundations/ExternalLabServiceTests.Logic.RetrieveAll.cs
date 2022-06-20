@@ -53,24 +53,24 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     ServiceType = "AzureIotHub"
                 };
 
-            this.labApiBrokerMock.Setup(broker =>
+            this.externalLabApiBrokerMock.Setup(broker =>
                 broker.GetAvailableLabsAsync(It.Is(
                     SameInformationAs(externalLabServiceInformation))))
                         .ReturnsAsync(retrievedExternalLabCollection);
 
             // when
             List<Lab> actualLabs =
-                await this.labService.RetrieveAllLabsAsync();
+                await this.externalLabService.RetrieveAllLabsAsync();
 
             // then
             actualLabs.Should().BeEquivalentTo(expectedLabs);
 
-            this.labApiBrokerMock.Verify(broker =>
+            this.externalLabApiBrokerMock.Verify(broker =>
                 broker.GetAvailableLabsAsync(It.Is(
                     SameInformationAs(externalLabServiceInformation))),
                         Times.Once);
 
-            this.labApiBrokerMock.VerifyNoOtherCalls();
+            this.externalLabApiBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }

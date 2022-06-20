@@ -23,19 +23,19 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
 {
     public partial class ExternalLabServiceTest
     {
-        private readonly Mock<IExternalLabApiBroker> labApiBrokerMock;
+        private readonly Mock<IExternalLabApiBroker> externalLabApiBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly ICompareLogic compareLogic;
-        private readonly IExternalLabService labService;
+        private readonly IExternalLabService externalLabService;
 
         public ExternalLabServiceTest()
         {
-            this.labApiBrokerMock = new Mock<IExternalLabApiBroker>();
+            this.externalLabApiBrokerMock = new Mock<IExternalLabApiBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
             this.compareLogic = new CompareLogic();
 
-            this.labService = new ExternalLabService(
-                labApiBroker: this.labApiBrokerMock.Object,
+            this.externalLabService = new ExternalLabService(
+                externalLabApiBroker: this.externalLabApiBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 

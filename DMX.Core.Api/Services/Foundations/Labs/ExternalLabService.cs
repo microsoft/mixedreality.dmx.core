@@ -15,14 +15,14 @@ namespace DMX.Core.Api.Services.Foundations.Labs
 {
     public partial class ExternalLabService : IExternalLabService
     {
-        private readonly IExternalLabApiBroker labApiBroker;
+        private readonly IExternalLabApiBroker externalLabApiBroker;
         private readonly ILoggingBroker loggingBroker;
 
         public ExternalLabService(
-            IExternalLabApiBroker labApiBroker,
+            IExternalLabApiBroker externalLabApiBroker,
             ILoggingBroker loggingBroker)
         {
-            this.labApiBroker = labApiBroker;
+            this.externalLabApiBroker = externalLabApiBroker;
             this.loggingBroker = loggingBroker;
         }
 
@@ -43,7 +43,7 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             };
 
             ExternalLabCollection externalLabCollection =
-                await this.labApiBroker.GetAvailableLabsAsync(
+                await this.externalLabApiBroker.GetAvailableLabsAsync(
                     externalLabServiceInformation);
 
             List<ExternalLab> externalLabs =
@@ -63,9 +63,9 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             };
         };
 
-        private static LabStatus RetrieveLabStatus(ExternalLab lab)
+        private static LabStatus RetrieveLabStatus(ExternalLab externalLab)
         {
-            return (lab.IsConnected, lab.IsReserved) switch
+            return (externalLab.IsConnected, externalLab.IsReserved) switch
             {
                 (false, _) => LabStatus.Offline,
                 (true, false) => LabStatus.Available,

@@ -26,29 +26,29 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
         {
             // given
             var failedExternalLabDependencyException =
-                new FailedLabDependencyException(criticalDependencyException);
+                new FailedExternalLabDependencyException(criticalDependencyException);
 
             var expectedLabDependencyException =
-                new LabDependencyException(failedExternalLabDependencyException);
+                new ExternalLabDependencyException(failedExternalLabDependencyException);
 
-            this.labApiBrokerMock.Setup(broker =>
+            this.externalLabApiBrokerMock.Setup(broker =>
                 broker.GetAvailableLabsAsync(
                     It.IsAny<ExternalLabServiceInformation>()))
                         .ThrowsAsync(criticalDependencyException);
 
             // when
             ValueTask<List<Lab>> retrieveAllLabsTask =
-                this.labService.RetrieveAllLabsAsync();
+                this.externalLabService.RetrieveAllLabsAsync();
 
-            LabDependencyException actualLabDependencyException =
-                await Assert.ThrowsAsync<LabDependencyException>(() =>
+            ExternalLabDependencyException actualLabDependencyException =
+                await Assert.ThrowsAsync<ExternalLabDependencyException>(() =>
                     retrieveAllLabsTask.AsTask());
 
             // then
             actualLabDependencyException.Should().BeEquivalentTo(
                 expectedLabDependencyException);
 
-            this.labApiBrokerMock.Verify(broker =>
+            this.externalLabApiBrokerMock.Verify(broker =>
                 broker.GetAvailableLabsAsync(
                     It.IsAny<ExternalLabServiceInformation>()),
                         Times.Once);
@@ -58,7 +58,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     expectedLabDependencyException))),
                         Times.Once);
 
-            this.labApiBrokerMock.VerifyNoOtherCalls();
+            this.externalLabApiBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
 
@@ -71,29 +71,29 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
             var httpResponseException = new HttpResponseException(someResponseMessage, someMessage);
 
             var failedExternalLabDependencyException =
-                new FailedLabDependencyException(httpResponseException);
+                new FailedExternalLabDependencyException(httpResponseException);
 
             var expectedLabDependencyException =
-                new LabDependencyException(failedExternalLabDependencyException);
+                new ExternalLabDependencyException(failedExternalLabDependencyException);
 
-            this.labApiBrokerMock.Setup(broker =>
+            this.externalLabApiBrokerMock.Setup(broker =>
                 broker.GetAvailableLabsAsync(
                     It.IsAny<ExternalLabServiceInformation>()))
                         .ThrowsAsync(httpResponseException);
 
             // when
             ValueTask<List<Lab>> retrieveAllLabsTask =
-                this.labService.RetrieveAllLabsAsync();
+                this.externalLabService.RetrieveAllLabsAsync();
 
-            LabDependencyException actualLabDependencyException =
-                await Assert.ThrowsAsync<LabDependencyException>(() =>
+            ExternalLabDependencyException actualExternalLabDependencyException =
+                await Assert.ThrowsAsync<ExternalLabDependencyException>(() =>
                     retrieveAllLabsTask.AsTask());
 
             // then
-            actualLabDependencyException.Should().BeEquivalentTo(
+            actualExternalLabDependencyException.Should().BeEquivalentTo(
                 expectedLabDependencyException);
 
-            this.labApiBrokerMock.Verify(broker =>
+            this.externalLabApiBrokerMock.Verify(broker =>
                 broker.GetAvailableLabsAsync(
                     It.IsAny<ExternalLabServiceInformation>()),
                         Times.Once);
@@ -103,7 +103,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     expectedLabDependencyException))),
                         Times.Once);
 
-            this.labApiBrokerMock.VerifyNoOtherCalls();
+            this.externalLabApiBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
 
@@ -114,29 +114,29 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
             var serviceException = new Exception();
 
             var failedExternalLabServiceException =
-                new FailedLabServiceException(serviceException);
+                new FailedExternalLabServiceException(serviceException);
 
             var expectedLabServiceException =
-                new LabServiceException(failedExternalLabServiceException);
+                new ExternaLabServiceException(failedExternalLabServiceException);
 
-            this.labApiBrokerMock.Setup(broker =>
+            this.externalLabApiBrokerMock.Setup(broker =>
                 broker.GetAvailableLabsAsync(
                     It.IsAny<ExternalLabServiceInformation>()))
                         .ThrowsAsync(serviceException);
 
             // when
             ValueTask<List<Lab>> retrieveAllLabsTask =
-                this.labService.RetrieveAllLabsAsync();
+                this.externalLabService.RetrieveAllLabsAsync();
 
-            LabServiceException actualLabServiceException =
-                await Assert.ThrowsAsync<LabServiceException>(() =>
+            ExternaLabServiceException actualLabServiceException =
+                await Assert.ThrowsAsync<ExternaLabServiceException>(() =>
                     retrieveAllLabsTask.AsTask());
 
             // then
             actualLabServiceException.Should().BeEquivalentTo(
                 expectedLabServiceException);
 
-            this.labApiBrokerMock.Verify(broker =>
+            this.externalLabApiBrokerMock.Verify(broker =>
                 broker.GetAvailableLabsAsync(
                     It.IsAny<ExternalLabServiceInformation>()),
                         Times.Once);
@@ -146,7 +146,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations
                     expectedLabServiceException))),
                         Times.Once);
 
-            this.labApiBrokerMock.VerifyNoOtherCalls();
+            this.externalLabApiBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }

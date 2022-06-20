@@ -25,60 +25,60 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             catch (HttpResponseUrlNotFoundException httpResponseUrlNotFoundException)
             {
                 var failedLabDependencyException =
-                    new FailedLabDependencyException(httpResponseUrlNotFoundException);
+                    new FailedExternalLabDependencyException(httpResponseUrlNotFoundException);
 
                 throw CreateAndLogCriticalDependencyException(failedLabDependencyException);
             }
             catch (HttpResponseUnauthorizedException httpResponseUnauthorizedException)
             {
                 var failedLabDependencyException =
-                    new FailedLabDependencyException(httpResponseUnauthorizedException);
+                    new FailedExternalLabDependencyException(httpResponseUnauthorizedException);
 
                 throw CreateAndLogCriticalDependencyException(failedLabDependencyException);
             }
             catch (HttpResponseForbiddenException httpResponseForbiddenException)
             {
                 var failedLabDependencyException =
-                    new FailedLabDependencyException(httpResponseForbiddenException);
+                    new FailedExternalLabDependencyException(httpResponseForbiddenException);
 
                 throw CreateAndLogCriticalDependencyException(failedLabDependencyException);
             }
             catch (HttpResponseException httpResponseException)
             {
-                var failedLabDependencyException = new FailedLabDependencyException(httpResponseException);
+                var failedLabDependencyException = new FailedExternalLabDependencyException(httpResponseException);
 
                 throw CreateAndLogDependencyException(failedLabDependencyException);
             }
             catch (Exception exception)
             {
-                var failedLabServiceException = new FailedLabServiceException(exception);
+                var failedLabServiceException = new FailedExternalLabServiceException(exception);
 
                 throw CreateAndLogServiceException(failedLabServiceException);
             }
         }
 
-        private LabDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
+        private ExternalLabDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
-            var labDependencyException = new LabDependencyException(exception);
-            this.loggingBroker.LogCritical(labDependencyException);
+            var externalLabDependencyException = new ExternalLabDependencyException(exception);
+            this.loggingBroker.LogCritical(externalLabDependencyException);
 
-            return labDependencyException;
+            return externalLabDependencyException;
         }
 
-        private LabDependencyException CreateAndLogDependencyException(Xeption exception)
+        private ExternalLabDependencyException CreateAndLogDependencyException(Xeption exception)
         {
-            var labDependencyException = new LabDependencyException(exception);
-            this.loggingBroker.LogError(labDependencyException);
+            var externalLabDependencyException = new ExternalLabDependencyException(exception);
+            this.loggingBroker.LogError(externalLabDependencyException);
 
-            return labDependencyException;
+            return externalLabDependencyException;
         }
 
-        private LabServiceException CreateAndLogServiceException(Xeption exception)
+        private ExternaLabServiceException CreateAndLogServiceException(Xeption exception)
         {
-            var labServiceException = new LabServiceException(exception);
-            this.loggingBroker.LogError(labServiceException);
+            var ExternalLabServiceException = new ExternaLabServiceException(exception);
+            this.loggingBroker.LogError(ExternalLabServiceException);
 
-            return labServiceException;
+            return ExternalLabServiceException;
         }
     }
 }
