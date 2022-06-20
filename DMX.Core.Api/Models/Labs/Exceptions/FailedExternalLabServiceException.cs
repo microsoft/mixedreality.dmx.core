@@ -2,14 +2,15 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using Xeptions;
 
 namespace DMX.Core.Api.Models.Labs.Exceptions
 {
-    public class LabDependencyException : Xeption
+    public class FailedExternalLabServiceException : Xeption
     {
-        public LabDependencyException(Xeption innerException)
-            : base(message: "Lab dependency error occurred, contact support.",
+        public FailedExternalLabServiceException(Exception innerException)
+            : base(message: "Failed external lab service error occurred, contact support.",
                   innerException)
         { }
     }

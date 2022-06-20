@@ -17,7 +17,7 @@ using Xunit;
 
 namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
 {
-    public partial class LabApiTests
+    public partial class ExternalLabApiTests
     {
         [Fact]
         public async Task ShouldRetrieveAvailableLabsAsync()

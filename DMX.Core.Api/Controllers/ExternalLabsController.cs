@@ -14,30 +14,30 @@ namespace DMX.Core.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LabsController : RESTFulController
+    public class ExternalLabsController : RESTFulController
     {
-        private readonly ILabService labService;
+        private readonly IExternalLabService externalLabService;
 
-        public LabsController(ILabService labService) =>
-            this.labService = labService;
+        public ExternalLabsController(IExternalLabService externalLabService) =>
+            this.externalLabService = externalLabService;
 
         [HttpGet]
         public async ValueTask<ActionResult<List<Lab>>> GetAllLabsAsync()
         {
             try
             {
-                List<Lab> allLabs =
-                    await this.labService.RetrieveAllLabsAsync();
+                List<Lab> allExternalLabs =
+                    await this.externalLabService.RetrieveAllLabsAsync();
 
-                return Ok(allLabs);
+                return Ok(allExternalLabs);
             }
-            catch (LabDependencyException labDependencyException)
+            catch (ExternalLabDependencyException externalLabDependencyException)
             {
-                return InternalServerError(labDependencyException);
+                return InternalServerError(externalLabDependencyException);
             }
-            catch (LabServiceException labServiceException)
+            catch (ExternaLabServiceException externalLabServiceException)
             {
-                return InternalServerError(labServiceException);
+                return InternalServerError(externalLabServiceException);
             }
         }
     }

@@ -14,12 +14,12 @@ using Xunit;
 namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
 {
     [Collection(nameof(ApiTestCollection))]
-    public partial class LabApiTests
+    public partial class ExternalLabApiTests
     {
         private readonly DmxCoreApiBroker dmxCoreApiBroker;
         private readonly WireMockServer wireMockServer;
 
-        public LabApiTests(DmxCoreApiBroker dmxCoreApiBroker)
+        public ExternalLabApiTests(DmxCoreApiBroker dmxCoreApiBroker)
         {
             this.dmxCoreApiBroker = dmxCoreApiBroker;
             this.wireMockServer = WireMockServer.Start(6122);

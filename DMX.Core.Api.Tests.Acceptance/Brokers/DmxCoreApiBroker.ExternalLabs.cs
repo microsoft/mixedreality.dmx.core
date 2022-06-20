@@ -10,12 +10,12 @@ namespace DMX.Core.Api.Tests.Acceptance.Brokers
 {
     public partial class DmxCoreApiBroker
     {
-        private const string AvailableLabsApiRelativeUrl = "api/labs";
+        private const string AvailableExternalLabsApiRelativeUrl = "api/externallabs";
 
         public async ValueTask<List<Lab>> GetAllLabs()
         {
             return await this.apiFactoryClient.GetContentAsync<List<Lab>>(
-                relativeUrl: $"{AvailableLabsApiRelativeUrl}");
+                relativeUrl: $"{AvailableExternalLabsApiRelativeUrl}");
         }
     }
 }

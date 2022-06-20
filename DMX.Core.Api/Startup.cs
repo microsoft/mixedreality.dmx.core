@@ -69,11 +69,11 @@ namespace DMX.Core.Api
         private static void AddBrokers(IServiceCollection services)
         {
             services.AddTransient<ILoggingBroker, LoggingBroker>();
-            services.AddTransient<ILabApiBroker, LabApiBroker>();
+            services.AddTransient<IExternalLabApiBroker, ExternalLabApiBroker>();
             services.AddTransient<IStorageBroker, StorageBroker>();
         }
 
         private static void AddServices(IServiceCollection services) =>
-            services.AddTransient<ILabService, LabService>();
+            services.AddTransient<IExternalLabService, ExternalLabService>();
     }
 }
