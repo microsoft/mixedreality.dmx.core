@@ -22,9 +22,9 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<Lab> AddLabAsync(Lab lab)
+        public async ValueTask<Lab> AddLabAsync(Lab lab)
         {
-            throw new System.NotImplementedException();
+            return await this.storageBroker.InsertLabAsync(lab);
         }
     }
 }
