@@ -23,6 +23,10 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             {
                 throw CreateAndLogValidationException(nullLabException);
             }
+            catch (InvalidLabException invalidLabException)
+            {
+                throw CreateAndLogValidationException(invalidLabException);
+            }
         }
 
         private LabValidationException CreateAndLogValidationException(Xeption nullLabException)
