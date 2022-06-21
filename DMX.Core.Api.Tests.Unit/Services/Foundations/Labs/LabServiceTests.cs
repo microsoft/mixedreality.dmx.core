@@ -2,12 +2,15 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
+using System.Linq.Expressions;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Services.Foundations.Labs;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
 {
@@ -31,5 +34,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
 
         private static Filler<Lab> CreateLabFiller() =>
             new Filler<Lab>();
+
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
     }
 }
