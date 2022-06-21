@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using DMX.Core.Api.Models.ExternalLabs;
 using DMX.Core.Api.Models.ExternalLabs.Exceptions;
 using DMX.Core.Api.Models.Labs;
-using DMX.Core.Api.Models.Labs.Exceptions;
 using FluentAssertions;
 using Moq;
 using RESTFulSense.Exceptions;

@@ -16,7 +16,7 @@ namespace DMX.Core.Api.Services.Foundations.Labs
 
         private void ValidateLabIsNotNull(Lab lab)
         {
-            if(lab is null)
+            if (lab is null)
             {
                 throw new NullLabException();
             }

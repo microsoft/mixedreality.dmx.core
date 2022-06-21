@@ -2,10 +2,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System.Threading.Tasks;
 using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Models.Labs.Exceptions;
-using System;
-using System.Threading.Tasks;
 using Xeptions;
 
 namespace DMX.Core.Api.Services.Foundations.Labs
