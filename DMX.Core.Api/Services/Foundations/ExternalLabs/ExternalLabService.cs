@@ -11,7 +11,7 @@ using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Models.Externals.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
 
-namespace DMX.Core.Api.Services.Foundations.Labs
+namespace DMX.Core.Api.Services.Foundations.ExternalLabs
 {
     public partial class ExternalLabService : IExternalLabService
     {
