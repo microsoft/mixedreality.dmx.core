@@ -41,5 +41,57 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async void ShouldThrowValidationExceptionOnAddIfLabIsInvalid()
+        {
+            // given
+            var invalidLab = new Lab();
+
+            var invalidLabException = new InvalidLabException();
+
+            invalidLabException.AddData(
+                key: nameof(Lab.Id),
+                values: "Id is required");
+
+            invalidLabException.AddData(
+                key: nameof(Lab.Name),
+                values: "Name is required");
+
+            invalidLabException.AddData(
+                key: nameof(Lab.ExternalId),
+                values: "ExternalId is required");
+
+            invalidLabException.AddData(
+                key: nameof(Lab.Description),
+                values: "Description is required");
+
+            invalidLabException.AddData(
+                key: nameof(Lab.Status),
+                values: "Status is required");
+
+            var expectedLabValidationException = new LabValidationException(invalidLabException);
+
+            // when
+            ValueTask<Lab> addLabTask = this.labService.AddLabAsync(invalidLab);
+
+            LabValidationException actualLabValidationException =
+                await Assert.ThrowsAsync<LabValidationException>(() =>
+                addLabTask.AsTask());
+
+            // then
+
+            actualLabValidationException.Should().BeEquivalentTo(expectedLabValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+            broker.LogError(It.Is(SameExceptionAs(
+                expectedLabValidationException))),
+                Times.Once);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+
+
+        }
     }
 }
