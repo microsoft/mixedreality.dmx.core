@@ -43,11 +43,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
         }
 
         [Fact]
-        public async void ShouldThrowValidationExceptionOnAddIfLabIsInvalid()
+        public async Task ShouldThrowValidationExceptionOnAddIfLabIsInvalidAndLogItAsync()
         {
             // given
             var invalidLab = new Lab();
-
             var invalidLabException = new InvalidLabException();
 
             invalidLabException.AddData(
@@ -55,43 +54,39 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 values: "Id is required");
 
             invalidLabException.AddData(
-                key: nameof(Lab.Name),
-                values: "Name is required");
+                key: nameof(Lab.ExternalId),
+                values: "Id is required");
 
             invalidLabException.AddData(
-                key: nameof(Lab.ExternalId),
-                values: "ExternalId is required");
+                key: nameof(Lab.Name),
+                values: "Text is required");
 
             invalidLabException.AddData(
                 key: nameof(Lab.Description),
-                values: "Description is required");
+                values: "Text is required");
 
-            invalidLabException.AddData(
-                key: nameof(Lab.Status),
-                values: "Status is required");
-
-            var expectedLabValidationException = new LabValidationException(invalidLabException);
+            var expectedLabValidationException =
+                new LabValidationException(invalidLabException);
 
             // when
-            ValueTask<Lab> addLabTask = this.labService.AddLabAsync(invalidLab);
+            ValueTask<Lab> addLabTask =
+                this.labService.AddLabAsync(invalidLab);
 
             LabValidationException actualLabValidationException =
                 await Assert.ThrowsAsync<LabValidationException>(() =>
-                addLabTask.AsTask());
+                    addLabTask.AsTask());
 
             // then
-
-            actualLabValidationException.Should().BeEquivalentTo(expectedLabValidationException);
+            actualLabValidationException.Should().BeEquivalentTo(
+                expectedLabValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
-            broker.LogError(It.Is(SameExceptionAs(
-                expectedLabValidationException))),
-                Times.Once);
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabValidationException))),
+                        Times.Once);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
-
-
         }
     }
 }
