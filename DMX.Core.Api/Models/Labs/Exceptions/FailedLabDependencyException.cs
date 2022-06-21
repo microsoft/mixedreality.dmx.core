@@ -7,10 +7,10 @@ using Xeptions;
 
 namespace DMX.Core.Api.Models.Labs.Exceptions
 {
-    public class FailedExternalLabServiceException : Xeption
+    public class FailedLabDependencyException : Xeption
     {
-        public FailedExternalLabServiceException(Exception innerException)
-            : base(message: "Failed lab service error occurred, contact support.",
+        public FailedLabDependencyException(Exception innerException)
+            : base(message: "Failed lab dependency error occurred, contact support.",
                   innerException)
         { }
     }
