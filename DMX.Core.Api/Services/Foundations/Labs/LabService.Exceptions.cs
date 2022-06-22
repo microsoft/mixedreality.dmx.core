@@ -5,6 +5,7 @@
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Models.Labs.Exceptions;
+using Microsoft.Data.SqlClient;
 using Xeptions;
 
 namespace DMX.Core.Api.Services.Foundations.Labs
@@ -27,14 +28,27 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             {
                 throw CreateAndLogValidationException(invalidLabException);
             }
+            catch (SqlException sqlException)
+            {
+                var failedLabStorageException = new FailedLabStorageException(sqlException);
+                throw CreateAndLogCriticalLabDependencyException(failedLabStorageException);
+            }
         }
 
-        private LabValidationException CreateAndLogValidationException(Xeption nullLabException)
+        private LabValidationException CreateAndLogValidationException(Xeption exception)
         {
-            var labValidationException = new LabValidationException(nullLabException);
+            var labValidationException = new LabValidationException(exception);
             this.loggingBroker.LogError(exception: labValidationException);
 
             return labValidationException;
         }
+
+        private LabDependencyException CreateAndLogCriticalLabDependencyException(Xeption exception)
+        {
+            var labDependencyException = new LabDependencyException(exception);
+            this.loggingBroker.LogCritical(exception: labDependencyException);
+
+            return labDependencyException;
+        } 
     }
 }
