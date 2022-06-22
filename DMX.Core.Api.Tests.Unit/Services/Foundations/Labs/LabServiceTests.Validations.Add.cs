@@ -98,5 +98,44 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnAddIfLabStatusIsInvalidAndLogItAsync()
+        {
+            // given
+            Lab randomLab = CreateRandomLab();
+            Lab invalidLab = randomLab;
+            invalidLab.Status = GetInvalidEnum<LabStatus>();
+
+            var invalidLabException =
+                new InvalidLabException();
+
+            invalidLabException.AddData(
+                nameof(Lab.Status),
+                "Value is not recognized");
+
+            var expectedLabValidationException =
+                new LabValidationException(invalidLabException);
+
+            // when
+            ValueTask < Lab > addLabTask =
+                this.labService.AddLabAsync(invalidLab);
+
+            LabValidationException actualLabValidationException =
+                await Assert.ThrowsAsync<LabValidationException>(() =>
+                    addLabTask.AsTask());
+
+            // then
+            actualLabValidationException.Should().BeEquivalentTo(
+                expectedLabValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabValidationException))),
+                        Times.Once);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }

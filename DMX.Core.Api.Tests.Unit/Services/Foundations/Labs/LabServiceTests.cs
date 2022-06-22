@@ -29,8 +29,24 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 storageBroker: this.storageBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
+
         private static Lab CreateRandomLab() =>
             CreateLabFiller().Create();
+
+        private static T GetInvalidEnum<T>()
+        {
+            int randomNumber = GetLocalRandomNumber();
+
+            while (Enum.IsDefined(typeof(T), randomNumber))
+            {
+                randomNumber = GetLocalRandomNumber();
+            }
+
+            return (T)(object)randomNumber;
+
+            static int GetLocalRandomNumber() =>
+                new IntRange(min: int.MinValue, max: int.MaxValue).GetValue();
+        }
 
         private static Filler<Lab> CreateLabFiller() =>
             new Filler<Lab>();
