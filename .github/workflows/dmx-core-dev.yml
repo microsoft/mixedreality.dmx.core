@@ -6,7 +6,7 @@ on:
 env:
   AZURE_WEBAPP_NAME: dmx-core-dev
   AZURE_WEBAPP_PACKAGE_PATH: DMX.Core.Api/publish
-  AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.dmx_core_dev_38c9 }}
+  AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.dmx_core_dev_fd79 }}
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 7.0.x
   WORKING_DIRECTORY: DMX.Core.Api
