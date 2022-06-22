@@ -83,8 +83,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 this.labService.AddLabAsync(invalidLab);
 
             LabValidationException actualLabValidationException =
-                await Assert.ThrowsAsync<LabValidationException>(() =>
-                    addLabTask.AsTask());
+                await Assert.ThrowsAsync<LabValidationException>(
+                    addLabTask.AsTask);
 
             // then
             actualLabValidationException.Should().BeEquivalentTo(
@@ -122,8 +122,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 this.labService.AddLabAsync(invalidLab);
 
             LabValidationException actualLabValidationException =
-                await Assert.ThrowsAsync<LabValidationException>(() =>
-                    addLabTask.AsTask());
+                await Assert.ThrowsAsync<LabValidationException>(
+                    addLabTask.AsTask);
 
             // then
             actualLabValidationException.Should().BeEquivalentTo(
