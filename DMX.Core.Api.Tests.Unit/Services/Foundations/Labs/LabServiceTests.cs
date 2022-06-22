@@ -4,10 +4,12 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Services.Foundations.Labs;
+using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -48,10 +50,13 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 new IntRange(min: int.MinValue, max: int.MaxValue).GetValue();
         }
 
-        private static Filler<Lab> CreateLabFiller() =>
-            new Filler<Lab>();
-
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
+
+        private static SqlException GetSqlException() =>
+           (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
+        
+        private static Filler<Lab> CreateLabFiller() =>
+            new Filler<Lab>();
     }
 }
