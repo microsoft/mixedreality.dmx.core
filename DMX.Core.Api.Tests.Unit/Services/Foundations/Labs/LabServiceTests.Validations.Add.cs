@@ -88,5 +88,34 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [MemberData(nameof(LabInvalidProperties))]
+        public async Task ShouldThrowValidationExceptionOnAddIfLabPropertyIsInvalidAndLogItAsync((Lab InvalidLab, InvalidLabException InvalidLabException) labAndException)
+        {
+            // given
+            var expectedLabValidationException =
+                new LabValidationException(labAndException.InvalidLabException);
+
+            // when
+            ValueTask<Lab> addLabTask =
+                this.labService.AddLabAsync(labAndException.InvalidLab);
+
+            LabValidationException actualLabValidationException =
+                await Assert.ThrowsAsync<LabValidationException>(() =>
+                    addLabTask.AsTask());
+
+            // then
+            actualLabValidationException.Should().BeEquivalentTo(
+                expectedLabValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabValidationException))),
+                        Times.Once);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
