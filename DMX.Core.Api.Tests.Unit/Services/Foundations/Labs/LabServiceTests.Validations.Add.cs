@@ -118,7 +118,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 new LabValidationException(invalidLabException);
 
             // when
-            ValueTask < Lab > addLabTask =
+            ValueTask<Lab> addLabTask =
                 this.labService.AddLabAsync(invalidLab);
 
             LabValidationException actualLabValidationException =

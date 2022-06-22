@@ -18,7 +18,8 @@ namespace DMX.Core.Api.Services.Foundations.Labs
                 (Rule: IsInvalid(lab.Id), Parameter: nameof(Lab.Id)),
                 (Rule: IsInvalidId(lab.ExternalId), Parameter: nameof(Lab.ExternalId)),
                 (Rule: IsInvalid(lab.Name), Parameter: nameof(Lab.Name)),
-                (Rule: IsInvalid(lab.Description), Parameter: nameof(Lab.Description)));
+                (Rule: IsInvalid(lab.Description), Parameter: nameof(Lab.Description)),
+                (Rule: IsInvalid(lab.Status), Parameter: nameof(Lab.Status)));
         }
 
         private void ValidateLabIsNotNull(Lab lab)
@@ -45,6 +46,12 @@ namespace DMX.Core.Api.Services.Foundations.Labs
         {
             Condition = String.IsNullOrWhiteSpace(id),
             Message = "Id is required"
+        };
+
+        private static dynamic IsInvalid(LabStatus labStatus) => new
+        {
+            Condition = Enum.IsDefined(labStatus) is false,
+            Message = "Value is not recognized"
         };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
