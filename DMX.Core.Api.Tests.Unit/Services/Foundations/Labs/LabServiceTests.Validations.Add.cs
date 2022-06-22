@@ -42,11 +42,21 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
 
-        [Fact]
-        public async Task ShouldThrowValidationExceptionOnAddIfLabIsInvalidAndLogItAsync()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ShouldThrowValidationExceptionOnAddIfLabIsInvalidAndLogItAsync(
+            string invalidString)
         {
             // given
-            var invalidLab = new Lab();
+            var invalidLab = new Lab
+            {
+                Name = invalidString,
+                Description = invalidString,
+                ExternalId = invalidString
+            };
+
             var invalidLabException = new InvalidLabException();
 
             invalidLabException.AddData(
