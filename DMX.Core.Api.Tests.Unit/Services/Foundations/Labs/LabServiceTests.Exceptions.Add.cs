@@ -26,7 +26,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
 
             var failedLabStorageException =
                 new FailedLabStorageException(sqlException);
-            
+
             var expectedLabDependencyException =
                 new LabDependencyException(failedLabStorageException);
 
@@ -107,13 +107,13 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             // given
             Lab someLab = CreateRandomLab();
 
-            var dbUpdateException = 
+            var dbUpdateException =
                 new DbUpdateException();
 
-            var failedLabStorageException = 
+            var failedLabStorageException =
                 new FailedLabStorageException(dbUpdateException);
 
-            var expectedLabDependencyException = 
+            var expectedLabDependencyException =
                 new LabDependencyException(failedLabStorageException);
 
             this.storageBrokerMock.Setup(broker =>

@@ -49,15 +49,12 @@ namespace DMX.Core.Api.Services.Foundations.Labs
 
                 throw CreateAndLogDependencyException(failedLabStorageException);
             }
-        }
+            catch (Exception exception)
+            {
+                var failedLabServiceException = new FailedLabServiceException(exception);
 
-        private LabDependencyException CreateAndLogDependencyException(
-            Xeption exception)
-        {
-            var labDependencyException = new LabDependencyException(exception);
-            this.loggingBroker.LogError(labDependencyException);
-
-            return labDependencyException;
+                throw CreateAndLogServiceException(failedLabServiceException);
+            }
         }
 
         private LabValidationException CreateAndLogValidationException(Xeption exception)
@@ -82,6 +79,22 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             this.loggingBroker.LogError(exception: labDependencyValidationException);
 
             return labDependencyValidationException;
+        }
+
+        private LabDependencyException CreateAndLogDependencyException(Xeption exception)
+        {
+            var labDependencyException = new LabDependencyException(exception);
+            this.loggingBroker.LogError(labDependencyException);
+
+            return labDependencyException;
+        }
+
+        private LabServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var labServiceException = new LabServiceException(exception);
+            this.loggingBroker.LogError(labServiceException);
+
+            return labServiceException;
         }
     }
 }

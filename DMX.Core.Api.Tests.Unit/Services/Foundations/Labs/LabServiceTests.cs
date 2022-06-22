@@ -58,7 +58,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
 
         private static SqlException GetSqlException() =>
            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
-        
+
         private static Filler<Lab> CreateLabFiller() =>
             new Filler<Lab>();
     }
