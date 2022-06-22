@@ -3,13 +3,13 @@
 // ---------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using DMX.Core.Api.Models.Labs;
 
-namespace DMX.Core.Api.Models.Externals.ExternalLabs
+namespace DMX.Core.Api.Services.Foundations.ExternalLabs
 {
-    public class ExternalLabCommand
+    public interface IExternalLabService
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public IDictionary<string, string> Parameters { get; set; }
+        ValueTask<List<Lab>> RetrieveAllLabsAsync();
     }
 }
