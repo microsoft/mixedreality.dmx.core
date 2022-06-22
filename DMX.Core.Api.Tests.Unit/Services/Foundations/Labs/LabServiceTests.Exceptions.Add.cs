@@ -100,13 +100,18 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             // given
             Lab someLab = CreateRandomLab();
 
-            var dbUpdateException = new DbUpdateException();
+            var dbUpdateException = 
+                new DbUpdateException();
 
-            var failedLabDependencyException = 
-                new FailedLabDependencyException(dbUpdateException);
+            var failedLabStorageException = 
+                new FailedLabStorageException(dbUpdateException);
 
             var expectedLabDependencyException = 
-                new LabDependencyException(failedLabDependencyException);
+                new LabDependencyException(failedLabStorageException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertLabAsync(It.IsAny<Lab>()))
+                    .ThrowsAsync(dbUpdateException);
 
             // when
             ValueTask<Lab> addLabTask = this.labService.AddLabAsync(someLab);

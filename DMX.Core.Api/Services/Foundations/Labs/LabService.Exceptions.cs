@@ -2,11 +2,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Models.Labs.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace DMX.Core.Api.Services.Foundations.Labs
@@ -41,6 +43,21 @@ namespace DMX.Core.Api.Services.Foundations.Labs
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsLabException);
             }
+            catch (DbUpdateException dbUpdateException)
+            {
+                var failedLabStorageException = new FailedLabStorageException(dbUpdateException);
+
+                throw CreateAndLogDependencyException(failedLabStorageException);
+            }
+        }
+
+        private LabDependencyException CreateAndLogDependencyException(
+            Xeption exception)
+        {
+            var labDependencyException = new LabDependencyException(exception);
+            this.loggingBroker.LogError(labDependencyException);
+
+            return labDependencyException;
         }
 
         private LabValidationException CreateAndLogValidationException(Xeption exception)
@@ -57,7 +74,7 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             this.loggingBroker.LogCritical(exception: labDependencyException);
 
             return labDependencyException;
-        } 
+        }
 
         private LabDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
         {
