@@ -5,6 +5,7 @@
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Models.Labs.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Xeptions;
 
@@ -31,7 +32,14 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             catch (SqlException sqlException)
             {
                 var failedLabStorageException = new FailedLabStorageException(sqlException);
+
                 throw CreateAndLogCriticalLabDependencyException(failedLabStorageException);
+            }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsLabException = new AlreadyExistsLabException(duplicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistsLabException);
             }
         }
 
@@ -50,5 +58,13 @@ namespace DMX.Core.Api.Services.Foundations.Labs
 
             return labDependencyException;
         } 
+
+        private LabDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
+        {
+            var labDependencyValidationException = new LabDependencyValidationException(exception);
+            this.loggingBroker.LogError(exception: labDependencyValidationException);
+
+            return labDependencyValidationException;
+        }
     }
 }
