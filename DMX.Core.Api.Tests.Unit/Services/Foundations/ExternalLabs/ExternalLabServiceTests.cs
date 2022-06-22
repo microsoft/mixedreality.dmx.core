@@ -9,9 +9,9 @@ using System.Linq.Expressions;
 using System.Net.Http;
 using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Models.Externals.ExternalLabs;
+using DMX.Core.Api.Models.ExternalLabs;
 using DMX.Core.Api.Models.Labs;
-using DMX.Core.Api.Services.Foundations.Labs;
+using DMX.Core.Api.Services.Foundations.ExternalLabs;
 using KellermanSoftware.CompareNetObjects;
 using Moq;
 using RESTFulSense.Exceptions;
@@ -19,7 +19,7 @@ using Tynamix.ObjectFiller;
 using Xeptions;
 using Xunit;
 
-namespace DMX.Core.Api.Tests.Unit.Services.Foundations
+namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
 {
     public partial class ExternalLabServiceTest
     {

@@ -5,12 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DMX.Core.Api.Models.ExternalLabs.Exceptions;
 using DMX.Core.Api.Models.Labs;
-using DMX.Core.Api.Models.Labs.Exceptions;
 using RESTFulSense.Exceptions;
 using Xeptions;
 
-namespace DMX.Core.Api.Services.Foundations.Labs
+namespace DMX.Core.Api.Services.Foundations.ExternalLabs
 {
     public partial class ExternalLabService
     {

@@ -4,7 +4,7 @@
 
 using Newtonsoft.Json;
 
-namespace DMX.Core.Api.Models.Externals.ExternalLabs
+namespace DMX.Core.Api.Models.ExternalLabs
 {
     public class ExternalLabCollection
     {

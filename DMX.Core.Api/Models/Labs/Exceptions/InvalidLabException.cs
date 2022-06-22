@@ -2,13 +2,15 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using System.Threading.Tasks;
-using DMX.Core.Api.Models.Labs;
+using Xeptions;
 
-namespace DMX.Core.Api.Brokers.Storages
+namespace DMX.Core.Api.Models.Labs.Exceptions
 {
-    public partial interface IStorageBroker
+    public class InvalidLabException : Xeption
     {
-        ValueTask<Lab> InsertLabAsync(Lab lab);
+        public InvalidLabException()
+            : base("Lab is invalid")
+        {
+        }
     }
 }
