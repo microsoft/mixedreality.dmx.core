@@ -23,7 +23,7 @@ namespace DMX.Core.Api.Controllers
             this.labService = externalLabService;
 
         [HttpPost]
-        public async ValueTask<ActionResult<Lab>> AddLabAsync(Lab lab)
+        public async ValueTask<ActionResult<Lab>> PostLabAsync(Lab lab)
         {
             try
             {
@@ -38,12 +38,12 @@ namespace DMX.Core.Api.Controllers
             }
             catch (LabDependencyException labDependencyException)
             {
-                return Problem(labDependencyException.Message);
+                return InternalServerError(labDependencyException);
             }
             catch (LabDependencyValidationException labDependencyValidationException)
                 when (labDependencyValidationException.InnerException is AlreadyExistsLabException)
             {
-                return Conflict(labDependencyValidationException.Message);
+                return Conflict(labDependencyValidationException.InnerException);
             }
             catch (LabDependencyValidationException labDependencyValidationException)
             {
@@ -51,7 +51,7 @@ namespace DMX.Core.Api.Controllers
             }
             catch(LabServiceException labServiceException)
             {
-                return Problem(labServiceException.Message);
+                return InternalServerError(labServiceException);
             }
         }
     }
