@@ -9,7 +9,7 @@ namespace DMX.Core.Api.Models.Labs.Exceptions
     public class InvalidLabException : Xeption
     {
         public InvalidLabException()
-            : base("Lab is invalid")
+            : base("Invalid lab error occurred. Please fix the errors and try again.")
         {
         }
     }
