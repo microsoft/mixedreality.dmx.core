@@ -5,6 +5,7 @@
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Models.Labs.Exceptions;
+using EFxceptions.Models.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
@@ -44,6 +45,49 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(expectedLabDependencyException))),
                     Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfLabAlreadyExistsAndLogItAsync()
+        {
+            // given
+            Lab someLab = CreateRandomLab();
+            string someMessage = GetRandomString();
+
+            var duplicateKeyException =
+                new DuplicateKeyException(someMessage);
+
+            var alreadyExistsLabException =
+                new AlreadyExistsLabException(duplicateKeyException);
+
+            var expectedLabDependencyValidationException =
+                new LabDependencyValidationException(alreadyExistsLabException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertLabAsync(It.IsAny<Lab>()))
+                    .ThrowsAsync(duplicateKeyException);
+
+            // when
+            ValueTask<Lab> addLabTask = this.labService.AddLabAsync(someLab);
+
+            LabDependencyValidationException actualLabDependencyValidationException =
+                await Assert.ThrowsAsync<LabDependencyValidationException>(addLabTask.AsTask);
+
+            // then
+            actualLabDependencyValidationException.Should()
+                .BeEquivalentTo(expectedLabDependencyValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabAsync(It.IsAny<Lab>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabDependencyValidationException))),
+                        Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
