@@ -8,6 +8,7 @@ using DMX.Core.Api.Models.Labs.Exceptions;
 using EFxceptions.Models.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
@@ -87,6 +88,43 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLabDependencyValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateErrorsOccursAndLogItAsync()
+        {
+            // given
+            Lab someLab = CreateRandomLab();
+
+            var dbUpdateException = new DbUpdateException();
+
+            var failedLabDependencyException = 
+                new FailedLabDependencyException(dbUpdateException);
+
+            var expectedLabDependencyException = 
+                new LabDependencyException(failedLabDependencyException);
+
+            // when
+            ValueTask<Lab> addLabTask = this.labService.AddLabAsync(someLab);
+
+            LabDependencyException actualLabDependencyException =
+                await Assert.ThrowsAsync<LabDependencyException>(addLabTask.AsTask);
+
+            // then
+            actualLabDependencyException.Should()
+                .BeEquivalentTo(expectedLabDependencyException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabAsync(It.IsAny<Lab>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabDependencyException))),
                         Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
