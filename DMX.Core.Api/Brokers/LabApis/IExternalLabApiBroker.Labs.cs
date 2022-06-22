@@ -7,7 +7,7 @@ using DMX.Core.Api.Models.Externals.ExternalLabs;
 
 namespace DMX.Core.Api.Brokers.LabApis
 {
-    public partial interface ILabApiBroker
+    public partial interface IExternalLabApiBroker
     {
         ValueTask<ExternalLabCollection> GetAvailableLabsAsync(
             ExternalLabServiceInformation externalLabServiceInformation);
