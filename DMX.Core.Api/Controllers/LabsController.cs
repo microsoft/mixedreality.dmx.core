@@ -2,14 +2,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Labs.Exceptions;
 using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Labs.Exceptions;
 using DMX.Core.Api.Services.Foundations.Labs;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
-using System.Reflection.Metadata;
 
 namespace DMX.Core.Api.Controllers
 {
@@ -49,7 +47,7 @@ namespace DMX.Core.Api.Controllers
             {
                 return BadRequest(labDependencyValidationException.InnerException);
             }
-            catch(LabServiceException labServiceException)
+            catch (LabServiceException labServiceException)
             {
                 return InternalServerError(labServiceException);
             }

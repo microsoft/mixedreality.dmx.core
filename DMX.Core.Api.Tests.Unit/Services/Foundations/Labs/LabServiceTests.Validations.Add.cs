@@ -18,10 +18,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
         {
             // given
             Lab nullLab = null;
-
             var nullLabException = new NullLabException();
 
-            var expectedLabValidationException = new LabValidationException(nullLabException);
+            var expectedLabValidationException =
+                new LabValidationException(nullLabException);
 
             // when
             ValueTask<Lab> addLabTask = this.labService.AddLabAsync(nullLab);
@@ -31,12 +31,17 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                     addLabTask.AsTask());
 
             // then
-            actualLabValidationException.Should().BeEquivalentTo(expectedLabValidationException);
+            actualLabValidationException.Should().BeEquivalentTo(
+                expectedLabValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLabValidationException))),
                         Times.Once());
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabAsync(It.IsAny<Lab>()),
+                    Times.Never);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
@@ -95,6 +100,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                     expectedLabValidationException))),
                         Times.Once);
 
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabAsync(It.IsAny<Lab>()),
+                    Times.Never);
+
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
@@ -133,6 +142,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLabValidationException))),
                         Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabAsync(It.IsAny<Lab>()),
+                    Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
