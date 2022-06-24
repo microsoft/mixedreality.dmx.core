@@ -11,7 +11,7 @@ using Tynamix.ObjectFiller;
 using WireMock.Server;
 using Xunit;
 
-namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
+namespace DMX.Core.Api.Tests.Acceptance.APIs.ExternalLabs
 {
     [Collection(nameof(ApiTestCollection))]
     public partial class ExternalLabApiTests

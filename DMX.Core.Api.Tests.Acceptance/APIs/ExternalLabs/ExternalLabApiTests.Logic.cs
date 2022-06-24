@@ -15,7 +15,7 @@ using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using Xunit;
 
-namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
+namespace DMX.Core.Api.Tests.Acceptance.APIs.ExternalLabs
 {
     public partial class ExternalLabApiTests
     {
