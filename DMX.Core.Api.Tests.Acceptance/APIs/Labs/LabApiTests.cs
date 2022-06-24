@@ -20,10 +20,8 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
     {
         private readonly DmxCoreApiBroker dmxCoreApiBroker;
 
-        public LabApiTests(DmxCoreApiBroker dmxCoreApiBroker)
-        {
+        public LabApiTests(DmxCoreApiBroker dmxCoreApiBroker) =>
             this.dmxCoreApiBroker = dmxCoreApiBroker;
-        }
 
         private static Lab CreateRandomLab() =>
             new Filler<Lab>().Create();
