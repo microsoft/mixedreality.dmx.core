@@ -32,9 +32,6 @@ namespace DMX.Core.Api.Services.Foundations.Labs
         });
 
         public IQueryable<Lab> RetrieveAllLabs() =>
-        TryCatch(() =>
-        {
-            return this.storageBroker.SelectAllLabs();
-        });
+        TryCatch(() => this.storageBroker.SelectAllLabs());
     }
 }

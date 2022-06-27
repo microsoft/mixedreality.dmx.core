@@ -72,6 +72,12 @@ namespace DMX.Core.Api.Services.Foundations.Labs
 
                 throw CreateAndLogCriticalLabDependencyException(failedLabStorageException);
             }
+            catch (Exception exception)
+            {
+                var failedLabServiceException = new FailedLabServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLabServiceException);
+            }
         }
 
         private LabValidationException CreateAndLogValidationException(Xeption exception)
