@@ -14,7 +14,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
     public partial class LabServiceTests
     {
         [Fact]
-        public void ShouldThrowCriticalDependencyExceptionOnRetrieveAllIfSqlErrorOccursAndLogItAsync()
+        public void ShouldThrowCriticalDependencyExceptionOnRetrieveAllIfSqlErrorOccursAndLogIt()
         {
             // given
             SqlException sqlException = GetSqlException();
@@ -49,6 +49,46 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 broker.LogCritical(It.Is(SameExceptionAs(
                     expectedLabDependencyException))),
                         Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public void ShouldThrowServiceExceptionOnRetrieveAllIfServiceErrorOccursAndLogIt()
+        {
+            // given
+            var exception = new Exception();
+
+            var failedLabServiceException =
+                new FailedLabServiceException(exception);
+
+            var expectedLabServiceException =
+                new LabServiceException(failedLabServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectAllLabs())
+                    .Throws(exception);
+
+            // when
+            Action retrieveAllLabsAction = () =>
+                this.labService.RetrieveAllLabs();
+
+            LabServiceException actualLabServiceExeption =
+                Assert.Throws<LabServiceException>(
+                    retrieveAllLabsAction);
+
+            // then
+            actualLabServiceExeption.Should().BeEquivalentTo(
+                expectedLabServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectAllLabs(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(expectedLabServiceException))),
+                    Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
