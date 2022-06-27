@@ -18,7 +18,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
     public partial class LabServiceTests
     {
         [Fact]
-        public async Task ShouldThrowCriticalDependencyExceptionOnRegisterIfSqlErrorOccursAndLogItAsync()
+        public async Task ShouldThrowCriticalDependencyExceptionOnAddIfSqlErrorOccursAndLogItAsync()
         {
             // given
             Lab someLab = CreateRandomLab();
