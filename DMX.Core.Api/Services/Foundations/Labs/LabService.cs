@@ -23,10 +23,11 @@ namespace DMX.Core.Api.Services.Foundations.Labs
         }
 
         public ValueTask<Lab> AddLabAsync(Lab lab) =>
-            TryCatch(async () =>
-            {
-                this.ValidateLabOnAdd(lab);
-                return await this.storageBroker.InsertLabAsync(lab);
-            });
+        TryCatch(async () =>
+        {
+            ValidateLabOnAdd(lab);
+
+            return await this.storageBroker.InsertLabAsync(lab);
+        });
     }
 }
