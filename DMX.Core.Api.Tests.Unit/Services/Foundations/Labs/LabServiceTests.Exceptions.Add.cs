@@ -35,7 +35,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                     .ThrowsAsync(sqlException);
 
             // when
-            ValueTask<Lab> retrievedLabTask = this.labService.AddLabAsync(someLab);
+            ValueTask<Lab> retrievedLabTask =
+                this.labService.AddLabAsync(someLab);
 
             LabDependencyException actualLabDependencyException =
                 await Assert.ThrowsAsync<LabDependencyException>(

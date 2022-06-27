@@ -31,7 +31,7 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             return await this.storageBroker.InsertLabAsync(lab);
         });
 
-        public IQueryable<Lab> RetrieveLabs() =>
+        public IQueryable<Lab> RetrieveAllLabs() =>
             this.storageBroker.SelectAllLabs();
     }
 }

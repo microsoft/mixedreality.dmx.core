@@ -2,7 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using System.Threading.Tasks;
+using System.Linq;
 using DMX.Core.Api.Models.Labs;
 using FluentAssertions;
 using Force.DeepCloner;
@@ -14,27 +14,26 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
     public partial class LabServiceTests
     {
         [Fact]
-        public async Task ShouldAddLabAsync()
+        public void ShouldRetrieveLabs()
         {
             // given
-            Lab randomLab = CreateRandomLab();
-            Lab inputLab = randomLab;
-            Lab insertedLab = inputLab;
-            Lab expectedLab = insertedLab.DeepClone();
+            IQueryable<Lab> randomLabs = CreateRandomLabs();
+            IQueryable<Lab> retrievedLabs = randomLabs;
+            IQueryable<Lab> expectedLabs = randomLabs.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
-                broker.InsertLabAsync(inputLab))
-                    .ReturnsAsync(insertedLab);
+                broker.SelectAllLabs())
+                    .Returns(retrievedLabs);
 
             // when
-            Lab actualLab =
-                await this.labService.AddLabAsync(inputLab);
+            IQueryable<Lab> actualLabs =
+                this.labService.RetrieveAllLabs();
 
             // then
-            actualLab.Should().BeEquivalentTo(expectedLab);
+            actualLabs.Should().BeEquivalentTo(expectedLabs);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.InsertLabAsync(inputLab),
+                broker.SelectAllLabs(),
                     Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
