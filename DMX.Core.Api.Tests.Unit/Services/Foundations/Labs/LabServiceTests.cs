@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using DMX.Core.Api.Brokers.Loggings;
@@ -35,6 +36,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
         private static Lab CreateRandomLab() =>
             CreateLabFiller().Create();
 
+        private static IQueryable<Lab> CreateRandomLabs() =>
+            CreateLabFiller().Create(count: GetRandomNumber()).AsQueryable();
+
         private static T GetInvalidEnum<T>()
         {
             int randomNumber = GetLocalRandomNumber();
@@ -55,6 +59,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
 
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 10).GetValue();
 
         private static SqlException GetSqlException() =>
            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));

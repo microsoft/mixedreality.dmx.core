@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
@@ -29,5 +30,10 @@ namespace DMX.Core.Api.Services.Foundations.Labs
 
             return await this.storageBroker.InsertLabAsync(lab);
         });
+
+        public IQueryable<Lab> RetrieveLabs()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
