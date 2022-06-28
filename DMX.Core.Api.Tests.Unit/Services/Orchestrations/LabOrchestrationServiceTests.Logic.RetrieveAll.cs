@@ -15,23 +15,21 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
 {
     public partial class LabOrchestrationServiceTests
     {
-        [Fact]
-        public async Task ShouldRetrieveSameLabsIfSameLabsAreReturnedFromDependentServicesAsync()
+        [Theory]
+        [MemberData(nameof(CreateLabsData))]
+        public async Task ShouldRetrieveLabsWithStatusAsync(
+            List<Lab> externalLabList,
+            IQueryable<Lab> labQuerable,
+            List<Lab> expectedLabsList)
         {
             // given
-            List<Lab> randomLabsList = CreateRandomLabsList();
-            List<Lab> expectedLabsList = randomLabsList.DeepClone();
-
-            IQueryable<Lab> randomLabsIqueryable =
-                randomLabsList.AsQueryable();
+            this.externalLabService.Setup(service =>
+                service.RetrieveAllLabsAsync())
+                    .ReturnsAsync(externalLabList);
 
             this.labServiceMock.Setup(service =>
                 service.RetrieveAllLabs())
-                    .Returns(randomLabsIqueryable);
-
-            this.externalLabService.Setup(service =>
-                service.RetrieveAllLabsAsync())
-                    .ReturnsAsync(randomLabsList);
+                    .Returns(labQuerable);
 
             // when
             List<Lab> actualLabs =
