@@ -25,7 +25,8 @@ namespace DMX.Core.Api.Services.Orchestrations
 
         public async ValueTask<List<Lab>> RetrieveAllLabsAsync()
         {
-            throw new System.NotImplementedException();
+            this.labService.RetrieveAllLabs();
+            return await this.externalLabService.RetrieveAllLabsAsync();
         }
     }
 }
