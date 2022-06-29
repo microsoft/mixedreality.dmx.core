@@ -60,7 +60,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
 
             // when
             List<Lab> actualLabs =
-                await this.externalLabService.RetrieveAllLabsAsync();
+                await this.externalLabService.RetrieveAllExternalLabsAsync();
 
             // then
             actualLabs.Should().BeEquivalentTo(expectedLabs);
