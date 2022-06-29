@@ -11,7 +11,7 @@ namespace DMX.Core.Api.Services.Orchestrations
     public partial class LabOrchestrationService
     {
         private delegate ValueTask<List<Lab>> ReturningLabsFunctions();
-        
+
         private async ValueTask<List<Lab>> TryCatch(ReturningLabsFunctions returningLabsFunctions)
         {
             try
@@ -20,13 +20,15 @@ namespace DMX.Core.Api.Services.Orchestrations
             }
             catch (ExternalLabDependencyException externalLabDependencyException)
             {
+                Xeption innerException = externalLabDependencyException.InnerException as Xeption;
 
-                throw CreateAndLogDependencyException(externalLabDependencyException.InnerException as Xeption);
+                throw CreateAndLogDependencyException(innerException);
             }
             catch (ExternalLabServiceException externalLabServiceException)
             {
+                Xeption innerException = externalLabServiceException.InnerException as Xeption;
 
-                throw CreateAndLogDependencyException(externalLabServiceException.InnerException as Xeption);
+                throw CreateAndLogDependencyException(innerException);
             }
         }
 
