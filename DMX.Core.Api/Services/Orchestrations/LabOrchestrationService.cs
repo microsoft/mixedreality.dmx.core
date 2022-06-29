@@ -2,14 +2,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Models.Labs;
-using DMX.Core.Api.Services.Foundations.ExternalLabs;
-using DMX.Core.Api.Services.Foundations.Labs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DMX.Core.Api.Brokers.Loggings;
+using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Services.Foundations.ExternalLabs;
+using DMX.Core.Api.Services.Foundations.Labs;
 
 namespace DMX.Core.Api.Services.Orchestrations
 {
@@ -32,8 +32,8 @@ namespace DMX.Core.Api.Services.Orchestrations
         public ValueTask<List<Lab>> RetrieveAllLabsAsync() =>
         TryCatch(async () =>
         {
-            List<Lab> externalLabs = await this.externalLabService.RetrieveAllLabsAsync();
             List<Lab> existingLabs = this.labService.RetrieveAllLabs().ToList();
+            List<Lab> externalLabs = await this.externalLabService.RetrieveAllLabsAsync();
             existingLabs.ForEach(lab => lab.Status = LabStatus.Offline);
 
             List<Lab> onlineLabs = existingLabs.Where(

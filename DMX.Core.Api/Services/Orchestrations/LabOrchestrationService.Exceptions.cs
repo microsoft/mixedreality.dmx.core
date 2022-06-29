@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.ExternalLabs.Exceptions;
@@ -38,6 +39,24 @@ namespace DMX.Core.Api.Services.Orchestrations
             {
                 throw CreateAndLogDependencyException(labServiceException);
             }
+            catch (Exception exception)
+            {
+                var failedLabOrchestrationServiceException = new FailedLabOrchestrationServiceException(
+                    exception);
+
+                throw CreateAndLogServiceException(failedLabOrchestrationServiceException);
+            }
+        }
+
+        private LabOrchestrationServiceException CreateAndLogServiceException(FailedLabOrchestrationServiceException failedLabOrchestrationServiceException)
+        {
+            var labOrchestrationServiceException =
+                new LabOrchestrationServiceException(
+                    failedLabOrchestrationServiceException);
+
+            this.loggingBroker.LogError(labOrchestrationServiceException);
+
+            return labOrchestrationServiceException;
         }
 
         private LabOrchestrationDependencyException CreateAndLogDependencyException(Xeption exception)
