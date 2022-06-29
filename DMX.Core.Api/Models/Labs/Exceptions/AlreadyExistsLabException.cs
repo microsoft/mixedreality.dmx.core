@@ -10,6 +10,8 @@ namespace DMX.Core.Api.Models.Labs.Exceptions
     public class AlreadyExistsLabException : Xeption
     {
         public AlreadyExistsLabException(Exception innerException)
-            : base(message: "Lab with same Id already exists", innerException) { }
+            : base(message: "Lab with same Id already exists",
+                  innerException)
+        { }
     }
 }
