@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Services.Foundations.ExternalLabs;
@@ -25,8 +26,8 @@ namespace DMX.Core.Api.Services.Orchestrations
 
         public async ValueTask<List<Lab>> RetrieveAllLabsAsync()
         {
-            this.labService.RetrieveAllLabs();
-            return await this.externalLabService.RetrieveAllLabsAsync();
+            await this.externalLabService.RetrieveAllLabsAsync();
+            return this.labService.RetrieveAllLabs().ToList();
         }
     }
 }
