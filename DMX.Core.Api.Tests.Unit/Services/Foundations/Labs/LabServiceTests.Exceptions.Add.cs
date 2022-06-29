@@ -4,8 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Labs;
-using DMX.Core.Api.Models.Labs.Exceptions;
+using DMX.Core.Api.Models.Foundations.Labs;
+using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using EFxceptions.Models.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;

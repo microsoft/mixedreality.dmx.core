@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------
 
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.Labs;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;

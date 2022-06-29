@@ -5,8 +5,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.ExternalLabs;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.ExternalLabs;
+using DMX.Core.Api.Models.Foundations.Labs;
 using FluentAssertions;
 using Moq;
 using Xunit;

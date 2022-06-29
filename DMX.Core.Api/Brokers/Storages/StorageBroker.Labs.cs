@@ -4,7 +4,7 @@
 
 using System.Linq;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.Labs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 

@@ -4,7 +4,7 @@
 
 using Xeptions;
 
-namespace DMX.Core.Api.Models.ExternalLabs.Exceptions
+namespace DMX.Core.Api.Models.Foundations.ExternalLabs.Exceptions
 {
     public class ExternalLabDependencyException : Xeption
     {
