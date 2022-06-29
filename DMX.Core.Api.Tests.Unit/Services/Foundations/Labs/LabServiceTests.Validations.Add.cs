@@ -149,6 +149,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+
         }
     }
 }
