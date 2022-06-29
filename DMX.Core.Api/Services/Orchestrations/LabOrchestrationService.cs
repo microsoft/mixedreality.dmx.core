@@ -32,8 +32,8 @@ namespace DMX.Core.Api.Services.Orchestrations
         public ValueTask<List<Lab>> RetrieveAllLabsAsync() =>
         TryCatch(async () =>
         {
-            List<Lab> externalLabs = await this.externalLabService.RetrieveAllLabsAsync();
             List<Lab> existingLabs = this.labService.RetrieveAllLabs().ToList();
+            List<Lab> externalLabs = await this.externalLabService.RetrieveAllLabsAsync();
             existingLabs.ForEach(lab => lab.Status = LabStatus.Offline);
 
             List<Lab> onlineLabs = existingLabs.Where(
