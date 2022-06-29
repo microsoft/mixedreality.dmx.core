@@ -15,39 +15,47 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
 {
     public partial class LabOrchestrationServiceTests
     {
-        [Theory]
-        [MemberData(nameof(CreateLabsData))]
-        public async Task ShouldRetrieveLabsWithStatusAsync(
-            List<Lab> externalLabList,
-            IQueryable<Lab> labQuerable,
-            List<Lab> expectedLabsList)
+        [Fact]
+        public async Task ShouldRetrieveAllLabsWithStatusUpdateAsync()
         {
             // given
-            this.externalLabService.Setup(service =>
-                service.RetrieveAllLabsAsync())
-                    .ReturnsAsync(externalLabList);
+            List<Lab> randomLabs =
+                CreateRandomLabs(labStatus: LabStatus.Available);
+
+            List<Lab> externalLabs = randomLabs;
+            List<Lab> existingLabs = randomLabs.DeepClone();
+
+            List<Lab> additionalExistingLabs =
+                CreateRandomLabs(labStatus: LabStatus.Offline);
+
+            existingLabs.AddRange(additionalExistingLabs);
+            List<Lab> expectedLabs = existingLabs.DeepClone();
 
             this.labServiceMock.Setup(service =>
                 service.RetrieveAllLabs())
-                    .Returns(labQuerable);
+                    .Returns(existingLabs.AsQueryable());
+
+            this.externalLabServiceMock.Setup(service =>
+                service.RetrieveAllLabsAsync())
+                    .ReturnsAsync(externalLabs);
 
             // when
             List<Lab> actualLabs =
                 await this.labOrchestrationService.RetrieveAllLabsAsync();
 
             // then
-            actualLabs.Should().BeEquivalentTo(expectedLabsList);
+            actualLabs.Should().BeEquivalentTo(expectedLabs);
 
             this.labServiceMock.Verify(service =>
                 service.RetrieveAllLabs(),
                     Times.Once);
 
-            this.externalLabService.Verify(service =>
+            this.externalLabServiceMock.Verify(service =>
                 service.RetrieveAllLabsAsync(),
                     Times.Once);
 
+            this.externalLabServiceMock.VerifyNoOtherCalls();
             this.labServiceMock.VerifyNoOtherCalls();
-            this.externalLabService.VerifyNoOtherCalls();
         }
     }
 }
