@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.ExternalLabs.Exceptions;
 using DMX.Core.Api.Models.Labs;
@@ -20,19 +19,20 @@ namespace DMX.Core.Api.Services.Orchestrations
             }
             catch (ExternalLabDependencyException externalLabDependencyException)
             {
-                throw CreateAndLogDependencyException(
-                    externalLabDependencyException.InnerException as Xeption);
+                throw CreateAndLogDependencyException(externalLabDependencyException);
             }
             catch (ExternalLabServiceException externalLabServiceException)
             {
-                throw CreateAndLogDependencyException(
-                    externalLabServiceException.InnerException as Xeption);
+                throw CreateAndLogDependencyException(externalLabServiceException);
             }
         }
 
-        private LabOrchestrationDependencyException CreateAndLogDependencyException(Xeption xeption)
+        private LabOrchestrationDependencyException CreateAndLogDependencyException(Xeption exception)
         {
-            var orchestrationDependencyException = new LabOrchestrationDependencyException(xeption);
+            var orchestrationDependencyException =
+                new LabOrchestrationDependencyException(
+                    exception.InnerException as Xeption);
+
             this.loggingBroker.LogError(orchestrationDependencyException);
 
             return orchestrationDependencyException;
