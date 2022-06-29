@@ -53,7 +53,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                         Times.Once);
 
             this.externalLabServiceMock.Verify(service =>
-                service.RetrieveAllLabsAsync(),
+                service.RetrieveAllExternalLabsAsync(),
                     Times.Never);
 
             this.labServiceMock.VerifyNoOtherCalls();
@@ -99,7 +99,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                     expectedLabOrchestrationServiceException))));
 
             this.externalLabServiceMock.Verify(service =>
-                service.RetrieveAllLabsAsync(),
+                service.RetrieveAllExternalLabsAsync(),
                     Times.Never);
 
             this.labServiceMock.VerifyNoOtherCalls();

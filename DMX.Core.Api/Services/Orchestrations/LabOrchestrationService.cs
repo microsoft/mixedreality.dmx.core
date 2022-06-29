@@ -33,7 +33,7 @@ namespace DMX.Core.Api.Services.Orchestrations
         TryCatch(async () =>
         {
             List<Lab> existingLabs = this.labService.RetrieveAllLabs().ToList();
-            List<Lab> externalLabs = await this.externalLabService.RetrieveAllLabsAsync();
+            List<Lab> externalLabs = await this.externalLabService.RetrieveAllExternalLabsAsync();
             existingLabs.ForEach(lab => lab.Status = LabStatus.Offline);
 
             List<Lab> onlineLabs = existingLabs.Where(
