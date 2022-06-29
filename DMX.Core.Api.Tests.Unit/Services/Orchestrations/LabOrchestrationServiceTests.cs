@@ -10,7 +10,6 @@ using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Models.ExternalLabs.Exceptions;
 using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Models.Labs.Exceptions;
-using DMX.Core.Api.Models.Orchestrations.Labs.Exceptions;
 using DMX.Core.Api.Services.Foundations.ExternalLabs;
 using DMX.Core.Api.Services.Foundations.Labs;
 using DMX.Core.Api.Services.Orchestrations;
@@ -40,33 +39,17 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
-        public static TheoryData<Xeption> ExternalDependencyExceptions()
-        {
-            string randomErrorMessage = GetRandomString();
-            var innerException = new Xeption(randomErrorMessage);
-
-            var externalLabDependencyException = new ExternalLabDependencyException(innerException);
-            var externalLabServiceException = new ExternalLabServiceException(innerException);
-
-            return new TheoryData<Xeption>
-            {
-                externalLabDependencyException,
-                externalLabServiceException
-            };
-        }
-
         public static TheoryData<Xeption> DependencyExceptions()
         {
             string randomErrorMessage = GetRandomString();
             var innerException = new Xeption(randomErrorMessage);
-            
-            var labDependencyException = new LabDependencyException(innerException);
-            var labServiceException = new LabServiceException(innerException);
-            
+
             return new TheoryData<Xeption>
             {
-                labDependencyException,
-                labServiceException
+                new ExternalLabDependencyException(innerException),
+                new ExternalLabServiceException(innerException),
+                new LabDependencyException(innerException),
+                new LabServiceException(innerException)
             };
         }
 
