@@ -4,12 +4,12 @@
 
 using Xeptions;
 
-namespace DMX.Core.Api.Models.ExternalLabs.Exceptions
+namespace DMX.Core.Api.Models.Foundations.Labs.Exceptions
 {
-    public class ExternalLabServiceException : Xeption
+    public class LabValidationException : Xeption
     {
-        public ExternalLabServiceException(Xeption innerException)
-            : base(message: "External lab service error occurred, contact support.",
+        public LabValidationException(Xeption innerException)
+            : base(message: "Lab validation errors occurred, please try again.",
                   innerException)
         { }
     }

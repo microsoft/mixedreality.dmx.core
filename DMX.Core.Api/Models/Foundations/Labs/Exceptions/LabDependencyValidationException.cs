@@ -4,7 +4,7 @@
 
 using Xeptions;
 
-namespace DMX.Core.Api.Models.Labs.Exceptions
+namespace DMX.Core.Api.Models.Foundations.Labs.Exceptions
 {
     public class LabDependencyValidationException : Xeption
     {

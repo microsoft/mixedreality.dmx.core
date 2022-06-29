@@ -5,7 +5,7 @@
 using System;
 using Xeptions;
 
-namespace DMX.Core.Api.Models.Labs.Exceptions
+namespace DMX.Core.Api.Models.Foundations.Labs.Exceptions
 {
     public class FailedLabDependencyException : Xeption
     {

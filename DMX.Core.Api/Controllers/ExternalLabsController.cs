@@ -4,8 +4,8 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.ExternalLabs.Exceptions;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.ExternalLabs.Exceptions;
+using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Services.Foundations.ExternalLabs;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
@@ -27,7 +27,7 @@ namespace DMX.Core.Api.Controllers
             try
             {
                 List<Lab> allExternalLabs =
-                    await this.externalLabService.RetrieveAllLabsAsync();
+                    await this.externalLabService.RetrieveAllExternalLabsAsync();
 
                 return Ok(allExternalLabs);
             }

@@ -5,8 +5,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.ExternalLabs.Exceptions;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.ExternalLabs.Exceptions;
+using DMX.Core.Api.Models.Foundations.Labs;
 using RESTFulSense.Exceptions;
 using Xeptions;
 

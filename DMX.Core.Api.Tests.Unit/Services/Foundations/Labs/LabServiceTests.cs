@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Services.Foundations.Labs;
 using Microsoft.Data.SqlClient;
 using Moq;
