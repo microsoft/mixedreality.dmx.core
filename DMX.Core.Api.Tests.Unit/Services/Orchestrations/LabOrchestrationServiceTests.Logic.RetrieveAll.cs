@@ -26,10 +26,16 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             List<Lab> existingLabs = randomLabs.DeepClone();
 
             List<Lab> additionalExistingLabs =
-                CreateRandomLabs(labStatus: LabStatus.Offline);
+                CreateRandomLabs(labStatus: LabStatus.Available);
 
             existingLabs.AddRange(additionalExistingLabs);
+            List<Lab> expectedExistingLabs = additionalExistingLabs.DeepClone();
+
+            expectedExistingLabs.ForEach(lab =>
+                lab.Status = LabStatus.Offline);
+
             List<Lab> expectedLabs = existingLabs.DeepClone();
+            expectedLabs.AddRange(expectedExistingLabs);
 
             this.labServiceMock.Setup(service =>
                 service.RetrieveAllLabs())
