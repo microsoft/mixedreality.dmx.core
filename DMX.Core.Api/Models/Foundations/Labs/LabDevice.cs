@@ -4,7 +4,7 @@
 
 using System;
 
-namespace DMX.Core.Api.Models.Labs
+namespace DMX.Core.Api.Models.Foundations.Labs
 {
     public class LabDevice
     {

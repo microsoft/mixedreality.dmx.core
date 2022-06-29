@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.Labs;
 
 namespace DMX.Core.Api.Services.Foundations.Labs
 {

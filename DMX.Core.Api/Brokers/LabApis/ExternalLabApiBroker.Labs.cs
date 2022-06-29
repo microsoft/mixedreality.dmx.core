@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------
 
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.ExternalLabs;
+using DMX.Core.Api.Models.Foundations.ExternalLabs;
 
 namespace DMX.Core.Api.Brokers.LabApis
 {

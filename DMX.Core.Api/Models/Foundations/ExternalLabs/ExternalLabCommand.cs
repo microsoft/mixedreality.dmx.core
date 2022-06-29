@@ -2,18 +2,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 
-namespace DMX.Core.Api.Models.Labs
+namespace DMX.Core.Api.Models.Foundations.ExternalLabs
 {
-    public class Lab
+    public class ExternalLabCommand
     {
-        public Guid Id { get; set; }
-        public string ExternalId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public LabStatus Status { get; set; }
-        public List<LabDevice> Devices { get; set; }
+        public IDictionary<string, string> Parameters { get; set; }
     }
 }

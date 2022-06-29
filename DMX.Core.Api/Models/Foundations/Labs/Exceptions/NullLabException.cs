@@ -2,11 +2,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-namespace DMX.Core.Api.Models.Labs
+using Xeptions;
+
+namespace DMX.Core.Api.Models.Foundations.Labs.Exceptions
 {
-    public enum LabDeviceStatus
+    public class NullLabException : Xeption
     {
-        Online,
-        Offline
+        public NullLabException()
+            : base(message: "Lab is null.")
+        { }
     }
 }

@@ -2,12 +2,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-namespace DMX.Core.Api.Models.Labs
+using Newtonsoft.Json;
+
+namespace DMX.Core.Api.Models.Foundations.ExternalLabs
 {
-    public enum LabStatus
+    public class ExternalLabCollection
     {
-        Available,
-        Reserved,
-        Offline
+        [JsonProperty("Data")]
+        public ExternalLab[] ExternalLabs { get; set; }
     }
 }
