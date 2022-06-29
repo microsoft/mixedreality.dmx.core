@@ -52,7 +52,45 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
 
             this.externalLabServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
 
+        [Theory]
+        [MemberData(nameof(DependencyExceptions))]
+        public async Task ShouldThrowOrchestrationDependencyExceptionOnRetrieveIfDependencyErrorOccursAndLogItAsync(
+            Xeption dependencyException)
+        {
+            // given
+            var expectedLabOrchestrationDependencyException =
+                new LabOrchestrationDependencyException(
+                    dependencyException.InnerException as Xeption);
+
+            this.labServiceMock.Setup(service =>
+                service.RetrieveAllLabs())
+                    .Throws(dependencyException);
+
+            // when
+            ValueTask<List<Lab>> retrieveAllLabsTask = this.labOrchestrationService.RetrieveAllLabsAsync();
+
+            LabOrchestrationDependencyException actualLabOrchestrationDependencyException =
+                await Assert.ThrowsAsync<LabOrchestrationDependencyException>(
+                    retrieveAllLabsTask.AsTask);
+
+            // then
+            actualLabOrchestrationDependencyException
+                .Should().BeEquivalentTo(
+                    expectedLabOrchestrationDependencyException);
+
+            this.labServiceMock.Verify(service =>
+                service.RetrieveAllLabs(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabOrchestrationDependencyException))),
+                        Times.Once);
+
+            this.labServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
