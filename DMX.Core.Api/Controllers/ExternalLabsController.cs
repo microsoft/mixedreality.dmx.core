@@ -27,7 +27,7 @@ namespace DMX.Core.Api.Controllers
             try
             {
                 List<Lab> allExternalLabs =
-                    await this.externalLabService.RetrieveAllLabsAsync();
+                    await this.externalLabService.RetrieveAllExternalLabsAsync();
 
                 return Ok(allExternalLabs);
             }
