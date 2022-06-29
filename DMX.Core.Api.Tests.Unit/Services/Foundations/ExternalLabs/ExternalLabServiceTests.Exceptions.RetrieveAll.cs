@@ -38,7 +38,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
 
             // when
             ValueTask<List<Lab>> retrieveAllLabsTask =
-                this.externalLabService.RetrieveAllLabsAsync();
+                this.externalLabService.RetrieveAllExternalLabsAsync();
 
             ExternalLabDependencyException actualLabDependencyException =
                 await Assert.ThrowsAsync<ExternalLabDependencyException>(() =>
@@ -83,7 +83,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
 
             // when
             ValueTask<List<Lab>> retrieveAllLabsTask =
-                this.externalLabService.RetrieveAllLabsAsync();
+                this.externalLabService.RetrieveAllExternalLabsAsync();
 
             ExternalLabDependencyException actualExternalLabDependencyException =
                 await Assert.ThrowsAsync<ExternalLabDependencyException>(() =>
@@ -126,7 +126,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
 
             // when
             ValueTask<List<Lab>> retrieveAllLabsTask =
-                this.externalLabService.RetrieveAllLabsAsync();
+                this.externalLabService.RetrieveAllExternalLabsAsync();
 
             ExternaLabServiceException actualLabServiceException =
                 await Assert.ThrowsAsync<ExternaLabServiceException>(() =>

@@ -10,6 +10,6 @@ namespace DMX.Core.Api.Services.Foundations.ExternalLabs
 {
     public interface IExternalLabService
     {
-        ValueTask<List<Lab>> RetrieveAllLabsAsync();
+        ValueTask<List<Lab>> RetrieveAllExternalLabsAsync();
     }
 }

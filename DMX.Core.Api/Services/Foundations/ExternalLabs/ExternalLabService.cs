@@ -26,7 +26,7 @@ namespace DMX.Core.Api.Services.Foundations.ExternalLabs
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<List<Lab>> RetrieveAllLabsAsync() =>
+        public ValueTask<List<Lab>> RetrieveAllExternalLabsAsync() =>
         TryCatch(async () =>
         {
             List<ExternalLab> externalLabs = await RetrieveExternalLabsAsync();
