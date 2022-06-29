@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Labs;
@@ -90,6 +91,53 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                         Times.Once);
 
             this.labServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowOrchestrationServiceExceptionOnRetrieveIfErrorOccursAndLogItAsync()
+        {
+            // given
+            string randomMessage = GetRandomString();
+            var exception = new Exception(randomMessage);
+
+            var failedLabOrchestrationServiceException =
+                new FailedLabOrchestrationServiceException(exception);
+
+            var expectedLabOrchestrationServiceException =
+                new LabOrchestrationServiceException(failedLabOrchestrationServiceException);
+
+            this.labServiceMock.Setup(service =>
+                service.RetrieveAllLabs())
+                    .Throws(exception);
+
+            // when
+            ValueTask<List<Lab>> retrieveLabsTask =
+                this.labOrchestrationService.RetrieveAllLabsAsync();
+
+            LabOrchestrationServiceException actualLabOrchestrationServiceException =
+                await Assert.ThrowsAsync<LabOrchestrationServiceException>(
+                    retrieveLabsTask.AsTask);
+
+            // then
+            actualLabOrchestrationServiceException.Should()
+                .BeEquivalentTo(expectedLabOrchestrationServiceException);
+
+            this.labServiceMock.Verify(service =>
+                service.RetrieveAllLabs(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabOrchestrationServiceException))),
+                        Times.Once);
+
+            this.externalLabServiceMock.Verify(service =>
+                service.RetrieveAllLabsAsync(),
+                    Times.Never);
+
+            this.labServiceMock.VerifyNoOtherCalls();
+            this.externalLabServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
