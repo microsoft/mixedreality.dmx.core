@@ -35,7 +35,7 @@ namespace DMX.Core.Api.Controllers
             {
                 return InternalServerError(externalLabDependencyException);
             }
-            catch (ExternaLabServiceException externalLabServiceException)
+            catch (ExternalLabServiceException externalLabServiceException)
             {
                 return InternalServerError(externalLabServiceException);
             }

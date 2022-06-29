@@ -6,9 +6,9 @@ using Xeptions;
 
 namespace DMX.Core.Api.Models.ExternalLabs.Exceptions
 {
-    public class ExternaLabServiceException : Xeption
+    public class ExternalLabServiceException : Xeption
     {
-        public ExternaLabServiceException(Xeption innerException)
+        public ExternalLabServiceException(Xeption innerException)
             : base(message: "External lab service error occurred, contact support.",
                   innerException)
         { }
