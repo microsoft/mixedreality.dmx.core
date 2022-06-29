@@ -20,15 +20,13 @@ namespace DMX.Core.Api.Services.Orchestrations
             }
             catch (ExternalLabDependencyException externalLabDependencyException)
             {
-                Xeption innerException = externalLabDependencyException.InnerException as Xeption;
-
-                throw CreateAndLogDependencyException(innerException);
+                throw CreateAndLogDependencyException(
+                    externalLabDependencyException.InnerException as Xeption);
             }
             catch (ExternalLabServiceException externalLabServiceException)
             {
-                Xeption innerException = externalLabServiceException.InnerException as Xeption;
-
-                throw CreateAndLogDependencyException(innerException);
+                throw CreateAndLogDependencyException(
+                    externalLabServiceException.InnerException as Xeption);
             }
         }
 
