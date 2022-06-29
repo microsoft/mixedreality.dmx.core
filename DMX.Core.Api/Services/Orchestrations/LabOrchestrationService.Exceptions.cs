@@ -41,25 +41,15 @@ namespace DMX.Core.Api.Services.Orchestrations
             }
             catch (Exception exception)
             {
-                var failedLabOrchestrationServiceException = new FailedLabOrchestrationServiceException(
-                    exception);
+                var failedLabOrchestrationServiceException =
+                    new FailedLabOrchestrationServiceException(exception);
 
                 throw CreateAndLogServiceException(failedLabOrchestrationServiceException);
             }
         }
 
-        private LabOrchestrationServiceException CreateAndLogServiceException(FailedLabOrchestrationServiceException failedLabOrchestrationServiceException)
-        {
-            var labOrchestrationServiceException =
-                new LabOrchestrationServiceException(
-                    failedLabOrchestrationServiceException);
-
-            this.loggingBroker.LogError(labOrchestrationServiceException);
-
-            return labOrchestrationServiceException;
-        }
-
-        private LabOrchestrationDependencyException CreateAndLogDependencyException(Xeption exception)
+        private LabOrchestrationDependencyException CreateAndLogDependencyException(
+            Xeption exception)
         {
             var orchestrationDependencyException =
                 new LabOrchestrationDependencyException(
@@ -68,6 +58,18 @@ namespace DMX.Core.Api.Services.Orchestrations
             this.loggingBroker.LogError(orchestrationDependencyException);
 
             return orchestrationDependencyException;
+        }
+
+        private LabOrchestrationServiceException CreateAndLogServiceException(
+            FailedLabOrchestrationServiceException failedLabOrchestrationServiceException)
+        {
+            var labOrchestrationServiceException =
+                new LabOrchestrationServiceException(
+                    failedLabOrchestrationServiceException);
+
+            this.loggingBroker.LogError(labOrchestrationServiceException);
+
+            return labOrchestrationServiceException;
         }
     }
 }
