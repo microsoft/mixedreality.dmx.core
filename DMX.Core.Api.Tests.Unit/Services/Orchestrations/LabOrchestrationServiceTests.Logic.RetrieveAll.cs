@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.Labs;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -43,7 +43,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                     .Returns(existingLabs.AsQueryable());
 
             this.externalLabServiceMock.Setup(service =>
-                service.RetrieveAllLabsAsync())
+                service.RetrieveAllExternalLabsAsync())
                     .ReturnsAsync(externalLabs);
 
             // when
@@ -58,7 +58,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                     Times.Once);
 
             this.externalLabServiceMock.Verify(service =>
-                service.RetrieveAllLabsAsync(),
+                service.RetrieveAllExternalLabsAsync(),
                     Times.Once);
 
             this.externalLabServiceMock.VerifyNoOtherCalls();

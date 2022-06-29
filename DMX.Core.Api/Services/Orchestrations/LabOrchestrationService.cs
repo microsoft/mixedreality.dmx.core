@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Services.Foundations.ExternalLabs;
 using DMX.Core.Api.Services.Foundations.Labs;
 
@@ -33,7 +33,7 @@ namespace DMX.Core.Api.Services.Orchestrations
         TryCatch(async () =>
         {
             List<Lab> existingLabs = this.labService.RetrieveAllLabs().ToList();
-            List<Lab> externalLabs = await this.externalLabService.RetrieveAllLabsAsync();
+            List<Lab> externalLabs = await this.externalLabService.RetrieveAllExternalLabsAsync();
             existingLabs.ForEach(lab => lab.Status = LabStatus.Offline);
 
             List<Lab> onlineLabs = existingLabs.Where(

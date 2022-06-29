@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Models.Orchestrations.Labs.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -53,7 +53,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                         Times.Once);
 
             this.externalLabServiceMock.Verify(service =>
-                service.RetrieveAllLabsAsync(),
+                service.RetrieveAllExternalLabsAsync(),
                     Times.Never);
 
             this.labServiceMock.VerifyNoOtherCalls();
@@ -99,7 +99,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                     expectedLabOrchestrationServiceException))));
 
             this.externalLabServiceMock.Verify(service =>
-                service.RetrieveAllLabsAsync(),
+                service.RetrieveAllExternalLabsAsync(),
                     Times.Never);
 
             this.labServiceMock.VerifyNoOtherCalls();
