@@ -35,7 +35,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
 
             this.labOrchestrationService = new LabOrchestrationService(
                 labService: this.labServiceMock.Object,
-                externalLabService: this.externalLabServiceMock.Object);
+                externalLabService: this.externalLabServiceMock.Object,
+                loggingBroker: this.loggingBrokerMock.Object);
         }
 
         public static TheoryData<Xeption> ExternalDependencyExceptions()

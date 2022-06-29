@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Models.Labs;
 using DMX.Core.Api.Services.Foundations.ExternalLabs;
 using DMX.Core.Api.Services.Foundations.Labs;
@@ -12,20 +13,24 @@ using System.Threading.Tasks;
 
 namespace DMX.Core.Api.Services.Orchestrations
 {
-    public class LabOrchestrationService : ILabOrchestrationService
+    public partial class LabOrchestrationService : ILabOrchestrationService
     {
         private readonly ILabService labService;
         private readonly IExternalLabService externalLabService;
+        private readonly ILoggingBroker loggingBroker;
 
         public LabOrchestrationService(
             ILabService labService,
-            IExternalLabService externalLabService)
+            IExternalLabService externalLabService,
+            ILoggingBroker loggingBroker)
         {
             this.labService = labService;
             this.externalLabService = externalLabService;
+            this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<List<Lab>> RetrieveAllLabsAsync()
+        public ValueTask<List<Lab>> RetrieveAllLabsAsync() =>
+        TryCatch(async () =>
         {
             List<Lab> externalLabs = await this.externalLabService.RetrieveAllLabsAsync();
             List<Lab> existingLabs = this.labService.RetrieveAllLabs().ToList();
@@ -38,7 +43,7 @@ namespace DMX.Core.Api.Services.Orchestrations
                 onlineLab.Status = LabStatus.Available);
 
             return existingLabs;
-        }
+        });
 
         public static Func<Lab, bool> LabIsOnline(List<Lab> externalLabs) =>
             existingLab => externalLabs.Any(IsSameExternalId(existingLab));
