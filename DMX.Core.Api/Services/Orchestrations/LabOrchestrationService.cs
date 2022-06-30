@@ -32,7 +32,7 @@ namespace DMX.Core.Api.Services.Orchestrations
         public ValueTask<List<Lab>> RetrieveAllLabsAsync() =>
         TryCatch(async () =>
         {
-            List<Lab> existingLabs = this.labService.RetrieveAllLabs().ToList();
+            List<Lab> existingLabs = this.labService.RetrieveAllLabsWithDevices().ToList();
             List<Lab> externalLabs = await this.externalLabService.RetrieveAllExternalLabsAsync();
             existingLabs.ForEach(lab => lab.Status = LabStatus.Offline);
 

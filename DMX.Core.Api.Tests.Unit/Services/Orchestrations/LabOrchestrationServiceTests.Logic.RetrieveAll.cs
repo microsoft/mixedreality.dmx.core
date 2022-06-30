@@ -39,7 +39,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             expectedLabs.AddRange(expectedExistingLabs);
 
             this.labServiceMock.Setup(service =>
-                service.RetrieveAllLabs())
+                service.RetrieveAllLabsWithDevices())
                     .Returns(existingLabs.AsQueryable());
 
             this.externalLabServiceMock.Setup(service =>
@@ -54,7 +54,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             actualLabs.Should().BeEquivalentTo(expectedLabs);
 
             this.labServiceMock.Verify(service =>
-                service.RetrieveAllLabs(),
+                service.RetrieveAllLabsWithDevices(),
                     Times.Once);
 
             this.externalLabServiceMock.Verify(service =>

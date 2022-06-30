@@ -27,7 +27,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                     dependencyException.InnerException as Xeption);
 
             this.labServiceMock.Setup(service =>
-                service.RetrieveAllLabs())
+                service.RetrieveAllLabsWithDevices())
                     .Throws(dependencyException);
 
             // when
@@ -44,7 +44,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                     expectedLabOrchestrationDependencyException);
 
             this.labServiceMock.Verify(service =>
-                service.RetrieveAllLabs(),
+                service.RetrieveAllLabsWithDevices(),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -75,7 +75,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                 new LabOrchestrationServiceException(failedLabOrchestrationServiceException);
 
             this.labServiceMock.Setup(service =>
-                service.RetrieveAllLabs())
+                service.RetrieveAllLabsWithDevices())
                     .Throws(exception);
 
             // when
@@ -91,7 +91,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                 .BeEquivalentTo(expectedLabOrchestrationServiceException);
 
             this.labServiceMock.Verify(service =>
-                service.RetrieveAllLabs(),
+                service.RetrieveAllLabsWithDevices(),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
