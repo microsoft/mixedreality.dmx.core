@@ -31,7 +31,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
 
             // when
             Action retrieveAllLabsAction = () =>
-                this.labService.RetrieveAllLabs();
+                this.labService.RetrieveAllLabsWithDevices();
 
             LabDependencyException actualLabDependencyException =
                 Assert.Throws<LabDependencyException>(
@@ -72,7 +72,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
 
             // when
             Action retrieveAllLabsAction = () =>
-                this.labService.RetrieveAllLabs();
+                this.labService.RetrieveAllLabsWithDevices();
 
             LabServiceException actualLabServiceExeption =
                 Assert.Throws<LabServiceException>(

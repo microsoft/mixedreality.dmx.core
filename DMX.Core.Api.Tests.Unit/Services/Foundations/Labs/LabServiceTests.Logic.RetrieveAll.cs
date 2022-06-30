@@ -27,7 +27,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
 
             // when
             IQueryable<Lab> actualLabs =
-                this.labService.RetrieveAllLabs();
+                this.labService.RetrieveAllLabsWithDevices();
 
             // then
             actualLabs.Should().BeEquivalentTo(expectedLabs);
