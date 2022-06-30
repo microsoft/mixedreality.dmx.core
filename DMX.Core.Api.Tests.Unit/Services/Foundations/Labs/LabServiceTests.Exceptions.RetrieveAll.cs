@@ -26,7 +26,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 new LabDependencyException(failedLabStorageException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectAllLabs())
+                broker.SelectAllLabsWithDevices())
                     .Throws(sqlException);
 
             // when
@@ -42,7 +42,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 expectedLabDependencyException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectAllLabs(),
+                broker.SelectAllLabsWithDevices(),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -67,7 +67,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 new LabServiceException(failedLabServiceException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectAllLabs())
+                broker.SelectAllLabsWithDevices())
                     .Throws(exception);
 
             // when
@@ -83,7 +83,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 expectedLabServiceException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectAllLabs(),
+                broker.SelectAllLabsWithDevices(),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
