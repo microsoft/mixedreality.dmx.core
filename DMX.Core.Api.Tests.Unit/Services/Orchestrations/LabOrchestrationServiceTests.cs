@@ -58,6 +58,15 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
 
         public static List<Lab> CreateRandomLabs(LabStatus labStatus) =>
             CreateLabsFiller(labStatus).Create(count: GetRandomNumber()).ToList();
+        
+        public static Lab CreateRandomLab() =>
+            CreateLabsFiller().Create();
+
+        public static List<LabDevice> CreateRandomLabDevices(
+            LabDeviceStatus labDeviceStatus) =>
+                CreateLabDeviceFiller(labDeviceStatus).Create(
+                    count: GetRandomNumber())
+                        .ToList();
 
         public static List<Lab> CreateRandomLabsList() =>
             CreateLabsFiller().Create(count: GetRandomNumber()).ToList();
@@ -77,6 +86,17 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
 
             filler.Setup()
                 .OnProperty(lab => lab.Status).Use(labStatus);
+
+            return filler;
+        }
+
+        public static Filler<LabDevice> CreateLabDeviceFiller(
+            LabDeviceStatus labDeviceStatus = LabDeviceStatus.Online)
+        {
+            var filler = new Filler<LabDevice>();
+
+            filler.Setup()
+                .OnProperty(device => device.Status).Use(labDeviceStatus);
 
             return filler;
         }
