@@ -11,6 +11,6 @@ namespace DMX.Core.Api.Services.Foundations.Labs
     public interface ILabService
     {
         ValueTask<Lab> AddLabAsync(Lab lab);
-        IQueryable<Lab> RetrieveAllLabs();
+        IQueryable<Lab> RetrieveAllLabsWithDevices();
     }
 }
