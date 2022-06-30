@@ -5,12 +5,12 @@
 using System;
 using Xeptions;
 
-namespace DMX.Core.Api.Models.Labs.Exceptions
+namespace DMX.Core.Api.Models.Foundations.Labs.Exceptions
 {
-    public class AlreadyExistsLabException : Xeption
+    public class FailedLabDependencyException : Xeption
     {
-        public AlreadyExistsLabException(Exception innerException)
-            : base(message: "Lab with same Id already exists",
+        public FailedLabDependencyException(Exception innerException)
+            : base(message: "Failed lab dependency error occurred, contact support.",
                   innerException)
         { }
     }

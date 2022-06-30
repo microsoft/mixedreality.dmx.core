@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
-using DMX.Core.Api.Models.Labs.Exceptions;
+using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
@@ -26,12 +26,12 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 new LabDependencyException(failedLabStorageException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectAllLabs())
+                broker.SelectAllLabsWithDevices())
                     .Throws(sqlException);
 
             // when
             Action retrieveAllLabsAction = () =>
-                this.labService.RetrieveAllLabs();
+                this.labService.RetrieveAllLabsWithDevices();
 
             LabDependencyException actualLabDependencyException =
                 Assert.Throws<LabDependencyException>(
@@ -42,7 +42,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 expectedLabDependencyException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectAllLabs(),
+                broker.SelectAllLabsWithDevices(),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -67,12 +67,12 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 new LabServiceException(failedLabServiceException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectAllLabs())
+                broker.SelectAllLabsWithDevices())
                     .Throws(exception);
 
             // when
             Action retrieveAllLabsAction = () =>
-                this.labService.RetrieveAllLabs();
+                this.labService.RetrieveAllLabsWithDevices();
 
             LabServiceException actualLabServiceExeption =
                 Assert.Throws<LabServiceException>(
@@ -83,7 +83,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 expectedLabServiceException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectAllLabs(),
+                broker.SelectAllLabsWithDevices(),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>

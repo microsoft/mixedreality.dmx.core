@@ -5,12 +5,12 @@
 using System;
 using Xeptions;
 
-namespace DMX.Core.Api.Models.Labs.Exceptions
+namespace DMX.Core.Api.Models.Foundations.Labs.Exceptions
 {
-    public class FailedLabServiceException : Xeption
+    public class FailedLabStorageException : Xeption
     {
-        public FailedLabServiceException(Exception innerException)
-            : base(message: "Failed lab service error occurred, contact support.",
+        public FailedLabStorageException(Exception innerException)
+            : base(message: "Failed lab storage error occurred, please contact support.",
                   innerException)
         { }
     }

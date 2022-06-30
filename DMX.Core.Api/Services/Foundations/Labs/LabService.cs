@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.Labs;
 
 namespace DMX.Core.Api.Services.Foundations.Labs
 {
@@ -31,7 +31,7 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             return await this.storageBroker.InsertLabAsync(lab);
         });
 
-        public IQueryable<Lab> RetrieveAllLabs() =>
-        TryCatch(() => this.storageBroker.SelectAllLabs());
+        public IQueryable<Lab> RetrieveAllLabsWithDevices() =>
+        TryCatch(() => this.storageBroker.SelectAllLabsWithDevices());
     }
 }

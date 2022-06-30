@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DMX.Core.Api.Models.ExternalLabs
+namespace DMX.Core.Api.Models.Foundations.ExternalLabs
 {
     public class ExternalLab
     {
