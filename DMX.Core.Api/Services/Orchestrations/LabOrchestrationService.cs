@@ -36,19 +36,43 @@ namespace DMX.Core.Api.Services.Orchestrations
             List<Lab> externalLabs = await this.externalLabService.RetrieveAllExternalLabsAsync();
             existingLabs.ForEach(lab => lab.Status = LabStatus.Offline);
 
-            List<Lab> onlineLabs = existingLabs.Where(
-                LabIsOnline(externalLabs)).ToList();
+            List<LabDevice> existingLabDevices =
+                existingLabs.SelectMany(lab => lab.Devices,
+                    (lab, labDevice) => labDevice).ToList();
+
+            existingLabDevices.ForEach(labDevice =>
+                labDevice.Status = LabDeviceStatus.Offline);
+
+            HashSet<string> externalLabsIds =
+                externalLabs.Select(lab =>
+                    lab.ExternalId)
+                        .ToHashSet();
+
+            List<Lab> onlineLabs = existingLabs.Where((lab) =>
+                LabIsOnline(lab, externalLabsIds)).ToList();
 
             onlineLabs.ForEach(onlineLab =>
                 onlineLab.Status = LabStatus.Available);
 
+            HashSet<Guid> externalLabDevicesIds =
+                externalLabs.SelectMany(lab => lab.Devices,
+                    (lab, labDevice) => labDevice.Id)
+                        .ToHashSet();
+
+            List<LabDevice> onlineLabDevices = existingLabDevices.Where(labDevice =>
+                LabDeviceIsOnline(labDevice, externalLabDevicesIds))
+                    .ToList();
+
+            onlineLabDevices.ForEach(onlineLabDevice =>
+                onlineLabDevice.Status = LabDeviceStatus.Online);
+
             return existingLabs;
         });
 
-        public static Func<Lab, bool> LabIsOnline(List<Lab> externalLabs) =>
-            existingLab => externalLabs.Any(IsSameExternalId(existingLab));
+        public static bool LabIsOnline(Lab lab, HashSet<string> externalLabIds) =>
+            externalLabIds.Contains(lab.ExternalId);
 
-        public static Func<Lab, bool> IsSameExternalId(Lab existingLab) =>
-            externalLab => externalLab.ExternalId == existingLab.ExternalId;
+        public static bool LabDeviceIsOnline(LabDevice labDevice, HashSet<Guid> externalLabDeviceIds) =>
+            externalLabDeviceIds.Contains(labDevice.Id);
     }
 }
