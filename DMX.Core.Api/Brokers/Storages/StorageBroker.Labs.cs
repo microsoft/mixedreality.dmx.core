@@ -26,11 +26,11 @@ namespace DMX.Core.Api.Brokers.Storages
             return labEntityEntry.Entity;
         }
 
-        public IQueryable<Lab> SelectAllLabs()
+        public IQueryable<Lab> SelectAllLabsWithDevices()
         {
             using var broker = new StorageBroker(this.configuration);
 
-            return broker.Labs;
+            return broker.Labs.Include(lab => lab.Devices);
         }
     }
 }

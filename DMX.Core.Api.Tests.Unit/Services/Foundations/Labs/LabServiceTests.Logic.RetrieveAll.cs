@@ -22,18 +22,18 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             IQueryable<Lab> expectedLabs = randomLabs.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectAllLabs())
+                broker.SelectAllLabsWithDevices())
                     .Returns(retrievedLabs);
 
             // when
             IQueryable<Lab> actualLabs =
-                this.labService.RetrieveAllLabs();
+                this.labService.RetrieveAllLabsWithDevices();
 
             // then
             actualLabs.Should().BeEquivalentTo(expectedLabs);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectAllLabs(),
+                broker.SelectAllLabsWithDevices(),
                     Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();

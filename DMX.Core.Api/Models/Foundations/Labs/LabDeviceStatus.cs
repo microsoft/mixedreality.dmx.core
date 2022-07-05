@@ -7,6 +7,7 @@ namespace DMX.Core.Api.Models.Foundations.Labs
     public enum LabDeviceStatus
     {
         Online,
-        Offline
+        Offline,
+        Unregistered
     }
 }
