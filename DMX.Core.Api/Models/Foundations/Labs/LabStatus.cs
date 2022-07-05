@@ -8,7 +8,7 @@ namespace DMX.Core.Api.Models.Foundations.Labs
     {
         Available,
         Reserved,
-        Unregistered,
-        Offline
+        Offline,
+        Unregistered
     }
 }
