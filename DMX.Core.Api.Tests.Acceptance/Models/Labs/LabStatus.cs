@@ -8,6 +8,7 @@ namespace DMX.Core.Api.Tests.Acceptance.Models.Labs
     {
         Available,
         Reserved,
-        Offline
+        Offline,
+        Unregistered
     }
 }
