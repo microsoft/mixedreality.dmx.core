@@ -9,7 +9,7 @@ namespace DMX.Core.Api.Models.Foundations.Labs
     public class LabDevice
     {
         public Guid Id { get; set; }
-        public Guid ExternalId { get; set; }
+        public string ExternalId { get; set; }
         public string Name { get; set; }
         public int? PowerLevel { get; set; }
         public LabDeviceType Type { get; set; }
