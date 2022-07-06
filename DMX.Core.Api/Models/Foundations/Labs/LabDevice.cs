@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Text.Json.Serialization;
 
 namespace DMX.Core.Api.Models.Foundations.Labs
 {
@@ -16,6 +17,8 @@ namespace DMX.Core.Api.Models.Foundations.Labs
         public LabDeviceStatus Status { get; set; }
         public LabDeviceCategory Category { get; set; }
         public Guid LabId { get; set; }
+
+        [JsonIgnore]
         public Lab Lab { get; set; }
     }
 }
