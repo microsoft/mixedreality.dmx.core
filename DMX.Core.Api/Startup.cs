@@ -33,7 +33,8 @@ namespace DMX.Core.Api
             services.AddLogging();
             services.AddDbContext<StorageBroker>();
             AddBrokers(services);
-            AddServices(services);
+            AddFoundationServices(services);
+            AddOrchestrationServices(services);
 
             services.AddSwaggerGen(option =>
             {
@@ -75,11 +76,13 @@ namespace DMX.Core.Api
             services.AddTransient<IStorageBroker, StorageBroker>();
         }
 
-        private static void AddServices(IServiceCollection services)
+        private static void AddFoundationServices(IServiceCollection services)
         {
             services.AddTransient<IExternalLabService, ExternalLabService>();
             services.AddTransient<ILabService, LabService>();
-            services.AddTransient<ILabOrchestrationService, LabOrchestrationService>();
         }
+
+        private static void AddOrchestrationServices(IServiceCollection services) =>
+            services.AddTransient<ILabOrchestrationService, LabOrchestrationService>();
     }
 }
