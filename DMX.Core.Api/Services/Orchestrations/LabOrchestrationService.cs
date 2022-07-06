@@ -43,6 +43,14 @@ namespace DMX.Core.Api.Services.Orchestrations
 
             onlineLabs.ForEach(lab => lab.Status = LabStatus.Available);
 
+            List<Lab> externalOnlineLabs = externalLabs.IntersectBy(existingLabs.Select(existingLab =>
+                existingLab.ExternalId),
+                    (externalLab) =>
+                        externalLab.ExternalId)
+                            .ToList();
+
+            UpdateDeviceStatusForOnlineLabs(onlineLabs, externalOnlineLabs);
+
             List<Lab> offlineLabs = existingLabs.ExceptBy(externalLabs.Select(externalLab =>
                 externalLab.ExternalId),
                     (existingLab) =>
@@ -65,7 +73,37 @@ namespace DMX.Core.Api.Services.Orchestrations
         public static bool LabIsOnline(Lab lab, HashSet<string> externalLabIds) =>
             externalLabIds.Contains(lab.ExternalId);
 
-        public static bool LabDeviceIsOnline(LabDevice labDevice, HashSet<Guid> externalLabDeviceIds) =>
-            externalLabDeviceIds.Contains(labDevice.Id);
+        public static void UpdateDeviceStatusForOnlineLabs(List<Lab> onlineLabs, List<Lab> externalOnlineLabs)
+        {
+
+            onlineLabs.ForEach(onlineLab =>
+            {
+                Lab externalLab = externalOnlineLabs.Single(externalLab => externalLab.ExternalId == onlineLab.ExternalId);
+                UpdateLabDeviceStatuses(onlineLab.Devices, externalLab.Devices);
+            });
+        }
+
+        public static void UpdateLabDeviceStatuses(List<LabDevice> onlineLabDevices, List<LabDevice> externalOnlineLabDevices)
+        {
+            List<LabDevice> onlineDevices =
+                onlineLabDevices.IntersectBy(externalOnlineLabDevices.Select(externalOnlineLabDevice =>
+                    externalOnlineLabDevice.Name),
+                        onlineLabDevice =>
+                            onlineLabDevice.Name)
+                                .ToList();
+
+            onlineLabDevices.ForEach(labDevice => labDevice.Status = LabDeviceStatus.Online);
+
+            List<LabDevice> offlineDevices =
+                onlineLabDevices.ExceptBy(externalOnlineLabDevices.Select(externalOnlineLabDevice =>
+                    externalOnlineLabDevice.Name),
+                        onlineLabDevice =>
+                            onlineLabDevice.Name)
+                                .ToList();
+
+            offlineDevices.ForEach(labDevice => labDevice.Status = LabDeviceStatus.Offline);
+
+            onlineLabDevices = onlineDevices.Union(offlineDevices).ToList();
+        }
     }
 }
