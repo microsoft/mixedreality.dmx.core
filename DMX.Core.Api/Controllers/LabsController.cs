@@ -22,7 +22,8 @@ namespace DMX.Core.Api.Controllers
         private readonly ILabService labService;
         private readonly ILabOrchestrationService labOrchestrationService;
 
-        public LabsController(ILabService externalLabService, 
+        public LabsController(
+            ILabService externalLabService, 
             ILabOrchestrationService labOrchestrationService)
         {
             this.labService = externalLabService;
