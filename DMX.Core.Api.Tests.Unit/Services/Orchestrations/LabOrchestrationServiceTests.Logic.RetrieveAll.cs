@@ -133,5 +133,39 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             this.externalLabServiceMock.VerifyNoOtherCalls();
             this.labServiceMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldRetrieveAllUnregisteredLabsWithAppropriateLabStatusAsync()
+        {
+            // given
+            List<Lab> randomLabs = CreateRandomLabs(labStatus: LabStatus.Available);
+            List<Lab> externalLabs = randomLabs.DeepClone();
+            List<Lab> expectedlabs = randomLabs.DeepClone();
+
+            expectedlabs.ForEach(lab =>
+                lab.Status = LabStatus.Unregistered);
+
+            this.externalLabServiceMock.Setup(service =>
+                service.RetrieveAllExternalLabsAsync())
+                    .ReturnsAsync(externalLabs);
+
+            // when
+            List<Lab> actualLabs =
+                await this.labOrchestrationService.RetrieveAllLabsAsync();
+
+            // then
+            actualLabs.Should().BeEquivalentTo(expectedlabs);
+
+            this.labServiceMock.Verify(service =>
+                service.RetrieveAllLabsWithDevices(),
+                Times.Once);
+
+            this.externalLabServiceMock.Verify(service =>
+                service.RetrieveAllExternalLabsAsync(),
+                    Times.Once);
+
+            this.externalLabServiceMock.VerifyNoOtherCalls();
+            this.labServiceMock.VerifyNoOtherCalls();
+        }
     }
 }
