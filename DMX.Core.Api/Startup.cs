@@ -8,6 +8,7 @@ using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Services.Foundations.ExternalLabs;
 using DMX.Core.Api.Services.Foundations.Labs;
+using DMX.Core.Api.Services.Orchestrations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -78,6 +79,7 @@ namespace DMX.Core.Api
         {
             services.AddTransient<IExternalLabService, ExternalLabService>();
             services.AddTransient<ILabService, LabService>();
+            services.AddTransient<ILabOrchestrationService, LabOrchestrationService>();
         }
     }
 }
