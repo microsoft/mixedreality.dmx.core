@@ -8,6 +8,7 @@ using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Services.Foundations.ExternalLabs;
 using DMX.Core.Api.Services.Foundations.Labs;
+using DMX.Core.Api.Services.Orchestrations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -32,7 +33,8 @@ namespace DMX.Core.Api
             services.AddLogging();
             services.AddDbContext<StorageBroker>();
             AddBrokers(services);
-            AddServices(services);
+            AddFoundationServices(services);
+            AddOrchestrationServices(services);
 
             services.AddSwaggerGen(option =>
             {
@@ -74,10 +76,13 @@ namespace DMX.Core.Api
             services.AddTransient<IStorageBroker, StorageBroker>();
         }
 
-        private static void AddServices(IServiceCollection services)
+        private static void AddFoundationServices(IServiceCollection services)
         {
             services.AddTransient<IExternalLabService, ExternalLabService>();
             services.AddTransient<ILabService, LabService>();
         }
+
+        private static void AddOrchestrationServices(IServiceCollection services) =>
+            services.AddTransient<ILabOrchestrationService, LabOrchestrationService>();
     }
 }
