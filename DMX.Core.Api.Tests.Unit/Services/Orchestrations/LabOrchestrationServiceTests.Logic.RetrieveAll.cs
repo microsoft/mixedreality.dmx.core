@@ -138,12 +138,15 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
         public async Task ShouldRetrieveAllUnregisteredLabsWithAppropriateLabStatusAsync()
         {
             // given
-            List<Lab> randomLabs = CreateRandomLabs(labStatus: LabStatus.Available);
+            List<Lab> randomLabs = 
+                CreateRandomLabs(labStatus: LabStatus.Unregistered);
+            
             List<Lab> externalLabs = randomLabs.DeepClone();
             List<Lab> expectedlabs = randomLabs.DeepClone();
 
-            expectedlabs.ForEach(lab =>
-                lab.Status = LabStatus.Unregistered);
+            externalLabs.ForEach(externalLab => 
+                externalLab.Devices.ForEach(labDevice => 
+                    labDevice.Status = LabDeviceStatus.Unregistered));
 
             this.externalLabServiceMock.Setup(service =>
                 service.RetrieveAllExternalLabsAsync())
@@ -158,7 +161,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
 
             this.labServiceMock.Verify(service =>
                 service.RetrieveAllLabsWithDevices(),
-                Times.Once);
+                    Times.Once);
 
             this.externalLabServiceMock.Verify(service =>
                 service.RetrieveAllExternalLabsAsync(),
