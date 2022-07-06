@@ -82,9 +82,7 @@ namespace DMX.Core.Api
             services.AddTransient<ILabService, LabService>();
         }
 
-        private static void AddOrchestrationServices(IServiceCollection services)
-        {
+        private static void AddOrchestrationServices(IServiceCollection services) =>
             services.AddTransient<ILabOrchestrationService, LabOrchestrationService>();
-        }
     }
 }
