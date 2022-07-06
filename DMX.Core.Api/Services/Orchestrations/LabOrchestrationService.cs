@@ -34,39 +34,32 @@ namespace DMX.Core.Api.Services.Orchestrations
         {
             List<Lab> existingLabs = this.labService.RetrieveAllLabsWithDevices().ToList();
             List<Lab> externalLabs = await this.externalLabService.RetrieveAllExternalLabsAsync();
-            existingLabs.ForEach(lab => lab.Status = LabStatus.Offline);
 
-            List<LabDevice> existingLabDevices =
-                existingLabs.SelectMany(lab => lab.Devices,
-                    (lab, labDevice) => labDevice).ToList();
+            List<Lab> onlineLabs = existingLabs.IntersectBy(externalLabs.Select(externalLab =>
+                externalLab.ExternalId),
+                    (existingLab) =>
+                        existingLab.ExternalId)
+                            .ToList();
 
-            existingLabDevices.ForEach(labDevice =>
-                labDevice.Status = LabDeviceStatus.Offline);
+            onlineLabs.ForEach(lab => lab.Status = LabStatus.Available);
 
-            HashSet<string> externalLabsIds =
-                externalLabs.Select(lab =>
-                    lab.ExternalId)
-                        .ToHashSet();
+            List<Lab> offlineLabs = existingLabs.ExceptBy(externalLabs.Select(externalLab =>
+                externalLab.ExternalId),
+                    (existingLab) =>
+                        existingLab.ExternalId)
+                            .ToList();
 
-            List<Lab> onlineLabs = existingLabs.Where((lab) =>
-                LabIsOnline(lab, externalLabsIds)).ToList();
+            offlineLabs.ForEach(lab => lab.Status = LabStatus.Offline);
 
-            onlineLabs.ForEach(onlineLab =>
-                onlineLab.Status = LabStatus.Available);
+            List<Lab> unregisteredLabs = externalLabs.ExceptBy(existingLabs.Select(existingLab =>
+                existingLab.ExternalId),
+                    (externalLab) =>
+                        externalLab.ExternalId)
+                            .ToList();
 
-            HashSet<Guid> externalLabDevicesIds =
-                externalLabs.SelectMany(lab => lab.Devices,
-                    (lab, labDevice) => labDevice.Id)
-                        .ToHashSet();
+            unregisteredLabs.ForEach(lab => lab.Status = LabStatus.Unregistered);
 
-            List<LabDevice> onlineLabDevices = existingLabDevices.Where(labDevice =>
-                LabDeviceIsOnline(labDevice, externalLabDevicesIds))
-                    .ToList();
-
-            onlineLabDevices.ForEach(onlineLabDevice =>
-                onlineLabDevice.Status = LabDeviceStatus.Online);
-
-            return existingLabs;
+            return onlineLabs.Union(offlineLabs).Union(unregisteredLabs).ToList();
         });
 
         public static bool LabIsOnline(Lab lab, HashSet<string> externalLabIds) =>
