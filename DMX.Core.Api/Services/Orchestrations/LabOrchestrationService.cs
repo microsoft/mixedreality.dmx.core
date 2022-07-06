@@ -75,15 +75,16 @@ namespace DMX.Core.Api.Services.Orchestrations
 
         public static void UpdateDeviceStatusForOnlineLabs(List<Lab> onlineLabs, List<Lab> externalOnlineLabs)
         {
-
             onlineLabs.ForEach(onlineLab =>
             {
                 Lab externalLab = externalOnlineLabs.Single(externalLab => externalLab.ExternalId == onlineLab.ExternalId);
-                UpdateLabDeviceStatuses(onlineLab.Devices, externalLab.Devices);
+                onlineLab.Devices = UpdateLabDeviceStatuses(onlineLab.Devices, externalLab.Devices);
             });
         }
 
-        public static void UpdateLabDeviceStatuses(List<LabDevice> onlineLabDevices, List<LabDevice> externalOnlineLabDevices)
+        public static List<LabDevice> UpdateLabDeviceStatuses(
+            List<LabDevice> onlineLabDevices,
+            List<LabDevice> externalOnlineLabDevices)
         {
             List<LabDevice> onlineDevices =
                 onlineLabDevices.IntersectBy(externalOnlineLabDevices.Select(externalOnlineLabDevice =>
@@ -103,7 +104,16 @@ namespace DMX.Core.Api.Services.Orchestrations
 
             offlineDevices.ForEach(labDevice => labDevice.Status = LabDeviceStatus.Offline);
 
-            onlineLabDevices = onlineDevices.Union(offlineDevices).ToList();
+            List<LabDevice> unregisteredDevices =
+                externalOnlineLabDevices.ExceptBy(onlineLabDevices.Select(onlineLabDevice =>
+                    onlineLabDevice.Name),
+                        externalOnlineLabDevice =>
+                            externalOnlineLabDevice.Name)
+                                .ToList();
+
+            unregisteredDevices.ForEach(labDevice => labDevice.Status = LabDeviceStatus.Unregistered);
+
+            return onlineDevices.Union(offlineDevices).Union(unregisteredDevices).ToList();
         }
     }
 }
