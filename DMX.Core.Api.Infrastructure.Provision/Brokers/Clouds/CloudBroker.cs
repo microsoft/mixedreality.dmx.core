@@ -17,6 +17,8 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
         private readonly string tenentId;
         private readonly string adminName;
         private readonly string adminAccess;
+        private readonly string externalLabApiUrl;
+        private readonly string externalLabApiAccessKey;
         private readonly IAzure azure;
 
         public CloudBroker()
@@ -26,6 +28,8 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
             this.tenentId = Environment.GetEnvironmentVariable("AzureTenentId");
             this.adminName = Environment.GetEnvironmentVariable("AzureAdminName");
             this.adminAccess = Environment.GetEnvironmentVariable("AzureAdminAccess");
+            this.externalLabApiUrl = Environment.GetEnvironmentVariable("ExternalLabApiUrl");
+            this.externalLabApiAccessKey = Environment.GetEnvironmentVariable("ExternalLabApiAccessKey");
             this.azure = AuthenticateAzure();
         }
 

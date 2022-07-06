@@ -2,11 +2,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Azure.Management.AppService.Fluent;
 using Microsoft.Azure.Management.AppService.Fluent.Models;
 using Microsoft.Azure.Management.AppService.Fluent.WebApp.Definition;
-using Microsoft.Azure.Management.AppService.Fluent.WebAppBase.Definition;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
 
 namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
@@ -19,18 +19,26 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
             IAppServicePlan appServicePlan,
             IResourceGroup resourceGroup)
         {
-            IExistingWindowsPlanWithGroup webAppWithExistingWindowsPlan = this.azure.AppServices.WebApps
-                .Define(webAppName)
-                    .WithExistingWindowsPlan(appServicePlan);
+            var webAppSettings= new Dictionary<string, string>
+                {
+                    { "ApiConfigurations:Url", this.externalLabApiUrl },
+                    { "ApiConfigurations:AccessKey", this.externalLabApiAccessKey }
+                };
 
-            IWithCreate<IWebApp> webAppWithConnectionString = webAppWithExistingWindowsPlan.WithExistingResourceGroup(resourceGroup)
-                .WithNetFrameworkVersion(NetFrameworkVersion.Parse("v7.0"))
+            IWithWindowsRuntimeStack webAppWithPlanAndResouceGroup =
+                this.azure.AppServices.WebApps
+                    .Define(webAppName)
+                        .WithExistingWindowsPlan(appServicePlan)
+                            .WithExistingResourceGroup(resourceGroup);
+            
+            return await webAppWithPlanAndResouceGroup
+                .WithNetFrameworkVersion(NetFrameworkVersion.Parse("v6.0"))
                     .WithConnectionString(
                         name: "DefaultConnection",
                         value: connectionString,
-                        type: ConnectionStringType.SQLAzure);
-
-            return await webAppWithConnectionString.CreateAsync();
+                        type: ConnectionStringType.SQLAzure)
+                        .WithAppSettings(settings: webAppSettings)
+                            .CreateAsync();
         }
     }
 }
