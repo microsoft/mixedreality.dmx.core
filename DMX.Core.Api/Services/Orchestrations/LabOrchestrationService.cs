@@ -66,6 +66,11 @@ namespace DMX.Core.Api.Services.Orchestrations
 
             unregisteredLabs.ForEach(lab => lab.Status = LabStatus.Unregistered);
 
+            unregisteredLabs.ForEach(lab =>
+                lab.Devices.ForEach(labDevice =>
+                    labDevice.Status = LabDeviceStatus.Unregistered));
+
+
             return onlineLabs.Union(offlineLabs).Union(unregisteredLabs).ToList();
         });
 

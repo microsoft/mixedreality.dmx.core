@@ -144,7 +144,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             List<Lab> externalLabs = randomLabs.DeepClone();
             List<Lab> expectedlabs = randomLabs.DeepClone();
 
-            externalLabs.ForEach(externalLab => 
+            expectedlabs.ForEach(externalLab => 
                 externalLab.Devices.ForEach(labDevice => 
                     labDevice.Status = LabDeviceStatus.Unregistered));
 
