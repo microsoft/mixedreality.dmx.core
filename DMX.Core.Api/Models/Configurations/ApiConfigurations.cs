@@ -8,5 +8,7 @@ namespace DMX.Core.Api.Models.Configurations
     {
         public string Url { get; set; }
         public string AccessKey { get; set; }
+        public string ServiceType { get; set; }
+        public string ServiceId { get; set; }
     }
 }

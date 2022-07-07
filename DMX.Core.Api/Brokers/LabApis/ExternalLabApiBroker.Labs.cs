@@ -14,6 +14,12 @@ namespace DMX.Core.Api.Brokers.LabApis
         {
             const string RelativeUrl = "api/GetAvailableDevicesAsync";
 
+            externalLabServiceInformation.ServiceType =
+                this.externalLabServiceInformation.ServiceType;
+
+            externalLabServiceInformation.ServiceId =
+                this.externalLabServiceInformation.ServiceId;
+
             return await this.PostAync<ExternalLabServiceInformation, ExternalLabCollection>(
                 relativeUrl: $"{RelativeUrl}?code={this.accessKey}",
                 content: externalLabServiceInformation);
