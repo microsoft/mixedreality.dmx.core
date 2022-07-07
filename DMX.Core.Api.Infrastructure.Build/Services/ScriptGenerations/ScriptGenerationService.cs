@@ -112,6 +112,7 @@ namespace DMX.Core.Api.Infrastructure.Build.Services.ScriptGenerations
                         {
                             { "AzureClientId", "${{ secrets.AZURECLIENTID }}" },
                             { "AzureTenantId", "${{ secrets.AZURETENANTID }}" },
+                            { "AzureSubscriptionId", "${{ secrets.AZURESUBSCRIPTIONID }}"},
                             { "AzureClientSecret", "${{ secrets.AZURECLIENTSECRET }}" },
                             { "AzureAdminName", "${{ secrets.AZUREADMINNAME }}" },
                             { "AzureAdminAccess", "${{ secrets.AZUREADMINACCESS }}" },
