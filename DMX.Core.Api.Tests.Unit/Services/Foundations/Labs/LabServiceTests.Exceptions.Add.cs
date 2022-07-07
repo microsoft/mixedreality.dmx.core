@@ -4,8 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Labs;
-using DMX.Core.Api.Models.Labs.Exceptions;
+using DMX.Core.Api.Models.Foundations.Labs;
+using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using EFxceptions.Models.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
@@ -18,7 +18,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
     public partial class LabServiceTests
     {
         [Fact]
-        public async Task ShouldThrowCriticalDependencyExceptionOnRegisterIfSqlErrorOccursAndLogItAsync()
+        public async Task ShouldThrowCriticalDependencyExceptionOnAddIfSqlErrorOccursAndLogItAsync()
         {
             // given
             Lab someLab = CreateRandomLab();
@@ -35,7 +35,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                     .ThrowsAsync(sqlException);
 
             // when
-            ValueTask<Lab> retrievedLabTask = this.labService.AddLabAsync(someLab);
+            ValueTask<Lab> retrievedLabTask =
+                this.labService.AddLabAsync(someLab);
 
             LabDependencyException actualLabDependencyException =
                 await Assert.ThrowsAsync<LabDependencyException>(

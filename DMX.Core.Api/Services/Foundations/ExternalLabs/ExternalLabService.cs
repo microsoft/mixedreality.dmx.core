@@ -8,8 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Models.ExternalLabs;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.ExternalLabs;
+using DMX.Core.Api.Models.Foundations.Labs;
 
 namespace DMX.Core.Api.Services.Foundations.ExternalLabs
 {
@@ -26,7 +26,7 @@ namespace DMX.Core.Api.Services.Foundations.ExternalLabs
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<List<Lab>> RetrieveAllLabsAsync() =>
+        public ValueTask<List<Lab>> RetrieveAllExternalLabsAsync() =>
         TryCatch(async () =>
         {
             List<ExternalLab> externalLabs = await RetrieveExternalLabsAsync();

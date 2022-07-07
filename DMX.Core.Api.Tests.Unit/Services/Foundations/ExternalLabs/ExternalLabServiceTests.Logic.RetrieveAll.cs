@@ -5,8 +5,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.ExternalLabs;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.ExternalLabs;
+using DMX.Core.Api.Models.Foundations.Labs;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -60,7 +60,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
 
             // when
             List<Lab> actualLabs =
-                await this.externalLabService.RetrieveAllLabsAsync();
+                await this.externalLabService.RetrieveAllExternalLabsAsync();
 
             // then
             actualLabs.Should().BeEquivalentTo(expectedLabs);

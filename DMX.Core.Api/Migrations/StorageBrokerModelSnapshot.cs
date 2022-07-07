@@ -22,7 +22,7 @@ namespace DMX.Core.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("DMX.Core.Api.Models.Labs.Lab", b =>
+            modelBuilder.Entity("DMX.Core.Api.Models.Foundations.Labs.Lab", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,7 +45,7 @@ namespace DMX.Core.Api.Migrations
                     b.ToTable("Labs");
                 });
 
-            modelBuilder.Entity("DMX.Core.Api.Models.Labs.LabDevice", b =>
+            modelBuilder.Entity("DMX.Core.Api.Models.Foundations.Labs.LabDevice", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,6 +53,9 @@ namespace DMX.Core.Api.Migrations
 
                     b.Property<int>("Category")
                         .HasColumnType("int");
+
+                    b.Property<string>("ExternalId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("LabId")
                         .HasColumnType("uniqueidentifier");
@@ -76,9 +79,9 @@ namespace DMX.Core.Api.Migrations
                     b.ToTable("LabDevices");
                 });
 
-            modelBuilder.Entity("DMX.Core.Api.Models.Labs.LabDevice", b =>
+            modelBuilder.Entity("DMX.Core.Api.Models.Foundations.Labs.LabDevice", b =>
                 {
-                    b.HasOne("DMX.Core.Api.Models.Labs.Lab", "Lab")
+                    b.HasOne("DMX.Core.Api.Models.Foundations.Labs.Lab", "Lab")
                         .WithMany("Devices")
                         .HasForeignKey("LabId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -87,7 +90,7 @@ namespace DMX.Core.Api.Migrations
                     b.Navigation("Lab");
                 });
 
-            modelBuilder.Entity("DMX.Core.Api.Models.Labs.Lab", b =>
+            modelBuilder.Entity("DMX.Core.Api.Models.Foundations.Labs.Lab", b =>
                 {
                     b.Navigation("Devices");
                 });

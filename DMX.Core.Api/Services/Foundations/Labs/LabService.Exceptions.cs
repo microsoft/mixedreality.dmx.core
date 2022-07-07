@@ -3,9 +3,10 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Labs;
-using DMX.Core.Api.Models.Labs.Exceptions;
+using DMX.Core.Api.Models.Foundations.Labs;
+using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,8 @@ namespace DMX.Core.Api.Services.Foundations.Labs
     public partial class LabService
     {
         private delegate ValueTask<Lab> ReturningLabFunction();
+
+        private delegate IQueryable<Lab> ReturningLabsFunction();
 
         private async ValueTask<Lab> TryCatch(ReturningLabFunction returningLabFunction)
         {
@@ -48,6 +51,26 @@ namespace DMX.Core.Api.Services.Foundations.Labs
                 var failedLabStorageException = new FailedLabStorageException(dbUpdateException);
 
                 throw CreateAndLogDependencyException(failedLabStorageException);
+            }
+            catch (Exception exception)
+            {
+                var failedLabServiceException = new FailedLabServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLabServiceException);
+            }
+        }
+
+        private IQueryable<Lab> TryCatch(ReturningLabsFunction returningLabsFunction)
+        {
+            try
+            {
+                return returningLabsFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedLabStorageException = new FailedLabStorageException(sqlException);
+
+                throw CreateAndLogCriticalLabDependencyException(failedLabStorageException);
             }
             catch (Exception exception)
             {

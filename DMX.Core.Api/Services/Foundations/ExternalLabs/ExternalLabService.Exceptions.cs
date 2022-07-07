@@ -5,8 +5,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.ExternalLabs.Exceptions;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.ExternalLabs.Exceptions;
+using DMX.Core.Api.Models.Foundations.Labs;
 using RESTFulSense.Exceptions;
 using Xeptions;
 
@@ -73,9 +73,9 @@ namespace DMX.Core.Api.Services.Foundations.ExternalLabs
             return externalLabDependencyException;
         }
 
-        private ExternaLabServiceException CreateAndLogServiceException(Xeption exception)
+        private ExternalLabServiceException CreateAndLogServiceException(Xeption exception)
         {
-            var externalLabServiceException = new ExternaLabServiceException(exception);
+            var externalLabServiceException = new ExternalLabServiceException(exception);
             this.loggingBroker.LogError(externalLabServiceException);
 
             return externalLabServiceException;

@@ -3,8 +3,8 @@
 // ---------------------------------------------------------------
 
 using System;
-using DMX.Core.Api.Models.Labs;
-using DMX.Core.Api.Models.Labs.Exceptions;
+using DMX.Core.Api.Models.Foundations.Labs;
+using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 
 namespace DMX.Core.Api.Services.Foundations.Labs
 {
@@ -22,7 +22,7 @@ namespace DMX.Core.Api.Services.Foundations.Labs
                 (Rule: IsInvalid(lab.Status), Parameter: nameof(Lab.Status)));
         }
 
-        private void ValidateLabIsNotNull(Lab lab)
+        private static void ValidateLabIsNotNull(Lab lab)
         {
             if (lab is null)
             {

@@ -2,10 +2,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.Labs;
 
 namespace DMX.Core.Api.Services.Foundations.Labs
 {
@@ -23,10 +24,14 @@ namespace DMX.Core.Api.Services.Foundations.Labs
         }
 
         public ValueTask<Lab> AddLabAsync(Lab lab) =>
-            TryCatch(async () =>
-            {
-                this.ValidateLabOnAdd(lab);
-                return await this.storageBroker.InsertLabAsync(lab);
-            });
+        TryCatch(async () =>
+        {
+            ValidateLabOnAdd(lab);
+
+            return await this.storageBroker.InsertLabAsync(lab);
+        });
+
+        public IQueryable<Lab> RetrieveAllLabsWithDevices() =>
+        TryCatch(() => this.storageBroker.SelectAllLabsWithDevices());
     }
 }

@@ -2,8 +2,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System.Linq;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Labs;
+using DMX.Core.Api.Models.Foundations.Labs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -23,6 +24,13 @@ namespace DMX.Core.Api.Brokers.Storages
             await broker.SaveChangesAsync();
 
             return labEntityEntry.Entity;
+        }
+
+        public IQueryable<Lab> SelectAllLabsWithDevices()
+        {
+            var broker = new StorageBroker(this.configuration);
+
+            return broker.Labs.Include(lab => lab.Devices);
         }
     }
 }
