@@ -83,7 +83,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             Lab externalLab = randomLab;
             Lab existingLab = randomLab.DeepClone();
             Lab expectedLab = randomLab.DeepClone();
-            
+
             List<LabDevice> commonRandomLabDevices =
                 CreateRandomLabDevices(LabDeviceStatus.Online);
 
@@ -106,7 +106,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             var externalLabs = new List<Lab>() { externalLab };
             var existingLabs = new List<Lab>() { existingLab };
             var expectedLabs = new List<Lab>() { expectedLab };
-            
+
             this.labServiceMock.Setup(service =>
                 service.RetrieveAllLabsWithDevices())
                     .Returns(existingLabs.AsQueryable());
@@ -138,14 +138,14 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
         public async Task ShouldRetrieveAllUnregisteredLabsWithAppropriateLabStatusAsync()
         {
             // given
-            List<Lab> randomLabs = 
+            List<Lab> randomLabs =
                 CreateRandomLabs(labStatus: LabStatus.Unregistered);
-            
+
             List<Lab> externalLabs = randomLabs.DeepClone();
             List<Lab> expectedlabs = randomLabs.DeepClone();
 
-            expectedlabs.ForEach(externalLab => 
-                externalLab.Devices.ForEach(labDevice => 
+            expectedlabs.ForEach(externalLab =>
+                externalLab.Devices.ForEach(labDevice =>
                     labDevice.Status = LabDeviceStatus.Unregistered));
 
             this.externalLabServiceMock.Setup(service =>
@@ -181,16 +181,16 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             Lab expectedLab = randomLab.DeepClone();
             existingLab.Devices = new List<LabDevice>();
 
-            List<LabDevice> randomLabDevices = 
+            List<LabDevice> randomLabDevices =
                 CreateRandomLabDevices(LabDeviceStatus.Online);
 
             List<LabDevice> externalLabDevices = randomLabDevices.DeepClone();
             externalLab.Devices = externalLabDevices;
-            
+
             List<LabDevice> expectedLabDevices =
                 randomLabDevices.DeepClone();
-           
-            expectedLabDevices.ForEach(labDevice => 
+
+            expectedLabDevices.ForEach(labDevice =>
                 labDevice.Status = LabDeviceStatus.Unregistered);
 
             expectedLab.Devices = expectedLabDevices;
@@ -208,7 +208,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                     .Returns(existingLabs.AsQueryable());
 
             // when
-            List<Lab> actualLabs = 
+            List<Lab> actualLabs =
                 await this.labOrchestrationService.RetrieveAllLabsAsync();
 
             // then

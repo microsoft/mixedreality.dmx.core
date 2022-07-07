@@ -58,7 +58,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
 
         public static List<Lab> CreateRandomLabs(LabStatus labStatus) =>
             CreateLabsFiller(labStatus).Create(count: GetRandomNumber()).ToList();
-        
+
         public static Lab CreateRandomLab() =>
             CreateLabsFiller().Create();
 
