@@ -117,7 +117,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
                 new FailedExternalLabServiceException(serviceException);
 
             var expectedLabServiceException =
-                new ExternaLabServiceException(failedExternalLabServiceException);
+                new ExternalLabServiceException(failedExternalLabServiceException);
 
             this.externalLabApiBrokerMock.Setup(broker =>
                 broker.GetAvailableLabsAsync(
@@ -128,8 +128,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
             ValueTask<List<Lab>> retrieveAllLabsTask =
                 this.externalLabService.RetrieveAllExternalLabsAsync();
 
-            ExternaLabServiceException actualLabServiceException =
-                await Assert.ThrowsAsync<ExternaLabServiceException>(() =>
+            ExternalLabServiceException actualLabServiceException =
+                await Assert.ThrowsAsync<ExternalLabServiceException>(() =>
                     retrieveAllLabsTask.AsTask());
 
             // then

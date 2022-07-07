@@ -37,8 +37,8 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
                         name: "DefaultConnection",
                         value: connectionString,
                         type: ConnectionStringType.SQLAzure)
-                        .WithAppSettings(settings: webAppSettings)
-                            .CreateAsync();
+                            .WithAppSettings(settings: webAppSettings)
+                                .CreateAsync();
         }
     }
 }

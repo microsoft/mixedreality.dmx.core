@@ -28,7 +28,7 @@ namespace DMX.Core.Api.Brokers.Storages
 
         public IQueryable<Lab> SelectAllLabsWithDevices()
         {
-            using var broker = new StorageBroker(this.configuration);
+            var broker = new StorageBroker(this.configuration);
 
             return broker.Labs.Include(lab => lab.Devices);
         }
