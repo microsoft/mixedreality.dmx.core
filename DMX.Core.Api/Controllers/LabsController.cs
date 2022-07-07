@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Foundations.ExternalLabs.Exceptions;
 using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using DMX.Core.Api.Models.Orchestrations.Labs.Exceptions;
@@ -23,7 +22,7 @@ namespace DMX.Core.Api.Controllers
         private readonly ILabOrchestrationService labOrchestrationService;
 
         public LabsController(
-            ILabService externalLabService, 
+            ILabService externalLabService,
             ILabOrchestrationService labOrchestrationService)
         {
             this.labService = externalLabService;

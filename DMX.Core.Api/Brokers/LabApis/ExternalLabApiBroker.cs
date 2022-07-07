@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Configurations;
 using DMX.Core.Api.Models.Foundations.ExternalLabs;
-using FluentAssertions.Common;
 using Microsoft.Extensions.Configuration;
 using RESTFulSense.Clients;
 
