@@ -14,7 +14,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
     {
         private readonly string clientId;
         private readonly string clientSecret;
-        private readonly string tenentId;
+        private readonly string tenantId;
         private readonly string adminName;
         private readonly string adminAccess;
         private readonly string subscriptionId;
@@ -26,7 +26,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
         {
             this.clientId = Environment.GetEnvironmentVariable("AzureClientId");
             this.clientSecret = Environment.GetEnvironmentVariable("AzureClientSecret");
-            this.tenentId = Environment.GetEnvironmentVariable("AzureTenentId");
+            this.tenantId = Environment.GetEnvironmentVariable("AzureTenantId");
             this.adminName = Environment.GetEnvironmentVariable("AzureAdminName");
             this.adminAccess = Environment.GetEnvironmentVariable("AzureAdminAccess");
             this.subscriptionId = Environment.GetEnvironmentVariable("AzureSubscriptionId");
@@ -41,7 +41,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
                 SdkContext.AzureCredentialsFactory.FromServicePrincipal(
                     clientId: this.clientId,
                     clientSecret: this.clientSecret,
-                    tenantId: this.tenentId,
+                    tenantId: this.tenantId,
                     environment: AzureEnvironment.AzureGlobalCloud);
 
             return Azure.Configure()
