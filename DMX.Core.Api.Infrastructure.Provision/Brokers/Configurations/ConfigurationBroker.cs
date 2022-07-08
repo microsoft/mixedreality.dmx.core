@@ -14,7 +14,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Configurations
         {
             IConfigurationRoot configrationRoot = new ConfigurationBuilder()
                 .SetBasePath(basePath: Directory.GetCurrentDirectory())
-                    .AddJsonFile(path: "appsettings.json", optional: false)
+                    .AddJsonFile(path: "DMX.Core.Api.Infrastructure.Provision\\appSettings.json", optional: false)
                         .Build();
 
             return configrationRoot.Get<CloudManagementConfiguration>();

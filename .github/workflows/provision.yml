@@ -2,16 +2,17 @@ name: Provision DMX Core
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
     branches:
-    - master
+    - main
 jobs:
   build:
     runs-on: windows-latest
     env:
       AzureClientId: ${{ secrets.AZURECLIENTID }}
       AzureTenantId: ${{ secrets.AZURETENANTID }}
+      AzureSubscriptionId: ${{ secrets.AZURESUBSCRIPTIONID }}
       AzureClientSecret: ${{ secrets.AZURECLIENTSECRET }}
       AzureAdminName: ${{ secrets.AZUREADMINNAME }}
       AzureAdminAccess: ${{ secrets.AZUREADMINACCESS }}

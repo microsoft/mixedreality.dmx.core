@@ -42,38 +42,38 @@ namespace DMX.Core.Api.Infrastructure.Build.Services.ScriptGenerations
                         RunsOn = BuildMachines.Windows2022,
 
                         Steps = new List<GithubTask>
-            {
-                new CheckoutTaskV2
-                {
-                    Name = "Checking out code"
-                },
+                        {
+                            new CheckoutTaskV2
+                            {
+                                Name = "Checking out code"
+                            },
 
-                new SetupDotNetTaskV1
-                {
-                    Name = "Installing .NET",
+                            new SetupDotNetTaskV1
+                            {
+                                Name = "Installing .NET",
 
-                    TargetDotNetVersion = new TargetDotNetVersion
-                    {
-                        DotNetVersion = "7.0.100-preview.4.22252.9",
-                        IncludePrerelease = true
-                    }
-                },
+                                TargetDotNetVersion = new TargetDotNetVersion
+                                {
+                                    DotNetVersion = "7.0.100-preview.4.22252.9",
+                                    IncludePrerelease = true
+                                }
+                            },
 
-                new RestoreTask
-                {
-                    Name = "Restoring Packages"
-                },
+                            new RestoreTask
+                            {
+                                Name = "Restoring Packages"
+                            },
 
-                new DotNetBuildTask
-                {
-                    Name = "Building Project(s)"
-                },
+                            new DotNetBuildTask
+                            {
+                                Name = "Building Project(s)"
+                            },
 
-                new TestTask
-                {
-                    Name = "Running Tests"
-                }
-            }
+                            new TestTask
+                            {
+                                Name = "Running Tests"
+                            }
+                        }
                     },
                 }
             };
@@ -93,12 +93,12 @@ namespace DMX.Core.Api.Infrastructure.Build.Services.ScriptGenerations
                 {
                     Push = new PushEvent
                     {
-                        Branches = new string[] { "master" }
+                        Branches = new string[] { "main" }
                     },
 
                     PullRequest = new PullRequestEvent
                     {
-                        Branches = new string[] { "master" }
+                        Branches = new string[] { "main" }
                     }
                 },
 
@@ -112,6 +112,7 @@ namespace DMX.Core.Api.Infrastructure.Build.Services.ScriptGenerations
                         {
                             { "AzureClientId", "${{ secrets.AZURECLIENTID }}" },
                             { "AzureTenantId", "${{ secrets.AZURETENANTID }}" },
+                            { "AzureSubscriptionId", "${{ secrets.AZURESUBSCRIPTIONID }}"},
                             { "AzureClientSecret", "${{ secrets.AZURECLIENTSECRET }}" },
                             { "AzureAdminName", "${{ secrets.AZUREADMINNAME }}" },
                             { "AzureAdminAccess", "${{ secrets.AZUREADMINACCESS }}" },
