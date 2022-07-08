@@ -12,7 +12,6 @@ jobs:
     env:
       AzureClientId: ${{ secrets.AZURECLIENTID }}
       AzureTenantId: ${{ secrets.AZURETENANTID }}
-      AzureSubscriptionId: ${{ secrets.AZURESUBSCRIPTIONID }}
       AzureClientSecret: ${{ secrets.AZURECLIENTSECRET }}
       AzureAdminName: ${{ secrets.AZUREADMINNAME }}
       AzureAdminAccess: ${{ secrets.AZUREADMINACCESS }}

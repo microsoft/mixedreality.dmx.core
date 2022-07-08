@@ -17,7 +17,6 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
         private readonly string tenantId;
         private readonly string adminName;
         private readonly string adminAccess;
-        private readonly string subscriptionId;
         private readonly string externalLabApiUrl;
         private readonly string externalLabApiAccessKey;
         private readonly IAzure azure;
@@ -29,7 +28,6 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
             this.tenantId = Environment.GetEnvironmentVariable("AzureTenantId");
             this.adminName = Environment.GetEnvironmentVariable("AzureAdminName");
             this.adminAccess = Environment.GetEnvironmentVariable("AzureAdminAccess");
-            this.subscriptionId = Environment.GetEnvironmentVariable("AzureSubscriptionId");
             this.externalLabApiUrl = Environment.GetEnvironmentVariable("ExternalLabApiUrl");
             this.externalLabApiAccessKey = Environment.GetEnvironmentVariable("ExternalLabApiAccessKey");
             this.azure = AuthenticateAzure();
@@ -47,7 +45,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
             return Azure.Configure()
                 .WithLogLevel(HttpLoggingDelegatingHandler.Level.Basic)
                     .Authenticate(credentials)
-                        .WithSubscription(this.subscriptionId);
+                        .WithDefaultSubscription();
         }
     }
 }
