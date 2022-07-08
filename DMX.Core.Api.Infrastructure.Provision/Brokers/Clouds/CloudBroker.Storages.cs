@@ -19,7 +19,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
         {
             IWithGroup sqlServerWithRegion = this.azure.SqlServers
                 .Define(sqlServerName)
-                    .WithRegion(Region.USWest);
+                    .WithRegion(Region.USWest3);
 
             IWithCreate sqlServerWithLogin = sqlServerWithRegion.WithExistingResourceGroup(resourceGroup)
                 .WithAdministratorLogin(this.adminName)
