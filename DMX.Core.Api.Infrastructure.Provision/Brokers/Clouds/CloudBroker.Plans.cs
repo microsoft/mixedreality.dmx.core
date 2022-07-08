@@ -18,7 +18,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
         {
             IWithPricingTier appServicePlanWithPricing = this.azure.AppServices.AppServicePlans
                 .Define(planName)
-                    .WithRegion(Region.USWest)
+                    .WithRegion(Region.USWest3)
                         .WithExistingResourceGroup(resourceGroup);
 
             return await appServicePlanWithPricing.WithPricingTier(PricingTier.StandardS1)
