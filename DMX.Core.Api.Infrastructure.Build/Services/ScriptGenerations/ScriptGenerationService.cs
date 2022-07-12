@@ -110,17 +110,19 @@ namespace DMX.Core.Api.Infrastructure.Build.Services.ScriptGenerations
 
                         EnvironmentVariables = new Dictionary<string, string>
                         {
-                            { "AzureClientId", "${{ secrets.AZURECLIENTID }}" },
-                            { "AzureTenantId", "${{ secrets.AZURETENANTID }}" },
-                            { "AzureClientSecret", "${{ secrets.AZURECLIENTSECRET }}" },
-                            { "AzureAdminName", "${{ secrets.AZUREADMINNAME }}" },
-                            { "AzureAdminAccess", "${{ secrets.AZUREADMINACCESS }}" },
-                            { "AzureAdInstance", "${{ secrets.AZUREADINSTANCE }}" },
-                            { "AzureAdDomain", "${{ secrets.AZUREADDOMAIN }}" },
-                            { "AzureAdCallbackPath", "${{ secrets.AZUREADCALLBACKPATH }}" },
-                            { "AzureAdScopes", "${{ secrets.AZUREADSCOPES }}" },
-                            { "ExternalLabApiUrl", "${{ secrets.EXTERNALLABAPIURL }}" },
-                            { "ExternalLabApiAccessKey", "${{ secrets.EXTERNALLABAPIACCESSKEY }}" }
+                            { "AzureClientId", "${{ secrets.AZURE_CLIENT_ID }}" },
+                            { "AzureTenantId", "${{ secrets.AZURE_TENANT_ID }}" },
+                            { "AzureClientSecret", "${{ secrets.AZURE_CLIENT_SECRET }}" },
+                            { "AzureAdminName", "${{ secrets.AZURE_ADMIN_NAME }}" },
+                            { "AzureAdminAccess", "${{ secrets.AZURE_ADMIN_ACCESS }}" },
+                            { "AzureAdAppProvisionClientId", "${{ secrets.AZURE_AD_APP_PROVISION_CLIENT_ID }}" },
+                            { "AzureAdAppProvisionClientSecret", "${{ secrets.AZURE_AD_APP_PROVISION_CLIENT_SECRET }}"},
+                            { "AzureAdDmxCoreInstance", "${{ secrets.AZURE_AD_INSTANCE }}" },
+                            { "AzureAdDmxCoreDomain", "${{ secrets.AZURE_AD_DOMAIN }}" },
+                            { "AzureAdDmxCoreCallbackPath", "${{ secrets.AZURE_AD_CALLBACK_PATH }}" },
+                            { "AzureAdDmxCoreScopes", "${{ secrets.AZURE_AD_SCOPES }}" },
+                            { "AzureAppServiceExternalLabApiUrl", "${{ secrets.AZURE_APP_SERVICE_EXTERNAL_LAB_API_URL }}" },
+                            { "AzureAppServiceExternalLabApiAccessKey", "${{ secrets.AZURE_APP_SERVICE_EXTERNAL_LAB_API_ACCESS_KEY }}" }
                         },
 
                         Steps = new List<GithubTask>
