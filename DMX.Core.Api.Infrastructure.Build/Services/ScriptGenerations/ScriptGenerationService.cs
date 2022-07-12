@@ -115,6 +115,10 @@ namespace DMX.Core.Api.Infrastructure.Build.Services.ScriptGenerations
                             { "AzureClientSecret", "${{ secrets.AZURECLIENTSECRET }}" },
                             { "AzureAdminName", "${{ secrets.AZUREADMINNAME }}" },
                             { "AzureAdminAccess", "${{ secrets.AZUREADMINACCESS }}" },
+                            { "AzureAdInstance", "${{ secrets.AZUREADINSTANCE }}" },
+                            { "AzureAdDomain", "${{ secrets.AZUREADDOMAIN }}" },
+                            { "AzureAdCallbackPath", "${{ secrets.AZUREADCALLBACKPATH }}" },
+                            { "AzureAdScopes", "${{ secrets.AZUREADSCOPES }}" },
                             { "ExternalLabApiUrl", "${{ secrets.EXTERNALLABAPIURL }}" },
                             { "ExternalLabApiAccessKey", "${{ secrets.EXTERNALLABAPIACCESSKEY }}" }
                         },
