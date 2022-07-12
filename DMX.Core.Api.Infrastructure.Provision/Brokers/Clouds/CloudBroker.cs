@@ -12,9 +12,14 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
 {
     public partial class CloudBroker : ICloudBroker
     {
+        private readonly string tenantId;
+        private readonly string dmxCoreClientId;
+        private readonly string dmxCoreInstance;
+        private readonly string dmxCoreDomain;
+        private readonly string dmxCoreCallbackPath;
+        private readonly string dmxCoreScopes;
         private readonly string provisionClientId;
         private readonly string provisionClientSecret;
-        private readonly string provisionTenantId;
         private readonly string provisionAdminName;
         private readonly string provisionAdminAccess;
         private readonly string configurationExternalLabApiUrl;
@@ -23,9 +28,14 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
 
         public CloudBroker()
         {
+            this.tenantId = Environment.GetEnvironmentVariable("AzureTenantId");
+            this.dmxCoreClientId = Environment.GetEnvironmentVariable("AzureAdAppDmxCoreClientId");
+            this.dmxCoreInstance = Environment.GetEnvironmentVariable("AzureAdAppDmxCoreInstance");
+            this.dmxCoreDomain = Environment.GetEnvironmentVariable("AzureAdAppDmxCoreDomain");
+            this.dmxCoreCallbackPath = Environment.GetEnvironmentVariable("AzureAdAppDmxCoreCallbackPath");
+            this.dmxCoreScopes = Environment.GetEnvironmentVariable("AzureAdAppDmxCoreScopes");
             this.provisionClientId = Environment.GetEnvironmentVariable("AzureAdAppProvisionClientId");
             this.provisionClientSecret = Environment.GetEnvironmentVariable("AzureAdAppProvisionClientSecret");
-            this.provisionTenantId = Environment.GetEnvironmentVariable("AzureAdAppProvisionTenantId");
             this.provisionAdminName = Environment.GetEnvironmentVariable("AzureSqlServerAdminName");
             this.provisionAdminAccess = Environment.GetEnvironmentVariable("AzureSqlServerAdminAccess");
             this.configurationExternalLabApiUrl = Environment.GetEnvironmentVariable("AzureAppServiceExternalLabApiUrl");
@@ -39,7 +49,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
                 SdkContext.AzureCredentialsFactory.FromServicePrincipal(
                     clientId: this.provisionClientId,
                     clientSecret: this.provisionClientSecret,
-                    tenantId: this.provisionTenantId,
+                    tenantId: this.tenantId,
                     environment: AzureEnvironment.AzureGlobalCloud);
 
             return Azure.Configure()
