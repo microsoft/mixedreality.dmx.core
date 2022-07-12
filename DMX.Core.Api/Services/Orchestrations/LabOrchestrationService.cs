@@ -74,8 +74,10 @@ namespace DMX.Core.Api.Services.Orchestrations
             return onlineLabs.Union(offlineLabs).Union(unregisteredLabs).ToList();
         });
 
-        public static bool LabIsOnline(Lab lab, HashSet<string> externalLabIds) =>
-            externalLabIds.Contains(lab.ExternalId);
+        public ValueTask<Lab> AddLabAsync(Lab lab)
+        {
+            throw new System.NotImplementedException();
+        }
 
         public static void UpdateDeviceStatusForOnlineLabs(List<Lab> onlineLabs, List<Lab> externalOnlineLabs)
         {
