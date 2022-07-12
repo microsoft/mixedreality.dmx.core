@@ -21,8 +21,8 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
         {
             var webAppSettings= new Dictionary<string, string>
                 {
-                    { "ApiConfigurations:Url", this.externalLabApiUrl },
-                    { "ApiConfigurations:AccessKey", this.externalLabApiAccessKey }
+                    { "ApiConfigurations:Url", this.configurationExternalLabApiUrl },
+                    { "ApiConfigurations:AccessKey", this.configurationExternalLabApiAccessKey }
                 };
 
             IWithWindowsRuntimeStack webAppWithPlanAndResouceGroup =

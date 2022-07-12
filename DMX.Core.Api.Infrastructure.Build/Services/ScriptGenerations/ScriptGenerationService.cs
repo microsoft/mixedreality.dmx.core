@@ -110,13 +110,11 @@ namespace DMX.Core.Api.Infrastructure.Build.Services.ScriptGenerations
 
                         EnvironmentVariables = new Dictionary<string, string>
                         {
-                            { "AzureClientId", "${{ secrets.AZURE_CLIENT_ID }}" },
-                            { "AzureTenantId", "${{ secrets.AZURE_TENANT_ID }}" },
-                            { "AzureClientSecret", "${{ secrets.AZURE_CLIENT_SECRET }}" },
-                            { "AzureAdminName", "${{ secrets.AZURE_ADMIN_NAME }}" },
-                            { "AzureAdminAccess", "${{ secrets.AZURE_ADMIN_ACCESS }}" },
                             { "AzureAdAppProvisionClientId", "${{ secrets.AZURE_AD_APP_PROVISION_CLIENT_ID }}" },
                             { "AzureAdAppProvisionClientSecret", "${{ secrets.AZURE_AD_APP_PROVISION_CLIENT_SECRET }}"},
+                            { "AzureAdAppProvisionTenantId", "${{ secrets.AZURE_TENANT_ID }}" },
+                            { "AzureSqlServerAdminName", "${{ secrets.AZURE_SQL_SERVER_ADMIN_NAME }}" },
+                            { "AzureSqlServerAdminAccess", "${{ secrets.AZURE_SQL_SERVER_ADMIN_ACCESS }}" },
                             { "AzureAdDmxCoreInstance", "${{ secrets.AZURE_AD_INSTANCE }}" },
                             { "AzureAdDmxCoreDomain", "${{ secrets.AZURE_AD_DOMAIN }}" },
                             { "AzureAdDmxCoreCallbackPath", "${{ secrets.AZURE_AD_CALLBACK_PATH }}" },

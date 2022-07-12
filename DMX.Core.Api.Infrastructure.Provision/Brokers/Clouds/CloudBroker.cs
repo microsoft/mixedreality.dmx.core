@@ -12,24 +12,24 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
 {
     public partial class CloudBroker : ICloudBroker
     {
-        private readonly string clientId;
-        private readonly string clientSecret;
-        private readonly string tenantId;
-        private readonly string adminName;
-        private readonly string adminAccess;
-        private readonly string externalLabApiUrl;
-        private readonly string externalLabApiAccessKey;
+        private readonly string provisionClientId;
+        private readonly string provisionClientSecret;
+        private readonly string provisionTenantId;
+        private readonly string provisionAdminName;
+        private readonly string provisionAdminAccess;
+        private readonly string configurationExternalLabApiUrl;
+        private readonly string configurationExternalLabApiAccessKey;
         private readonly IAzure azure;
 
         public CloudBroker()
         {
-            this.clientId = Environment.GetEnvironmentVariable("AzureClientId");
-            this.clientSecret = Environment.GetEnvironmentVariable("AzureClientSecret");
-            this.tenantId = Environment.GetEnvironmentVariable("AzureTenantId");
-            this.adminName = Environment.GetEnvironmentVariable("AzureAdminName");
-            this.adminAccess = Environment.GetEnvironmentVariable("AzureAdminAccess");
-            this.externalLabApiUrl = Environment.GetEnvironmentVariable("ExternalLabApiUrl");
-            this.externalLabApiAccessKey = Environment.GetEnvironmentVariable("ExternalLabApiAccessKey");
+            this.provisionClientId = Environment.GetEnvironmentVariable("AzureAdAppProvisionClientId");
+            this.provisionClientSecret = Environment.GetEnvironmentVariable("AzureAdAppProvisionClientSecret");
+            this.provisionTenantId = Environment.GetEnvironmentVariable("AzureAdAppProvisionTenantId");
+            this.provisionAdminName = Environment.GetEnvironmentVariable("AzureSqlServerAdminName");
+            this.provisionAdminAccess = Environment.GetEnvironmentVariable("AzureSqlServerAdminAccess");
+            this.configurationExternalLabApiUrl = Environment.GetEnvironmentVariable("AzureAppServiceExternalLabApiUrl");
+            this.configurationExternalLabApiAccessKey = Environment.GetEnvironmentVariable("AzureAppServiceExternalLabApiAccessKey");
             this.azure = AuthenticateAzure();
         }
 
@@ -37,9 +37,9 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
         {
             AzureCredentials credentials =
                 SdkContext.AzureCredentialsFactory.FromServicePrincipal(
-                    clientId: this.clientId,
-                    clientSecret: this.clientSecret,
-                    tenantId: this.tenantId,
+                    clientId: this.provisionClientId,
+                    clientSecret: this.provisionClientSecret,
+                    tenantId: this.provisionTenantId,
                     environment: AzureEnvironment.AzureGlobalCloud);
 
             return Azure.Configure()

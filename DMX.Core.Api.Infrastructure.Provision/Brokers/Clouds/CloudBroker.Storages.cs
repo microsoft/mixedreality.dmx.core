@@ -22,8 +22,8 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
                     .WithRegion(Region.USWest3);
 
             IWithCreate sqlServerWithLogin = sqlServerWithRegion.WithExistingResourceGroup(resourceGroup)
-                .WithAdministratorLogin(this.adminName)
-                    .WithAdministratorPassword(this.adminAccess);
+                .WithAdministratorLogin(this.provisionAdminName)
+                    .WithAdministratorPassword(this.provisionAdminAccess);
 
             return await sqlServerWithLogin.CreateAsync();
         }
@@ -42,8 +42,8 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
         {
             return new SqlDatabaseAccess
             {
-                AdminName = this.adminName,
-                AdminAccess = this.adminAccess,
+                AdminName = this.provisionAdminName,
+                AdminAccess = this.provisionAdminAccess,
             };
         }
     }
