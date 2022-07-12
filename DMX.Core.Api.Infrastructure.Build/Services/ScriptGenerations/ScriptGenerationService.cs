@@ -119,8 +119,8 @@ namespace DMX.Core.Api.Infrastructure.Build.Services.ScriptGenerations
                             { "AzureAdAppDmxCoreDomain", "${{ secrets.AZURE_ADAPP_DMXGATEKEEPER_DOMAIN }}" },
                             { "AzureAdAppDmxCoreCallbackPath", "${{ secrets.AZURE_ADAPP_DMXGATEKEEPER_CALLBACKPATH }}" },
                             { "AzureAdAppDmxCoreScopes", "${{ secrets.AZURE_ADAPP_DMXGATEKEEPER_SCOPES }}" },
-                            { "AzureSqlServerAdminName", "${{ secrets.AZURE_SQL_SERVER_ADMIN_NAME }}" },
-                            { "AzureSqlServerAdminAccess", "${{ secrets.AZURE_SQL_SERVER_ADMIN_ACCESS }}" },
+                            { "AzureSqlServerAdminName", "${{ secrets.AZURE_SQLSERVER_ADMINNAME }}" },
+                            { "AzureSqlServerAdminAccess", "${{ secrets.AZURE_SQLSERVER_ADMINACCESS }}" },
                             { "AzureAppServiceExternalLabApiUrl", "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_URL }}" },
                             { "AzureAppServiceExternalLabApiAccessKey", "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_ACCESSKEY }}" }
                         },
