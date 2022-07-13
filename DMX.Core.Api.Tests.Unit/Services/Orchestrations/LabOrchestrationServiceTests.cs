@@ -53,6 +53,21 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             };
         }
 
+        private static T GetInvalidEnum<T>()
+        {
+            int randomNumber = GetLocalRandomNumber();
+
+            while (Enum.IsDefined(typeof(T), randomNumber))
+            {
+                randomNumber = GetLocalRandomNumber();
+            }
+
+            return (T)(object)randomNumber;
+
+            static int GetLocalRandomNumber() =>
+                new IntRange(min: int.MinValue, max: int.MaxValue).GetValue();
+        }
+
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 

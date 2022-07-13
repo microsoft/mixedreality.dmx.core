@@ -55,7 +55,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public async Task ShouldThrowValidationExceptionOnAddIfLabIsInvalidAndLogItAsync(
+        public async Task ShouldThrowOrchestrationValidationExceptionOnAddIfLabIsInvalidAndLogItAsync(
             string invalidString)
         {
             // given
@@ -98,6 +98,51 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             // then
             actualLabOrchestrationValidationException.Should().BeEquivalentTo(
                 expectedLabOrchestrationValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabOrchestrationValidationException))),
+                        Times.Once);
+
+            this.labServiceMock.Verify(service =>
+                service.AddLabAsync(It.IsAny<Lab>()),
+                    Times.Never);
+
+            this.labServiceMock.VerifyNoOtherCalls();
+            this.externalLabServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowOrchestrationValidationExceptionOnAddIfLabStatusIsInvalidAndLogItAsync()
+        {
+            // given
+            Lab randomLab = CreateRandomLab();
+            Lab invalidLab = randomLab;
+            invalidLab.Status = GetInvalidEnum<LabStatus>();
+
+            var invalidLabException =
+                new InvalidLabException();
+
+            invalidLabException.AddData(
+                key: nameof(Lab.Status),
+                values: "Value is not recognized");
+
+            var expectedLabOrchestrationValidationException =
+                new LabOrchestrationValidationException(invalidLabException);
+
+            // when
+            ValueTask<Lab> addLabTask =
+                this.labOrchestrationService.AddLabAsync(invalidLab);
+
+            LabOrchestrationValidationException actualLabOrchestrationValidationException = 
+                await Assert.ThrowsAsync<LabOrchestrationValidationException>(
+                    addLabTask.AsTask);
+
+            // then
+            actualLabOrchestrationValidationException
+                .Should().BeEquivalentTo(
+                    expectedLabOrchestrationValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
