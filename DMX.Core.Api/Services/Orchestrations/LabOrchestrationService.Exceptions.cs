@@ -73,6 +73,13 @@ namespace DMX.Core.Api.Services.Orchestrations
             {
                 throw CreateAndLogDependencyException(labServiceException);
             }
+            catch (Exception exception)
+            {
+                var failedLabOrchestrationServiceException =
+                    new FailedLabOrchestrationServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLabOrchestrationServiceException);
+            }
         }
 
         private LabOrchestrationDependencyException CreateAndLogDependencyException(
