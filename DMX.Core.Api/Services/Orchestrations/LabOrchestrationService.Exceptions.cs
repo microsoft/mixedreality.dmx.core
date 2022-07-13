@@ -61,6 +61,10 @@ namespace DMX.Core.Api.Services.Orchestrations
             {
                 throw CreateAndLogValidationException(nullLabException);
             }
+            catch (InvalidLabException invalidLabException)
+            {
+                throw CreateAndLogValidationException(invalidLabException);
+            }
             catch (ExternalLabDependencyException externalLabDependencyException)
             {
                 throw CreateAndLogDependencyException(externalLabDependencyException);
@@ -86,10 +90,10 @@ namespace DMX.Core.Api.Services.Orchestrations
             }
         }
 
-        private LabOrchestrationValidationException CreateAndLogValidationException(NullLabException nullLabException)
+        private LabOrchestrationValidationException CreateAndLogValidationException(Xeption exception)
         {
-            LabOrchestrationValidationException labOrchestrationValidationException =
-                new LabOrchestrationValidationException(nullLabException);
+            var labOrchestrationValidationException =
+                new LabOrchestrationValidationException(exception);
 
             this.loggingBroker.LogError(exception: labOrchestrationValidationException);
 
