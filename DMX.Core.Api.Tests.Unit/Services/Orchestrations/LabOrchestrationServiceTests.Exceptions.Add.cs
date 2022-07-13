@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Models.Orchestrations.Labs.Exceptions;
@@ -52,6 +53,52 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLabOrchestrationDependencyException))),
+                        Times.Once);
+
+            this.labServiceMock.VerifyNoOtherCalls();
+            this.externalLabServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowOrchestrationServiceExceptionOnAddIfErrorOccursAndLogItAsync()
+        {
+            // given
+            Lab randomLab = CreateRandomLab();
+            Lab inputLab = randomLab;
+
+            string randomMessage = GetRandomString();
+            var exception = new Exception(randomMessage);
+
+            var failedLabOrchestrationServiceException =
+                new FailedLabOrchestrationServiceException(exception); 
+
+            var expectedLabOrchestrationServiceException =
+                new LabOrchestrationServiceException(failedLabOrchestrationServiceException);
+
+            this.labServiceMock.Setup(service =>
+                service.AddLabAsync(inputLab))
+                    .ThrowsAsync(exception);
+
+            // when
+            ValueTask<Lab> actualLabTask =
+                this.labOrchestrationService.AddLabAsync(inputLab);
+
+            LabOrchestrationServiceException actualLabOrchestrationServiceException =
+                await Assert.ThrowsAsync<LabOrchestrationServiceException>(
+                    actualLabTask.AsTask);
+
+            // then
+            actualLabOrchestrationServiceException.Should()
+                .BeEquivalentTo(expectedLabOrchestrationServiceException);
+
+            this.labServiceMock.Verify(service =>
+                service.AddLabAsync(It.IsAny<Lab>()),
+                    Times.Once());
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabOrchestrationServiceException))),
                         Times.Once);
 
             this.labServiceMock.VerifyNoOtherCalls();
