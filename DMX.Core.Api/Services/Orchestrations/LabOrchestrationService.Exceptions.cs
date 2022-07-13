@@ -57,6 +57,10 @@ namespace DMX.Core.Api.Services.Orchestrations
             {
                 return await returningLabFunctions();
             }
+            catch (NullLabException nullLabException)
+            {
+                throw CreateAndLogValidationException(nullLabException);
+            }
             catch (ExternalLabDependencyException externalLabDependencyException)
             {
                 throw CreateAndLogDependencyException(externalLabDependencyException);
@@ -80,6 +84,16 @@ namespace DMX.Core.Api.Services.Orchestrations
 
                 throw CreateAndLogServiceException(failedLabOrchestrationServiceException);
             }
+        }
+
+        private LabOrchestrationValidationException CreateAndLogValidationException(NullLabException nullLabException)
+        {
+            LabOrchestrationValidationException labOrchestrationValidationException =
+                new LabOrchestrationValidationException(nullLabException);
+
+            this.loggingBroker.LogError(exception: labOrchestrationValidationException);
+
+            return labOrchestrationValidationException;
         }
 
         private LabOrchestrationDependencyException CreateAndLogDependencyException(

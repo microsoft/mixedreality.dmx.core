@@ -77,6 +77,8 @@ namespace DMX.Core.Api.Services.Orchestrations
         public ValueTask<Lab> AddLabAsync(Lab lab) =>
         TryCatch(() =>
         {
+            ValidateLabOnAdd(lab);
+
             return this.labService.AddLabAsync(lab);
         });
 
