@@ -21,8 +21,14 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
         {
             var webAppSettings= new Dictionary<string, string>
                 {
-                    { "ApiConfigurations:Url", this.externalLabApiUrl },
-                    { "ApiConfigurations:AccessKey", this.externalLabApiAccessKey }
+                    { "ApiConfigurations:Url", this.configurationExternalLabApiUrl },
+                    { "ApiConfigurations:AccessKey", this.configurationExternalLabApiAccessKey },
+                    { "AzureAd:TenantId", this.tenantId },
+                    { "AzureAd:Instance", this.dmxCoreInstance },
+                    { "AzureAd:Domain", this.dmxCoreDomain },
+                    { "AzureAd:ClientId", this.dmxCoreClientId },
+                    { "AzureAd:CallbackPath", this.dmxCoreCallbackPath },
+                    { "AzureAd:Scopes", this.dmxCoreScopes },
                 };
 
             IWithWindowsRuntimeStack webAppWithPlanAndResouceGroup =

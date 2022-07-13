@@ -110,13 +110,19 @@ namespace DMX.Core.Api.Infrastructure.Build.Services.ScriptGenerations
 
                         EnvironmentVariables = new Dictionary<string, string>
                         {
-                            { "AzureClientId", "${{ secrets.AZURECLIENTID }}" },
-                            { "AzureTenantId", "${{ secrets.AZURETENANTID }}" },
-                            { "AzureClientSecret", "${{ secrets.AZURECLIENTSECRET }}" },
-                            { "AzureAdminName", "${{ secrets.AZUREADMINNAME }}" },
-                            { "AzureAdminAccess", "${{ secrets.AZUREADMINACCESS }}" },
-                            { "ExternalLabApiUrl", "${{ secrets.EXTERNALLABAPIURL }}" },
-                            { "ExternalLabApiAccessKey", "${{ secrets.EXTERNALLABAPIACCESSKEY }}" }
+                            { "AzureSubscriptionId", "${{ secrets.AZURE_SUBSCRIPTIONID }}"},
+                            { "AzureTenantId", "${{ secrets.AZURE_TENANTID }}" },
+                            { "AzureAdAppProvisionClientId", "${{ secrets.AZURE_ADAPP_PROVISION_CLIENTID }}" },
+                            { "AzureAdAppProvisionClientSecret", "${{ secrets.AZURE_ADAPP_PROVISION_CLIENTSECRET }}" },
+                            { "AzureAdAppDmxCoreClientId", "${{ secrets.AZURE_ADAPP_DMXCORE_CLIENTID }}" },
+                            { "AzureAdAppDmxCoreInstance", "${{ secrets.AZURE_ADAPP_DMXCORE_INSTANCE }}" },
+                            { "AzureAdAppDmxCoreDomain", "${{ secrets.AZURE_ADAPP_DMXCORE_DOMAIN }}" },
+                            { "AzureAdAppDmxCoreCallbackPath", "${{ secrets.AZURE_ADAPP_DMXCORE_CALLBACKPATH }}" },
+                            { "AzureAdAppDmxCoreScopes", "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES }}" },
+                            { "AzureSqlServerAdminName", "${{ secrets.AZURE_SQLSERVER_ADMINNAME }}" },
+                            { "AzureSqlServerAdminAccess", "${{ secrets.AZURE_SQLSERVER_ADMINACCESS }}" },
+                            { "AzureAppServiceExternalLabApiUrl", "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_URL }}" },
+                            { "AzureAppServiceExternalLabApiAccessKey", "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_ACCESSKEY }}" }
                         },
 
                         Steps = new List<GithubTask>
