@@ -16,15 +16,14 @@ namespace DMX.Core.Api.Services.Orchestrations
 {
     public partial class LabOrchestrationService
     {
-        private delegate ValueTask<List<Lab>> ReturningLabsFunctions();
+        private delegate ValueTask<List<Lab>> ReturningLabsFunction();
+        private delegate ValueTask<Lab> ReturningLabFunction();
 
-        private delegate ValueTask<Lab> ReturningLabFunctions();
-
-        private async ValueTask<List<Lab>> TryCatch(ReturningLabsFunctions returningLabsFunctions)
+        private async ValueTask<List<Lab>> TryCatch(ReturningLabsFunction returningLabsFunction)
         {
             try
             {
-                return await returningLabsFunctions();
+                return await returningLabsFunction();
             }
             catch (ExternalLabDependencyException externalLabDependencyException)
             {
@@ -51,11 +50,11 @@ namespace DMX.Core.Api.Services.Orchestrations
             }
         }
 
-        private async ValueTask<Lab> TryCatch(ReturningLabFunctions returningLabFunctions)
+        private async ValueTask<Lab> TryCatch(ReturningLabFunction returningLabFunction)
         {
             try
             {
-                return await returningLabFunctions();
+                return await returningLabFunction();
             }
             catch (NullLabException nullLabException)
             {
