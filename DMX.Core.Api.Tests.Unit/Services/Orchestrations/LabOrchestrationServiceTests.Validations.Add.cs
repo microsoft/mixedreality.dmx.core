@@ -51,68 +51,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             this.externalLabServiceMock.VerifyNoOtherCalls();
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public async Task ShouldThrowOrchestrationValidationExceptionOnAddIfLabIsInvalidAndLogItAsync(
-            string invalidString)
-        {
-            // given
-            var invalidLab = new Lab
-            {
-                Name = invalidString,
-                Description = invalidString,
-                ExternalId = invalidString,
-            };
-
-            var invalidLabException = new InvalidLabException();
-
-            invalidLabException.AddData(
-                key: nameof(Lab.Id),
-                values: "Id is required");
-
-            invalidLabException.AddData(
-                key: nameof(Lab.ExternalId),
-                values: "Id is required");
-
-            invalidLabException.AddData(
-                key: nameof(Lab.Name),
-                values: "Text is required");
-
-            invalidLabException.AddData(
-                key: nameof(Lab.Description),
-                values: "Text is required");
-
-            var expectedLabOrchestrationValidationException =
-                new LabOrchestrationValidationException(invalidLabException);
-
-            // when
-            ValueTask<Lab> actualLabTask =
-                this.labOrchestrationService.AddLabAsync(invalidLab);
-
-            LabOrchestrationValidationException actualLabOrchestrationValidationException =
-                await Assert.ThrowsAsync<LabOrchestrationValidationException>(
-                    actualLabTask.AsTask);
-
-            // then
-            actualLabOrchestrationValidationException.Should().BeEquivalentTo(
-                expectedLabOrchestrationValidationException);
-
-            this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is(SameExceptionAs(
-                    expectedLabOrchestrationValidationException))),
-                        Times.Once);
-
-            this.labServiceMock.Verify(service =>
-                service.AddLabAsync(It.IsAny<Lab>()),
-                    Times.Never);
-
-            this.loggingBrokerMock.VerifyNoOtherCalls();
-            this.labServiceMock.VerifyNoOtherCalls();
-            this.externalLabServiceMock.VerifyNoOtherCalls();
-        }
-
         [Fact]
         public async Task ShouldThrowOrchestrationValidationExceptionOnAddIfLabStatusIsInvalidAndLogItAsync()
         {
