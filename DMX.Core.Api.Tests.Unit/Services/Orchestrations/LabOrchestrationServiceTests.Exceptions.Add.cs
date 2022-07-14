@@ -67,19 +67,19 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
         {
             // given
             Lab randomLab = CreateRandomLab();
-            Lab inputLab = randomLab.DeepClone();
+            Lab someLab = randomLab.DeepClone();
 
             var expectedLabOrchestrationDependencyException =
                 new LabOrchestrationDependencyException(
                     dependencyException.InnerException as Xeption);
 
             this.labServiceMock.Setup(service =>
-                service.AddLabAsync(inputLab))
+                service.AddLabAsync(It.IsAny<Lab>()))
                     .ThrowsAsync(dependencyException);
 
             // when
             ValueTask<Lab> addLabTask =
-                this.labOrchestrationService.AddLabAsync(inputLab);
+                this.labOrchestrationService.AddLabAsync(someLab);
 
             LabOrchestrationDependencyException actualLabOrchestrationDependencyException =
                 await Assert.ThrowsAsync<LabOrchestrationDependencyException>(
@@ -109,7 +109,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
         {
             // given
             Lab randomLab = CreateRandomLab();
-            Lab inputLab = randomLab;
+            Lab someLab = randomLab;
             string randomMessage = GetRandomString();
             var exception = new Exception(randomMessage);
 
@@ -120,12 +120,12 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                 new LabOrchestrationServiceException(failedLabOrchestrationServiceException);
 
             this.labServiceMock.Setup(service =>
-                service.AddLabAsync(inputLab))
+                service.AddLabAsync(It.IsAny<Lab>()))
                     .ThrowsAsync(exception);
 
             // when
             ValueTask<Lab> actualLabTask =
-                this.labOrchestrationService.AddLabAsync(inputLab);
+                this.labOrchestrationService.AddLabAsync(someLab);
 
             LabOrchestrationServiceException actualLabOrchestrationServiceException =
                 await Assert.ThrowsAsync<LabOrchestrationServiceException>(
