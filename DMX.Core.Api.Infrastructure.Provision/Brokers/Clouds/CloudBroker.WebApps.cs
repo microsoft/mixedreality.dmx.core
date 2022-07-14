@@ -19,7 +19,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
             IAppServicePlan appServicePlan,
             IResourceGroup resourceGroup)
         {
-            var webAppSettings= new Dictionary<string, string>
+            var webAppSettings = new Dictionary<string, string>
                 {
                     { "ApiConfigurations:Url", this.configurationExternalLabApiUrl },
                     { "ApiConfigurations:AccessKey", this.configurationExternalLabApiAccessKey },
@@ -36,7 +36,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
                     .Define(webAppName)
                         .WithExistingWindowsPlan(appServicePlan)
                             .WithExistingResourceGroup(resourceGroup);
-            
+
             return await webAppWithPlanAndResouceGroup
                 .WithNetFrameworkVersion(NetFrameworkVersion.Parse("v6.0"))
                     .WithConnectionString(
