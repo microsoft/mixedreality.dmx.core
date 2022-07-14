@@ -9,7 +9,6 @@ using DMX.Core.Api.Models.Foundations.ExternalLabs.Exceptions;
 using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using DMX.Core.Api.Models.Orchestrations.Labs.Exceptions;
-using Microsoft.AspNetCore.Server.IIS.Core;
 using Xeptions;
 
 namespace DMX.Core.Api.Services.Orchestrations
@@ -59,18 +58,6 @@ namespace DMX.Core.Api.Services.Orchestrations
             catch (NullLabException nullLabException)
             {
                 throw CreateAndLogValidationException(nullLabException);
-            }
-            catch (InvalidLabException invalidLabException)
-            {
-                throw CreateAndLogValidationException(invalidLabException);
-            }
-            catch (ExternalLabDependencyException externalLabDependencyException)
-            {
-                throw CreateAndLogDependencyException(externalLabDependencyException);
-            }
-            catch (ExternalLabServiceException externalLabServiceException)
-            {
-                throw CreateAndLogDependencyException(externalLabServiceException);
             }
             catch (LabDependencyException labDependencyException)
             {
