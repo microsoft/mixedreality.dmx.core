@@ -17,6 +17,50 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
     public partial class LabOrchestrationServiceTests
     {
         [Theory]
+        [MemberData(nameof(LabDependencyValidationExceptions))]
+        public async Task ShouldThrowOrchestrationDependencyValidationExceptionOnAdIfDependencyValidationErrorOccursAndLogItAsync(
+            Xeption validationException)
+        {
+            // given
+            Lab randomLab = CreateRandomLab();
+            Lab someLab = randomLab;
+
+            var expectedLabOrchestrationDependencyValidationException =
+                new LabOrchestrationDependencyValidationException(
+                    validationException.InnerException as Xeption);
+
+            this.labServiceMock.Setup(service =>
+                service.AddLabAsync(It.IsAny<Lab>()))
+                    .ThrowsAsync(validationException);
+
+            // when
+            ValueTask<Lab> actualLabTask =
+                this.labOrchestrationService.AddLabAsync(someLab);
+
+            LabOrchestrationDependencyValidationException
+                actualLabOrchestrationDependencyValidationException =
+                    await Assert.ThrowsAsync<LabOrchestrationDependencyValidationException>(
+                        actualLabTask.AsTask);
+
+            // then
+            actualLabOrchestrationDependencyValidationException.Should()
+                .BeEquivalentTo(expectedLabOrchestrationDependencyValidationException);
+
+            this.labServiceMock.Verify(service =>
+                service.AddLabAsync(It.IsAny<Lab>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabOrchestrationDependencyValidationException))),
+                        Times.Once);
+
+            this.labServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.externalLabServiceMock.VerifyNoOtherCalls();
+        }
+
+        [Theory]
         [MemberData(nameof(LabDependencyExceptions))]
         public async Task ShouldThrowOrchestrationDependencyExceptionOnAddIfDependencyErrorOccursAndLogItAsync(
             Xeption dependencyException)
