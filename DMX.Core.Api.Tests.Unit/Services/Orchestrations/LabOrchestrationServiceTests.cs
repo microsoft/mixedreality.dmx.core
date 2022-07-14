@@ -39,7 +39,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
-        public static TheoryData<Xeption> DependencyExceptions()
+        public static TheoryData<Xeption> AllDependencyExceptions()
         {
             string randomErrorMessage = GetRandomString();
             var innerException = new Xeption(randomErrorMessage);
@@ -48,6 +48,18 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             {
                 new ExternalLabDependencyException(innerException),
                 new ExternalLabServiceException(innerException),
+                new LabDependencyException(innerException),
+                new LabServiceException(innerException)
+            };
+        }
+
+        public static TheoryData<Xeption> LabDependencyExceptions()
+        {
+            string randomErrorMessage = GetRandomString();
+            var innerException = new Xeption(randomErrorMessage);
+
+            return new TheoryData<Xeption>
+            {
                 new LabDependencyException(innerException),
                 new LabServiceException(innerException)
             };
