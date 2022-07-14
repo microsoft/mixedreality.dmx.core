@@ -37,18 +37,18 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                 .Should().BeEquivalentTo(
                     expectedLabOrchestrationValidationException);
 
-            this.labServiceMock.Verify(service =>
-                service.AddLabAsync(It.IsAny<Lab>()),
-                    Times.Never);
-
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLabOrchestrationValidationException))),
                         Times.Once);
 
+            this.labServiceMock.Verify(service =>
+                service.AddLabAsync(It.IsAny<Lab>()),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
             this.labServiceMock.VerifyNoOtherCalls();
             this.externalLabServiceMock.VerifyNoOtherCalls();
-            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
 
         [Theory]
@@ -108,9 +108,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                 service.AddLabAsync(It.IsAny<Lab>()),
                     Times.Never);
 
+            this.loggingBrokerMock.VerifyNoOtherCalls();
             this.labServiceMock.VerifyNoOtherCalls();
             this.externalLabServiceMock.VerifyNoOtherCalls();
-            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -153,9 +153,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                 service.AddLabAsync(It.IsAny<Lab>()),
                     Times.Never);
 
+            this.loggingBrokerMock.VerifyNoOtherCalls();
             this.labServiceMock.VerifyNoOtherCalls();
             this.externalLabServiceMock.VerifyNoOtherCalls();
-            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }

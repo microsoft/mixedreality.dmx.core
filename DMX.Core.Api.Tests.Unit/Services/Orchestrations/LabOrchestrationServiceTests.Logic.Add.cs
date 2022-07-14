@@ -41,6 +41,5 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             this.externalLabServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
-
     }
 }

@@ -56,8 +56,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                         Times.Once);
 
             this.labServiceMock.VerifyNoOtherCalls();
-            this.externalLabServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.externalLabServiceMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -66,7 +66,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             // given
             Lab randomLab = CreateRandomLab();
             Lab inputLab = randomLab;
-
             string randomMessage = GetRandomString();
             var exception = new Exception(randomMessage);
 
@@ -102,8 +101,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                         Times.Once);
 
             this.labServiceMock.VerifyNoOtherCalls();
-            this.externalLabServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.externalLabServiceMock.VerifyNoOtherCalls();
         }
     }
 }
