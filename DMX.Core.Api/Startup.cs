@@ -9,11 +9,13 @@ using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Services.Foundations.ExternalLabs;
 using DMX.Core.Api.Services.Foundations.Labs;
 using DMX.Core.Api.Services.Orchestrations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 
 namespace DMX.Core.Api
@@ -32,6 +34,7 @@ namespace DMX.Core.Api
             services.AddHttpClient();
             services.AddLogging();
             services.AddDbContext<StorageBroker>();
+            AddAuthentication(services);
             AddBrokers(services);
             AddFoundationServices(services);
             AddOrchestrationServices(services);
@@ -65,8 +68,9 @@ namespace DMX.Core.Api
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            MapControllersForEnvironments(app, env);
         }
 
         private static void AddBrokers(IServiceCollection services)
@@ -84,5 +88,32 @@ namespace DMX.Core.Api
 
         private static void AddOrchestrationServices(IServiceCollection services) =>
             services.AddTransient<ILabOrchestrationService, LabOrchestrationService>();
+
+        private void AddAuthentication(IServiceCollection services)
+        {
+            services.AddAuthentication(
+                JwtBearerDefaults.AuthenticationScheme)
+                    .AddMicrosoftIdentityWebApi(
+                        Configuration.GetSection("AzureAd"));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
+        }
+
+        private static void MapControllersForEnvironments(
+            IApplicationBuilder app,
+            IWebHostEnvironment env)
+        {
+            app.UseEndpoints(endpoints =>
+            {
+                if (env.IsDevelopment())
+                {
+                    endpoints.MapControllers().AllowAnonymous();
+                }
+                else
+                {
+                    endpoints.MapControllers();
+                }
+            });
+        }
     }
 }
