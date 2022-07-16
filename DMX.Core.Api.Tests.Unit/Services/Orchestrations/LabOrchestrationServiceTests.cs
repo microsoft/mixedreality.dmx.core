@@ -39,7 +39,31 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
-        public static TheoryData<Xeption> DependencyExceptions()
+        public static TheoryData<Xeption> LabDependencyValidationExceptions()
+        {
+            string randomErrorMessage = GetRandomString();
+            var innerException = new Xeption(randomErrorMessage);
+
+            return new TheoryData<Xeption>
+            {
+                new LabValidationException(innerException),
+                new LabDependencyValidationException(innerException),
+            };
+        }
+
+        public static TheoryData<Xeption> LabDependencyExceptions()
+        {
+            string randomErrorMessage = GetRandomString();
+            var innerException = new Xeption(randomErrorMessage);
+
+            return new TheoryData<Xeption>
+            {
+                new LabDependencyException(innerException),
+                new LabServiceException(innerException)
+            };
+        }
+
+        public static TheoryData<Xeption> AllDependencyExceptions()
         {
             string randomErrorMessage = GetRandomString();
             var innerException = new Xeption(randomErrorMessage);
@@ -51,6 +75,21 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                 new LabDependencyException(innerException),
                 new LabServiceException(innerException)
             };
+        }
+
+        private static T GetInvalidEnum<T>()
+        {
+            int randomNumber = GetLocalRandomNumber();
+
+            while (Enum.IsDefined(typeof(T), randomNumber))
+            {
+                randomNumber = GetLocalRandomNumber();
+            }
+
+            return (T)(object)randomNumber;
+
+            static int GetLocalRandomNumber() =>
+                new IntRange(min: int.MinValue, max: int.MaxValue).GetValue();
         }
 
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
