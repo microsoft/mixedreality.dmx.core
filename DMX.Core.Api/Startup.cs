@@ -70,7 +70,18 @@ namespace DMX.Core.Api
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            
+            app.UseEndpoints(endpoints =>
+            {
+                if (env.IsDevelopment())
+                {
+                    endpoints.MapControllers().AllowAnonymous();
+                }
+                else
+                {
+                    endpoints.MapControllers();
+                }
+            });
         }
 
         private void AddAuthentication(IServiceCollection services)
