@@ -70,28 +70,7 @@ namespace DMX.Core.Api
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            
-            app.UseEndpoints(endpoints =>
-            {
-                if (env.IsDevelopment())
-                {
-                    endpoints.MapControllers().AllowAnonymous();
-                }
-                else
-                {
-                    endpoints.MapControllers();
-                }
-            });
-        }
-
-        private void AddAuthentication(IServiceCollection services)
-        {
-            services.AddAuthentication(
-                JwtBearerDefaults.AuthenticationScheme)
-                    .AddMicrosoftIdentityWebApi(
-                        Configuration.GetSection("AzureAd"));
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
+            MapControllersForEnvironments(app, env);
         }
 
         private static void AddBrokers(IServiceCollection services)
@@ -109,5 +88,32 @@ namespace DMX.Core.Api
 
         private static void AddOrchestrationServices(IServiceCollection services) =>
             services.AddTransient<ILabOrchestrationService, LabOrchestrationService>();
+
+        private void AddAuthentication(IServiceCollection services)
+        {
+            services.AddAuthentication(
+                JwtBearerDefaults.AuthenticationScheme)
+                    .AddMicrosoftIdentityWebApi(
+                        Configuration.GetSection("AzureAd"));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
+        }
+
+        private static void MapControllersForEnvironments(
+            IApplicationBuilder app,
+            IWebHostEnvironment env)
+        {
+            app.UseEndpoints(endpoints =>
+            {
+                if (env.IsDevelopment())
+                {
+                    endpoints.MapControllers().AllowAnonymous();
+                }
+                else
+                {
+                    endpoints.MapControllers();
+                }
+            });
+        }
     }
 }
