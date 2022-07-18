@@ -7,27 +7,24 @@ using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using DMX.Core.Api.Models.Orchestrations.Labs.Exceptions;
-using DMX.Core.Api.Services.Foundations.Labs;
 using DMX.Core.Api.Services.Orchestrations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 using RESTFulSense.Controllers;
 
 namespace DMX.Core.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class LabsController : RESTFulController
     {
-        private readonly ILabService labService;
         private readonly ILabOrchestrationService labOrchestrationService;
 
-        public LabsController(
-            ILabService externalLabService,
-            ILabOrchestrationService labOrchestrationService)
-        {
-            this.labService = externalLabService;
+        public LabsController(ILabOrchestrationService labOrchestrationService) =>
             this.labOrchestrationService = labOrchestrationService;
-        }
 
         [HttpPost]
         public async ValueTask<ActionResult<Lab>> PostLabAsync(Lab lab)
@@ -35,7 +32,7 @@ namespace DMX.Core.Api.Controllers
             try
             {
                 Lab addedLab =
-                    await this.labService.AddLabAsync(lab);
+                    await this.labOrchestrationService.AddLabAsync(lab);
 
                 return Created(addedLab);
             }

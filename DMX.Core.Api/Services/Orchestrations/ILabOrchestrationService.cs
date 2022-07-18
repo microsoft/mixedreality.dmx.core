@@ -10,6 +10,7 @@ namespace DMX.Core.Api.Services.Orchestrations
 {
     public interface ILabOrchestrationService
     {
+        public ValueTask<Lab> AddLabAsync(Lab lab);
         public ValueTask<List<Lab>> RetrieveAllLabsAsync();
     }
 }

@@ -17,7 +17,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
     public partial class LabOrchestrationServiceTests
     {
         [Theory]
-        [MemberData(nameof(DependencyExceptions))]
+        [MemberData(nameof(AllDependencyExceptions))]
         public async Task ShouldThrowOrchestrationDependencyExceptionOnRetrieveIfDependencyErrorOccursAndLogItAsync(
             Xeption dependencyException)
         {

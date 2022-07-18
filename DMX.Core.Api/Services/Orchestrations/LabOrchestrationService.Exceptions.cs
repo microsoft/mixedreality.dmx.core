@@ -15,13 +15,14 @@ namespace DMX.Core.Api.Services.Orchestrations
 {
     public partial class LabOrchestrationService
     {
-        private delegate ValueTask<List<Lab>> ReturningLabsFunctions();
+        private delegate ValueTask<List<Lab>> ReturningLabsFunction();
+        private delegate ValueTask<Lab> ReturningLabFunction();
 
-        private async ValueTask<List<Lab>> TryCatch(ReturningLabsFunctions returningLabsFunctions)
+        private async ValueTask<List<Lab>> TryCatch(ReturningLabsFunction returningLabsFunction)
         {
             try
             {
-                return await returningLabsFunctions();
+                return await returningLabsFunction();
             }
             catch (ExternalLabDependencyException externalLabDependencyException)
             {
@@ -46,6 +47,63 @@ namespace DMX.Core.Api.Services.Orchestrations
 
                 throw CreateAndLogServiceException(failedLabOrchestrationServiceException);
             }
+        }
+
+        private async ValueTask<Lab> TryCatch(ReturningLabFunction returningLabFunction)
+        {
+            try
+            {
+                return await returningLabFunction();
+            }
+            catch (NullLabException nullLabException)
+            {
+                throw CreateAndLogValidationException(nullLabException);
+            }
+            catch (LabValidationException labValidationException)
+            {
+                throw CreateAndLogDependencyValidationException(labValidationException);
+            }
+            catch (LabDependencyValidationException labDependencyValidationException)
+            {
+                throw CreateAndLogDependencyValidationException(labDependencyValidationException);
+            }
+            catch (LabDependencyException labDependencyException)
+            {
+                throw CreateAndLogDependencyException(labDependencyException);
+            }
+            catch (LabServiceException labServiceException)
+            {
+                throw CreateAndLogDependencyException(labServiceException);
+            }
+            catch (Exception exception)
+            {
+                var failedLabOrchestrationServiceException =
+                    new FailedLabOrchestrationServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLabOrchestrationServiceException);
+            }
+        }
+
+        private LabOrchestrationValidationException CreateAndLogValidationException(Xeption exception)
+        {
+            var labOrchestrationValidationException =
+                new LabOrchestrationValidationException(exception);
+
+            this.loggingBroker.LogError(exception: labOrchestrationValidationException);
+
+            return labOrchestrationValidationException;
+        }
+
+        private LabOrchestrationDependencyValidationException CreateAndLogDependencyValidationException(
+            Xeption exception)
+        {
+            var labOrchestrationDependencyValidationException =
+                new LabOrchestrationDependencyValidationException(
+                    exception.InnerException as Xeption);
+
+            this.loggingBroker.LogError(labOrchestrationDependencyValidationException);
+
+            return labOrchestrationDependencyValidationException;
         }
 
         private LabOrchestrationDependencyException CreateAndLogDependencyException(

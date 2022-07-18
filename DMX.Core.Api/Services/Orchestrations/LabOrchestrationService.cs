@@ -28,6 +28,14 @@ namespace DMX.Core.Api.Services.Orchestrations
             this.loggingBroker = loggingBroker;
         }
 
+        public ValueTask<Lab> AddLabAsync(Lab lab) =>
+        TryCatch(() =>
+        {
+            ValidateLabOnAdd(lab);
+
+            return this.labService.AddLabAsync(lab);
+        });
+
         public ValueTask<List<Lab>> RetrieveAllLabsAsync() =>
         TryCatch(async () =>
         {
@@ -74,10 +82,7 @@ namespace DMX.Core.Api.Services.Orchestrations
             return onlineLabs.Union(offlineLabs).Union(unregisteredLabs).ToList();
         });
 
-        public static bool LabIsOnline(Lab lab, HashSet<string> externalLabIds) =>
-            externalLabIds.Contains(lab.ExternalId);
-
-        public static void UpdateDeviceStatusForOnlineLabs(List<Lab> onlineLabs, List<Lab> externalOnlineLabs)
+        private static void UpdateDeviceStatusForOnlineLabs(List<Lab> onlineLabs, List<Lab> externalOnlineLabs)
         {
             onlineLabs.ForEach(onlineLab =>
             {
@@ -86,7 +91,7 @@ namespace DMX.Core.Api.Services.Orchestrations
             });
         }
 
-        public static List<LabDevice> UpdateLabDeviceStatuses(
+        private static List<LabDevice> UpdateLabDeviceStatuses(
             List<LabDevice> onlineLabDevices,
             List<LabDevice> externalOnlineLabDevices)
         {
