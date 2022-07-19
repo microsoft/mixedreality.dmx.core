@@ -17,13 +17,16 @@ namespace DMX.Core.Api.Services.Foundations.ExternalLabs
     {
         private readonly IExternalLabApiBroker externalLabApiBroker;
         private readonly ILoggingBroker loggingBroker;
+        private readonly ExternalLabServiceInformation externalLabServiceInformation;
 
         public ExternalLabService(
             IExternalLabApiBroker externalLabApiBroker,
-            ILoggingBroker loggingBroker)
+            ILoggingBroker loggingBroker,
+            ExternalLabServiceInformation externalLabServiceInformation)
         {
             this.externalLabApiBroker = externalLabApiBroker;
             this.loggingBroker = loggingBroker;
+            this.externalLabServiceInformation = externalLabServiceInformation;
         }
 
         public ValueTask<List<Lab>> RetrieveAllExternalLabsAsync() =>
@@ -36,11 +39,9 @@ namespace DMX.Core.Api.Services.Foundations.ExternalLabs
 
         private async ValueTask<List<ExternalLab>> RetrieveExternalLabsAsync()
         {
-            var externalLabServiceInformation = new ExternalLabServiceInformation();
-
             ExternalLabCollection externalLabCollection =
                 await this.externalLabApiBroker.GetAvailableLabsAsync(
-                    externalLabServiceInformation);
+                    this.externalLabServiceInformation);
 
             List<ExternalLab> externalLabs =
                 externalLabCollection.ExternalLabs.ToList();
