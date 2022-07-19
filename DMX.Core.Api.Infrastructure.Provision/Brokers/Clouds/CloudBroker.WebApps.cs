@@ -21,7 +21,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
         {
             var webAppSettings = new Dictionary<string, string>
                 {
-                    { "ASPNETCORE_ENVIRONMENT", ENVIRONMENT },
+                    { "ASPNETCORE_ENVIRONMENT", Environment },
                     { "ApiConfigurations:Url", this.configurationExternalLabApiUrl },
                     { "ApiConfigurations:AccessKey", this.configurationExternalLabApiAccessKey },
                     { "AzureAd:TenantId", this.tenantId },
