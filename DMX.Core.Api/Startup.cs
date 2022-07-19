@@ -38,10 +38,13 @@ namespace DMX.Core.Api
 
             services.AddTransient((t) =>
             {
+                IConfigurationSection externalLabServiceInformationConfig =
+                    Configuration.GetSection("ExternalLabServiceInformation");
+                
                 return new ExternalLabServiceInformation
                 {
-                    ServiceId = Configuration.GetConnectionString("ExternalLabServiceInformation:ServiceId"),
-                    ServiceType = Configuration.GetConnectionString("ExternalLabServiceInformation:ServiceType")
+                    ServiceId = externalLabServiceInformationConfig["ServiceId"],
+                    ServiceType = externalLabServiceInformationConfig["ServiceType"]
                 };
             });
 
