@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.Labs;
@@ -31,6 +32,11 @@ namespace DMX.Core.Api.Brokers.Storages
             var broker = new StorageBroker(this.configuration);
 
             return broker.Labs.Include(lab => lab.Devices);
+        }
+
+        public ValueTask<Lab> DeleteLabByIdAsync(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
