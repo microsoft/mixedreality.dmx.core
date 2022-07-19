@@ -34,7 +34,7 @@ namespace DMX.Core.Api.Brokers.Storages
             return broker.Labs.Include(lab => lab.Devices);
         }
 
-        public ValueTask<Lab> DeleteLabByIdAsync(Guid id)
+        public ValueTask<Lab> DeleteLabAsync(Lab lab)
         {
             throw new NotImplementedException();
         }
