@@ -9,13 +9,13 @@ namespace DMX.Core.Api.Brokers.LabApis
 {
     public partial class ExternalLabApiBroker
     {
+        const string ExternalLabDevicesRelativeUrl = "api/GetAvailableDevicesAsync";
+
         public async ValueTask<ExternalLabCollection> GetAvailableLabsAsync(
             ExternalLabServiceInformation externalLabServiceInformation)
         {
-            const string RelativeUrl = "api/GetAvailableDevicesAsync";
-
             return await this.PostAync<ExternalLabServiceInformation, ExternalLabCollection>(
-                relativeUrl: $"{RelativeUrl}?code={this.accessKey}",
+                relativeUrl: $"{ExternalLabDevicesRelativeUrl}?code={this.accessKey}",
                 content: externalLabServiceInformation);
         }
     }
