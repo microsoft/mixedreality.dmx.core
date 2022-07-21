@@ -39,9 +39,10 @@ namespace DMX.Core.Api.Brokers.LabApis
             return new RESTFulApiFactoryClient(this.httpClient);
         }
 
-        private string GetApiAccessToken(IConfiguration configuration)
+        private static string GetApiAccessToken(IConfiguration configuration)
         {
-            LocalConfigurations localConfigurations = configuration.Get<LocalConfigurations>();
+            LocalConfigurations localConfigurations =
+                configuration.Get<LocalConfigurations>();
 
             return localConfigurations.ApiConfigurations.AccessKey;
         }
