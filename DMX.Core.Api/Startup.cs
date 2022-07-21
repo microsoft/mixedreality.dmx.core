@@ -103,7 +103,7 @@ namespace DMX.Core.Api
         {
             app.UseEndpoints(endpoints =>
             {
-                if (false)
+                if (env.IsDevelopment())
                 {
                     endpoints.MapControllers().AllowAnonymous();
                 }
