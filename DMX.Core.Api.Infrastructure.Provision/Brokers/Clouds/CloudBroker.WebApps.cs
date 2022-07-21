@@ -29,7 +29,8 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
                     { "AzureAd:Domain", this.dmxCoreDomain },
                     { "AzureAd:ClientId", this.dmxCoreClientId },
                     { "AzureAd:CallbackPath", this.dmxCoreCallbackPath },
-                    { "AzureAd:Scopes", this.dmxCoreScopes },
+                    { "AzureAd:Scopes:GetAllLabs", this.dmxCoreScopesGetAllLabs },
+                    { "AzureAd:Scopes:PostLab", this.dmxCoreScopesPostLab },
                 };
 
             IWithWindowsRuntimeStack webAppWithPlanAndResouceGroup =
