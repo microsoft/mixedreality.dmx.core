@@ -9,9 +9,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMX.Core.Api.Tests.Acceptan
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMX.Core.Api.Tests.Unit", "DMX.Core.Api.Tests.Unit\DMX.Core.Api.Tests.Unit.csproj", "{1A19BAFF-CCDA-4755-955F-20229F597628}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMX.Core.Api.Infrastructure.Provision", "DMX.Core.Api.Infrastructure.Provision\DMX.Core.Api.Infrastructure.Provision.csproj", "{80618794-C607-4DC3-9727-1A835EBE958B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMX.Core.Api.Infrastructure.Provision", "DMX.Core.Api.Infrastructure.Provision\DMX.Core.Api.Infrastructure.Provision.csproj", "{80618794-C607-4DC3-9727-1A835EBE958B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMX.Core.Api.Infrastructure.Build", "DMX.Core.Api.Infrastructure.Build\DMX.Core.Api.Infrastructure.Build.csproj", "{6BCE03B5-EAC5-48BB-99CB-31F1F05D8CEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMX.Core.Api.Infrastructure.Build", "DMX.Core.Api.Infrastructure.Build\DMX.Core.Api.Infrastructure.Build.csproj", "{6BCE03B5-EAC5-48BB-99CB-31F1F05D8CEB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DMX.Core.Api.Designs", "DMX.Core.Api.Designs", "{3E1A0E42-B7C2-4618-9EB5-A59C5D0C3CE1}"
+	ProjectSection(SolutionItems) = preProject
+		C:\Users\hassan\Desktop\DMX.Core.Api.Designs.drawio = C:\Users\hassan\Desktop\DMX.Core.Api.Designs.drawio
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
