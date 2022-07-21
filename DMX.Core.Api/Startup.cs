@@ -95,8 +95,6 @@ namespace DMX.Core.Api
                 JwtBearerDefaults.AuthenticationScheme)
                     .AddMicrosoftIdentityWebApi(
                         Configuration.GetSection("AzureAd"));
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
         }
 
         private static void MapControllersForEnvironments(
@@ -105,7 +103,7 @@ namespace DMX.Core.Api
         {
             app.UseEndpoints(endpoints =>
             {
-                if (env.IsDevelopment())
+                if (false)
                 {
                     endpoints.MapControllers().AllowAnonymous();
                 }
