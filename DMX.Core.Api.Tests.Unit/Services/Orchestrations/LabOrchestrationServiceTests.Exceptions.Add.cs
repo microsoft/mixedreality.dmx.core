@@ -114,7 +114,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             var exception = new Exception(randomMessage);
 
             var failedLabOrchestrationServiceException =
-                new FailedLabOrchestrationServiceException(exception); 
+                new FailedLabOrchestrationServiceException(exception);
 
             var expectedLabOrchestrationServiceException =
                 new LabOrchestrationServiceException(failedLabOrchestrationServiceException);
