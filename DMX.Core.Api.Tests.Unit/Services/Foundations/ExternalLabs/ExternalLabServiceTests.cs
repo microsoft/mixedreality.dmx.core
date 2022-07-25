@@ -27,6 +27,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly ICompareLogic compareLogic;
         private readonly IExternalLabService externalLabService;
+        private readonly ExternalLabServiceInformation externalLabServiceInformation;
 
         public ExternalLabServiceTest()
         {
@@ -34,9 +35,16 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
             this.compareLogic = new CompareLogic();
 
+            this.externalLabServiceInformation = new ExternalLabServiceInformation
+            {
+                ServiceId = "Bondi-HW-Lab",
+                ServiceType = "AzureIotHub"
+            };
+
             this.externalLabService = new ExternalLabService(
                 externalLabApiBroker: this.externalLabApiBrokerMock.Object,
-                loggingBroker: this.loggingBrokerMock.Object);
+                loggingBroker: this.loggingBrokerMock.Object,
+                externalLabServiceInformation: this.externalLabServiceInformation);
         }
 
         public static TheoryData CriticalDependencyException()

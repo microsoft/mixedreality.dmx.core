@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
+using DMX.Core.Api.Models.Foundations.ExternalLabs;
 using DMX.Core.Api.Services.Foundations.ExternalLabs;
 using DMX.Core.Api.Services.Foundations.Labs;
 using DMX.Core.Api.Services.Orchestrations;
@@ -38,6 +39,7 @@ namespace DMX.Core.Api
             AddBrokers(services);
             AddFoundationServices(services);
             AddOrchestrationServices(services);
+            AddModels(services, Configuration);
 
             services.AddSwaggerGen(option =>
             {
@@ -88,6 +90,21 @@ namespace DMX.Core.Api
 
         private static void AddOrchestrationServices(IServiceCollection services) =>
             services.AddTransient<ILabOrchestrationService, LabOrchestrationService>();
+
+        private static void AddModels(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddTransient((t) =>
+            {
+                IConfigurationSection externalLabServiceInformationConfig =
+                    configuration.GetSection("ExternalLabServiceInformation");
+
+                return new ExternalLabServiceInformation
+                {
+                    ServiceId = externalLabServiceInformationConfig["ServiceId"],
+                    ServiceType = externalLabServiceInformationConfig["ServiceType"]
+                };
+            });
+        }
 
         private void AddAuthentication(IServiceCollection services)
         {
