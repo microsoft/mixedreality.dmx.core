@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.Labs;
@@ -24,6 +25,13 @@ namespace DMX.Core.Api.Brokers.Storages
             await broker.SaveChangesAsync();
 
             return labEntityEntry.Entity;
+        }
+
+        public async ValueTask<Lab> SelectLabByIdAsync(Guid labId)
+        {
+            var broker = new StorageBroker(this.configuration);
+
+            return await broker.Labs.FindAsync(labId);
         }
 
         public IQueryable<Lab> SelectAllLabsWithDevices()
