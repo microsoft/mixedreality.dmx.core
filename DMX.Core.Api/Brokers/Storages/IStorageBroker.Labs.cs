@@ -12,8 +12,8 @@ namespace DMX.Core.Api.Brokers.Storages
     public partial interface IStorageBroker
     {
         ValueTask<Lab> InsertLabAsync(Lab lab);
-        ValueTask<Lab> SelectLabByIdAsync(Guid labId);
         IQueryable<Lab> SelectAllLabsWithDevices();
+        ValueTask<Lab> SelectLabByIdAsync(Guid labId);
         ValueTask<Lab> DeleteLabAsync(Lab lab);
     }
 }

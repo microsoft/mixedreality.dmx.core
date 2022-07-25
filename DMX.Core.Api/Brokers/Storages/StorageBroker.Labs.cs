@@ -27,18 +27,18 @@ namespace DMX.Core.Api.Brokers.Storages
             return labEntityEntry.Entity;
         }
 
-        public async ValueTask<Lab> SelectLabByIdAsync(Guid labId)
-        {
-            var broker = new StorageBroker(this.configuration);
-
-            return await broker.Labs.FindAsync(labId);
-        }
-
         public IQueryable<Lab> SelectAllLabsWithDevices()
         {
             var broker = new StorageBroker(this.configuration);
 
             return broker.Labs.Include(lab => lab.Devices);
+        }
+
+        public async ValueTask<Lab> SelectLabByIdAsync(Guid labId)
+        {
+            var broker = new StorageBroker(this.configuration);
+
+            return await broker.Labs.FindAsync(labId);
         }
 
         public async ValueTask<Lab> DeleteLabAsync(Lab lab)
