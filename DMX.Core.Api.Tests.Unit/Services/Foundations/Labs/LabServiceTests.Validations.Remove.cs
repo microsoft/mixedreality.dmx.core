@@ -55,5 +55,49 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnRemoveIfLabIsNullAndLogItAsync()
+        {
+            // given
+            Lab nullLab = null;
+            Lab returnedLab = nullLab;
+            var someId = Guid.NewGuid();
+            var nullLabException = new NullLabException();
+
+            var expectedLabValidationException =
+                new LabValidationException(nullLabException);
+
+            storageBrokerMock.Setup(broker =>
+                broker.SelectLabByIdAsync(It.IsAny<Guid>()))
+                    .ReturnsAsync(returnedLab);
+
+            // when
+            ValueTask<Lab> removeLabTask = this.labService.RemoveLabByIdAsync(someId);
+
+            LabValidationException actualLabValidationException =
+                await Assert.ThrowsAsync<LabValidationException>(
+                    removeLabTask.AsTask);
+
+            // then
+            actualLabValidationException.Should().BeEquivalentTo(
+                expectedLabValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLabByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.DeleteLabAsync(It.IsAny<Lab>()),
+                    Times.Never);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
