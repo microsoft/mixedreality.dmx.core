@@ -16,7 +16,7 @@ namespace DMX.Core.Api.Brokers.Storages
 
         public async ValueTask<Lab> InsertLabAsync(Lab lab)
         {
-            using var broker = new StorageBroker(this.configuration);
+            var broker = new StorageBroker(this.configuration);
 
             EntityEntry<Lab> labEntityEntry =
                 await broker.Labs.AddAsync(lab);

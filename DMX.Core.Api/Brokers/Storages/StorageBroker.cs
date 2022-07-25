@@ -18,18 +18,18 @@ namespace DMX.Core.Api.Brokers.Storages
             this.Database.Migrate();
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            ConfigureLab(modelBuilder);
-            ConfigureLabDevice(modelBuilder);
-        }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string connectionString =
                 this.configuration.GetConnectionString("DefaultConnection");
 
             optionsBuilder.UseSqlServer(connectionString);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            ConfigureLab(modelBuilder);
+            ConfigureLabDevice(modelBuilder);
         }
     }
 }
