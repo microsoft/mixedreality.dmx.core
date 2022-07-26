@@ -46,6 +46,12 @@ namespace DMX.Core.Api.Services.Foundations.Labs
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsLabException);
             }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedLabException = new LockedLabException(dbUpdateConcurrencyException);
+
+                throw CreateAndLogDependencyValidationException(lockedLabException);
+            }
             catch (DbUpdateException dbUpdateException)
             {
                 var failedLabStorageException = new FailedLabStorageException(dbUpdateException);
