@@ -44,5 +44,18 @@ namespace DMX.Core.Api.Services.Foundations.Labs
 
             return maybeLab;
         });
+        
+        public ValueTask<Lab> RemoveLabByIdAsync(Guid labId) =>
+        TryCatch(async () =>
+        {
+            ValidateLabId(labId);
+
+            Lab maybeLab =
+                await this.storageBroker.SelectLabByIdAsync(labId);
+
+            ValidateLabIsNotNull(maybeLab);
+
+            return await this.storageBroker.DeleteLabAsync(maybeLab);
+        });
     }
 }
