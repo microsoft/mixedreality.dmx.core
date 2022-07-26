@@ -49,6 +49,49 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 broker.SelectLabByIdAsync(It.IsAny<Guid>()),
                     Times.Never);
 
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnRetrieveByIdIfLabIsNotFoundAndLogitAsync()
+        {
+            // given
+            Guid randomId = Guid.NewGuid();
+            Guid nonExistentLabId = randomId;
+            Lab noLab = null;
+
+            var notFoundLabException =
+                new NotFoundLabException(nonExistentLabId);
+
+            var expectedLabValidationException =
+                new LabValidationException(notFoundLabException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLabByIdAsync(nonExistentLabId))
+                    .ReturnsAsync(noLab);
+
+            // when
+            ValueTask<Lab> retrieveLabByIdTask =
+                this.labService.RetrieveLabByIdAsync(nonExistentLabId);
+
+            LabValidationException actualLabValidationException =
+                await Assert.ThrowsAsync<LabValidationException>(
+                    retrieveLabByIdTask.AsTask);
+
+            // then
+            actualLabValidationException.Should().BeEquivalentTo(
+                expectedLabValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLabByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabValidationException))),
+                        Times.Once);
+
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
