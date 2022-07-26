@@ -35,7 +35,7 @@ namespace DMX.Core.Api.Services.Foundations.Labs
         public IQueryable<Lab> RetrieveAllLabsWithDevices() =>
         TryCatch(() => this.storageBroker.SelectAllLabsWithDevices());
 
-        public ValueTask<Lab> RetrieveByIdAsync(Guid labId) =>
-            throw new NotImplementedException();
+        public async ValueTask<Lab> RetrieveByIdAsync(Guid labId) =>
+            await this.storageBroker.SelectLabByIdAsync(labId);
     }
 }
