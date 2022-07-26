@@ -31,6 +31,14 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             }
         }
 
+        private static void ValidateLabExists(Lab maybeLab, Guid labId)
+        {
+            if (maybeLab is null)
+            {
+                throw new NotFoundLabException(labId);
+            }
+        }
+
         private static void ValidateLabId(Guid labId) =>
             Validate((Rule: IsInvalid(labId), Parameter: nameof(Lab.Id)));
 
