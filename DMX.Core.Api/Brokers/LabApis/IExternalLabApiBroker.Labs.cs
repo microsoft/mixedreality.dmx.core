@@ -9,7 +9,6 @@ namespace DMX.Core.Api.Brokers.LabApis
 {
     public partial interface IExternalLabApiBroker
     {
-        ValueTask<ExternalLabCollection> GetAvailableLabsAsync(
-            ExternalLabServiceInformation externalLabServiceInformation);
+        ValueTask<ExternalLabCollection> GetAvailableLabsAsync();
     }
 }
