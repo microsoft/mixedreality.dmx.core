@@ -30,7 +30,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
 
             // when
             Lab actualLab =
-                await this.labService.RetrieveByIdAsync(
+                await this.labService.RetrieveLabByIdAsync(
                     inputLabId);
 
             // then
