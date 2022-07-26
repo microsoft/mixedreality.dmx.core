@@ -34,7 +34,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                     .ReturnsAsync(deletedLab);
 
             // when
-            Lab actualLab = 
+            Lab actualLab =
                 await this.labService.RemoveLabByIdAsync(
                     inputLabId);
 

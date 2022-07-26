@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------
 
 using System;
-using System.Data;
 using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 
