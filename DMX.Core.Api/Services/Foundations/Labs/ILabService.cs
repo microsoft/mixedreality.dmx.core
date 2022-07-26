@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.Labs;
@@ -12,5 +13,6 @@ namespace DMX.Core.Api.Services.Foundations.Labs
     {
         ValueTask<Lab> AddLabAsync(Lab lab);
         IQueryable<Lab> RetrieveAllLabsWithDevices();
+        ValueTask<Lab> RetrieveByIdAsync(Guid labId);
     }
 }
