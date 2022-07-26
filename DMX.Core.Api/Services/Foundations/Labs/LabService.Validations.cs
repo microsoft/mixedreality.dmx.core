@@ -22,9 +22,6 @@ namespace DMX.Core.Api.Services.Foundations.Labs
                 (Rule: IsInvalid(lab.Status), Parameter: nameof(Lab.Status)));
         }
 
-        private static void ValidateLabId(Guid labId) =>
-            Validate((Rule: IsInvalid(labId), Parameter: nameof(Lab.Id)));
-
         private static void ValidateLabIsNotNull(Lab lab)
         {
             if (lab is null)
@@ -32,6 +29,17 @@ namespace DMX.Core.Api.Services.Foundations.Labs
                 throw new NullLabException();
             }
         }
+
+        private static void ValidateLabExists(Lab maybeLab, Guid labId)
+        {
+            if (maybeLab is null)
+            {
+                throw new NotFoundLabException(labId);
+            }
+        }
+
+        private static void ValidateLabId(Guid labId) =>
+            Validate((Rule: IsInvalid(labId), Parameter: nameof(Lab.Id)));
 
         private static dynamic IsInvalid(string text) => new
         {
