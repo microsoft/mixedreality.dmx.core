@@ -46,13 +46,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
                     Devices = randomProperty.Devices
                 }).ToList();
 
-            var externalLabServiceInformation =
-                new ExternalLabServiceInformation
-                {
-                    ServiceId = "Bondi-HW-Lab",
-                    ServiceType = "AzureIotHub"
-                };
-
             this.externalLabApiBrokerMock.Setup(broker =>
                 broker.GetAvailableLabsAsync())
                     .ReturnsAsync(retrievedExternalLabCollection);
