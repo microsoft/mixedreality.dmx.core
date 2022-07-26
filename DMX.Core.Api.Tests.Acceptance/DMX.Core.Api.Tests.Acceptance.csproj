@@ -11,7 +11,7 @@
     <PackageReference Include="DeepCloner" Version="0.10.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.0-preview.5.22303.8" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0-preview-20220612-01" />
-    <PackageReference Include="RESTFulSense" Version="2.5.0" />
+    <PackageReference Include="RESTFulSense" Version="2.7.0" />
     <PackageReference Include="Tynamix.ObjectFiller" Version="1.5.8" />
     <PackageReference Include="WireMock.Net" Version="1.5.0" />
     <PackageReference Include="xunit" Version="2.4.2-pre.12" />
