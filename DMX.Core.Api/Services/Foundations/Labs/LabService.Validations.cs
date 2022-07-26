@@ -22,9 +22,6 @@ namespace DMX.Core.Api.Services.Foundations.Labs
                 (Rule: IsInvalid(lab.Status), Parameter: nameof(Lab.Status)));
         }
 
-        private static void ValidateLabId(Guid labId) =>
-            Validate((Rule: IsInvalid(labId), Parameter: nameof(Lab.Id)));
-
         private static void ValidateLabIsNotNull(Lab lab)
         {
             if (lab is null)
