@@ -7,6 +7,7 @@ using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
@@ -14,6 +15,59 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
 {
     public partial class LabServiceTests
     {
+        [Fact]
+        public async Task ShouldThrowDependencyValidationOnRemoveIfDatabaseUpdateConcurrencyErrorOccursAndLogItAsync()
+        {
+            // given
+            var someGuid = Guid.NewGuid();
+            Lab someLab = CreateRandomLab();
+
+            var dbUpdateConcurrencyException =
+                new DbUpdateConcurrencyException();
+
+            var lockedLabException =
+                new LockedLabException(dbUpdateConcurrencyException);
+
+            var expectedLabDependencyValidationException =
+                new LabDependencyValidationException(lockedLabException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLabByIdAsync(It.IsAny<Guid>()))
+                    .ReturnsAsync(someLab);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.DeleteLabAsync(It.IsAny<Lab>()))
+                    .ThrowsAsync(dbUpdateConcurrencyException);
+
+            // when
+            ValueTask<Lab> actualLabTask =
+                this.labService.RemoveLabByIdAsync(someGuid);
+
+            LabDependencyValidationException actualLabDependencyValidationException =
+                await Assert.ThrowsAsync<LabDependencyValidationException>(
+                    actualLabTask.AsTask);
+
+            // then
+            actualLabDependencyValidationException.Should().BeEquivalentTo(
+                expectedLabDependencyValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLabByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.DeleteLabAsync(It.IsAny<Lab>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabDependencyValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
         [Fact]
         public async Task ShouldThrowCriticalDependencyExceptionOnRemoveIfSqlErrorOccursAndLogItAsync()
         {
@@ -92,7 +146,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 this.labService.RemoveLabByIdAsync(someGuid);
 
             LabServiceException actualLabServiceException =
-                await Assert.ThrowsAsync<LabServiceException>(actualLabTask.AsTask);
+                await Assert.ThrowsAsync<LabServiceException>(
+                    actualLabTask.AsTask);
 
             // then
             actualLabServiceException.Should().BeEquivalentTo(
