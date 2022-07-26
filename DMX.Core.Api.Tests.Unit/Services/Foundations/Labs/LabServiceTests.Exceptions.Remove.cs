@@ -42,7 +42,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             // then
             actualLabDependencyException.Should().BeEquivalentTo(
                 expectedLabDependencyException);
-            
+
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLabByIdAsync(It.IsAny<Guid>()),
                     Times.Once);
@@ -54,6 +54,56 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(
                     expectedLabDependencyException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRemoveIfErrorOccursAndLogItAsync()
+        {
+            // given
+            var someGuid = Guid.NewGuid();
+            Lab someLab = CreateRandomLab();
+            var exception = new Exception();
+
+            var failedLabServiceException
+                = new FailedLabServiceException(exception);
+
+            var expectedLabServiceExceptions =
+                new LabServiceException(failedLabServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLabByIdAsync(It.IsAny<Guid>()))
+                    .ReturnsAsync(someLab);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.DeleteLabAsync(It.IsAny<Lab>()))
+                    .ThrowsAsync(exception);
+
+            // when
+            ValueTask<Lab> actualLabTask =
+                this.labService.RemoveLabByIdAsync(someGuid);
+
+            LabServiceException actualLabServiceException =
+                await Assert.ThrowsAsync<LabServiceException>(actualLabTask.AsTask);
+
+            // then
+            actualLabServiceException.Should().BeEquivalentTo(
+                expectedLabServiceExceptions);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLabByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.DeleteLabAsync(It.IsAny<Lab>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabServiceExceptions))),
                         Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
