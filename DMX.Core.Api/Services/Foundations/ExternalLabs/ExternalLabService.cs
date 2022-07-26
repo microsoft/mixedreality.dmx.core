@@ -40,8 +40,7 @@ namespace DMX.Core.Api.Services.Foundations.ExternalLabs
         private async ValueTask<List<ExternalLab>> RetrieveExternalLabsAsync()
         {
             ExternalLabCollection externalLabCollection =
-                await this.externalLabApiBroker.GetAvailableLabsAsync(
-                    this.externalLabServiceInformation);
+                await this.externalLabApiBroker.GetAvailableLabsAsync();
 
             List<ExternalLab> externalLabs =
                 externalLabCollection.ExternalLabs.ToList();
