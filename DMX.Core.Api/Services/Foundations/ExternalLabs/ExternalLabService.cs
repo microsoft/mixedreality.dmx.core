@@ -17,16 +17,13 @@ namespace DMX.Core.Api.Services.Foundations.ExternalLabs
     {
         private readonly IExternalLabApiBroker externalLabApiBroker;
         private readonly ILoggingBroker loggingBroker;
-        private readonly ExternalLabServiceInformation externalLabServiceInformation;
 
         public ExternalLabService(
             IExternalLabApiBroker externalLabApiBroker,
-            ILoggingBroker loggingBroker,
-            ExternalLabServiceInformation externalLabServiceInformation)
+            ILoggingBroker loggingBroker)
         {
             this.externalLabApiBroker = externalLabApiBroker;
             this.loggingBroker = loggingBroker;
-            this.externalLabServiceInformation = externalLabServiceInformation;
         }
 
         public ValueTask<List<Lab>> RetrieveAllExternalLabsAsync() =>
