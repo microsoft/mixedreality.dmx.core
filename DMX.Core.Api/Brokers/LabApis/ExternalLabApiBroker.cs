@@ -44,7 +44,8 @@ namespace DMX.Core.Api.Brokers.LabApis
 
         private static string GetApiAccessToken(IConfiguration configuration)
         {
-            LocalConfigurations localConfigurations = configuration.Get<LocalConfigurations>();
+            LocalConfigurations localConfigurations =
+                configuration.Get<LocalConfigurations>();
 
             return localConfigurations.ApiConfigurations.AccessKey;
         }

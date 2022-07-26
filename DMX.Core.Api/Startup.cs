@@ -96,8 +96,6 @@ namespace DMX.Core.Api
                 JwtBearerDefaults.AuthenticationScheme)
                     .AddMicrosoftIdentityWebApi(
                         Configuration.GetSection("AzureAd"));
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
         }
 
         private static void MapControllersForEnvironments(

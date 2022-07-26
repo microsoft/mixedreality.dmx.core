@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.ExternalLabs.Exceptions;
 using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Services.Foundations.ExternalLabs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 using RESTFulSense.Controllers;
 
 namespace DMX.Core.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ExternalLabsController : RESTFulController

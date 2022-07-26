@@ -18,7 +18,6 @@ namespace DMX.Core.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class LabsController : RESTFulController
     {
         private readonly ILabOrchestrationService labOrchestrationService;
@@ -27,6 +26,7 @@ namespace DMX.Core.Api.Controllers
             this.labOrchestrationService = labOrchestrationService;
 
         [HttpPost]
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:PostLab")]
         public async ValueTask<ActionResult<Lab>> PostLabAsync(Lab lab)
         {
             try
@@ -60,6 +60,7 @@ namespace DMX.Core.Api.Controllers
         }
 
         [HttpGet]
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:GetAllLabs")]
         public async ValueTask<ActionResult<List<Lab>>> GetAllLabsAsync()
         {
             try
