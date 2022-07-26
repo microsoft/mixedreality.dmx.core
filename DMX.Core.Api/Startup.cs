@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
+using DMX.Core.Api.Models.Foundations.ExternalLabs;
 using DMX.Core.Api.Services.Foundations.ExternalLabs;
 using DMX.Core.Api.Services.Foundations.Labs;
 using DMX.Core.Api.Services.Orchestrations;

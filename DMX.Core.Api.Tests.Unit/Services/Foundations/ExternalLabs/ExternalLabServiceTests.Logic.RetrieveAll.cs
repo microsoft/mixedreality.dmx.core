@@ -46,17 +46,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
                     Devices = randomProperty.Devices
                 }).ToList();
 
-            var externalLabServiceInformation =
-                new ExternalLabServiceInformation
-                {
-                    ServiceId = "Bondi-HW-Lab",
-                    ServiceType = "AzureIotHub"
-                };
-
             this.externalLabApiBrokerMock.Setup(broker =>
-                broker.GetAvailableLabsAsync(It.Is(
-                    SameInformationAs(externalLabServiceInformation))))
-                        .ReturnsAsync(retrievedExternalLabCollection);
+                broker.GetAvailableLabsAsync())
+                    .ReturnsAsync(retrievedExternalLabCollection);
 
             // when
             List<Lab> actualLabs =
@@ -66,9 +58,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
             actualLabs.Should().BeEquivalentTo(expectedLabs);
 
             this.externalLabApiBrokerMock.Verify(broker =>
-                broker.GetAvailableLabsAsync(It.Is(
-                    SameInformationAs(externalLabServiceInformation))),
-                        Times.Once);
+                broker.GetAvailableLabsAsync(),
+                    Times.Once);
 
             this.externalLabApiBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

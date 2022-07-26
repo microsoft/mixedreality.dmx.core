@@ -36,15 +36,8 @@ namespace DMX.Core.Api.Services.Foundations.ExternalLabs
 
         private async ValueTask<List<ExternalLab>> RetrieveExternalLabsAsync()
         {
-            var externalLabServiceInformation = new ExternalLabServiceInformation
-            {
-                ServiceId = "Bondi-HW-Lab",
-                ServiceType = "AzureIotHub"
-            };
-
             ExternalLabCollection externalLabCollection =
-                await this.externalLabApiBroker.GetAvailableLabsAsync(
-                    externalLabServiceInformation);
+                await this.externalLabApiBroker.GetAvailableLabsAsync();
 
             List<ExternalLab> externalLabs =
                 externalLabCollection.ExternalLabs.ToList();
