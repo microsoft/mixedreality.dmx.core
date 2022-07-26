@@ -39,7 +39,6 @@ namespace DMX.Core.Api
             AddBrokers(services);
             AddFoundationServices(services);
             AddOrchestrationServices(services);
-            AddModels(services, Configuration);
 
             services.AddSwaggerGen(option =>
             {
@@ -90,21 +89,6 @@ namespace DMX.Core.Api
 
         private static void AddOrchestrationServices(IServiceCollection services) =>
             services.AddTransient<ILabOrchestrationService, LabOrchestrationService>();
-
-        private static void AddModels(IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddTransient((t) =>
-            {
-                IConfigurationSection externalLabServiceInformationConfig =
-                    configuration.GetSection("ExternalLabServiceInformation");
-
-                return new ExternalLabServiceInformation
-                {
-                    ServiceId = externalLabServiceInformationConfig["ServiceId"],
-                    ServiceType = externalLabServiceInformationConfig["ServiceType"]
-                };
-            });
-        }
 
         private void AddAuthentication(IServiceCollection services)
         {
