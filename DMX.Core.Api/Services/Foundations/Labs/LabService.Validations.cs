@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Data;
 using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 
@@ -29,6 +30,9 @@ namespace DMX.Core.Api.Services.Foundations.Labs
                 throw new NullLabException();
             }
         }
+
+        private static void ValidateLabId(Guid labId) =>
+            Validate((Rule: IsInvalid(labId), Parameter: nameof(Lab.Id)));
 
         private static dynamic IsInvalid(string text) => new
         {

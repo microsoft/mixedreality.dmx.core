@@ -21,6 +21,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             Guid invalidLabId = Guid.Empty;
             var invalidLabException = new InvalidLabException();
 
+            invalidLabException.AddData(
+                key: nameof(Lab.Id),
+                values: "Id is required");
+
             var expectedLabValidationException = 
                 new LabValidationException(invalidLabException);
 
