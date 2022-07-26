@@ -60,8 +60,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
         public async Task ShouldThrowValidationExceptionOnRemoveIfLabIsNullAndLogItAsync()
         {
             // given
-            Lab nullLab = null;
-            Lab returnedLab = nullLab;
+            Lab noLab = null;
             var someId = Guid.NewGuid();
             var nullLabException = new NullLabException();
 
@@ -70,7 +69,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
 
             storageBrokerMock.Setup(broker =>
                 broker.SelectLabByIdAsync(It.IsAny<Guid>()))
-                    .ReturnsAsync(returnedLab);
+                    .ReturnsAsync(noLab);
 
             // when
             ValueTask<Lab> removeLabTask = this.labService.RemoveLabByIdAsync(someId);

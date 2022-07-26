@@ -10,7 +10,7 @@ namespace DMX.Core.Api.Models.Foundations.Labs.Exceptions
     public class LockedLabException : Xeption
     {
         public LockedLabException(Exception innerException)
-            : base(message: "Locked lab record exception. Please try again later.", innerException)
+            : base(message: "Locked lab record error occurred. Please try again later.", innerException)
         { }
     }
 }

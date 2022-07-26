@@ -128,8 +128,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             Lab someLab = CreateRandomLab();
             var exception = new Exception();
 
-            var failedLabServiceException
-                = new FailedLabServiceException(exception);
+            var failedLabServiceException =
+                new FailedLabServiceException(exception);
 
             var expectedLabServiceExceptions =
                 new LabServiceException(failedLabServiceException);
