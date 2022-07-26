@@ -51,6 +51,8 @@ namespace DMX.Core.Api.Brokers.LabApis
         }
 
         private static ExternalLabServiceInformation GetExternalLabServiceInformation(IConfiguration configuration) =>
-            configuration.Get<ExternalLabServiceInformation>();
+            configuration
+                .GetSection(nameof(ExternalLabServiceInformation))
+                    .Get<ExternalLabServiceInformation>();
     }
 }
