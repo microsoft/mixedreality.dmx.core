@@ -15,7 +15,9 @@ using RESTFulSense.Controllers;
 
 namespace DMX.Core.Api.Controllers
 {
+#if RELEASE
     [Authorize]
+#endif
     [ApiController]
     [Route("api/[controller]")]
     public class LabsController : RESTFulController
@@ -26,7 +28,9 @@ namespace DMX.Core.Api.Controllers
             this.labOrchestrationService = labOrchestrationService;
 
         [HttpPost]
+#if RELEASE
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:PostLab")]
+#endif
         public async ValueTask<ActionResult<Lab>> PostLabAsync(Lab lab)
         {
             try
@@ -60,7 +64,9 @@ namespace DMX.Core.Api.Controllers
         }
 
         [HttpGet]
+#if RELEASE
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:GetAllLabs")]
+#endif
         public async ValueTask<ActionResult<List<Lab>>> GetAllLabsAsync()
         {
             try
