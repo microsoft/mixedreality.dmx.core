@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
@@ -33,5 +34,18 @@ namespace DMX.Core.Api.Services.Foundations.Labs
 
         public IQueryable<Lab> RetrieveAllLabsWithDevices() =>
         TryCatch(() => this.storageBroker.SelectAllLabsWithDevices());
+
+        public ValueTask<Lab> RemoveLabByIdAsync(Guid labId) =>
+        TryCatch(async () =>
+        {
+            ValidateLabId(labId);
+
+            Lab maybeLab =
+                await this.storageBroker.SelectLabByIdAsync(labId);
+
+            ValidateLabIsNotNull(maybeLab);
+
+            return await this.storageBroker.DeleteLabAsync(maybeLab);
+        });
     }
 }

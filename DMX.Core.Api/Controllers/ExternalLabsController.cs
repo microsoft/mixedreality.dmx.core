@@ -9,7 +9,6 @@ using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Services.Foundations.ExternalLabs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Web.Resource;
 using RESTFulSense.Controllers;
 
 namespace DMX.Core.Api.Controllers
