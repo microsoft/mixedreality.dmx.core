@@ -56,5 +56,47 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRetrieveByIdIfServiceErrorOccursAndLogItAsync()
+        {
+            // given
+            Guid someLabId = Guid.NewGuid();
+            var serviceException = new Exception();
+
+            var failedLabServiceException =
+                new FailedLabServiceException(serviceException);
+
+            var expectedLabServiceException =
+                new LabServiceException(failedLabServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLabByIdAsync(someLabId))
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<Lab> retrieveByIdTask =
+                this.labService.RetrieveLabByIdAsync(someLabId);
+
+            LabServiceException actualLabServiceException =
+                await Assert.ThrowsAsync<LabServiceException>(
+                    retrieveByIdTask.AsTask);
+
+            //then
+            actualLabServiceException.Should().BeEquivalentTo(
+                expectedLabServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLabByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabServiceException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
