@@ -13,6 +13,7 @@ namespace DMX.Core.Api.Services.Foundations.Labs
     {
         ValueTask<Lab> AddLabAsync(Lab lab);
         IQueryable<Lab> RetrieveAllLabsWithDevices();
+        ValueTask<Lab> RetrieveLabByIdAsync(Guid labId);
         ValueTask<Lab> RemoveLabByIdAsync(Guid labId);
     }
 }
