@@ -19,6 +19,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
         {
             // given
             var someGuid = Guid.NewGuid();
+            Lab someLab = CreateRandomLab();
             SqlException sqlException = GetSqlException();
 
             var failedLabStorageException =
@@ -26,6 +27,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
 
             var expectedLabDependencyException =
                 new LabDependencyException(failedLabStorageException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLabByIdAsync(It.IsAny<Guid>()))
+                    .ReturnsAsync(someLab);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.DeleteLabAsync(It.IsAny<Lab>()))
