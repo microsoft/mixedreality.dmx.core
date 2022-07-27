@@ -83,6 +83,11 @@ namespace DMX.Core.Api.Services.Orchestrations
             return onlineLabs.Union(offlineLabs).Union(unregisteredLabs).ToList();
         });
 
+        public ValueTask<Lab> RetrieveLabByIdAsync(Guid labId)
+        {
+            return this.labService.RetrieveLabByIdAsync(labId);
+        }
+
         public ValueTask<Lab> RemoveLabByIdAsync(Guid labId) =>
         TryCatch(async () =>
         {
@@ -132,11 +137,6 @@ namespace DMX.Core.Api.Services.Orchestrations
             unregisteredDevices.ForEach(labDevice => labDevice.Status = LabDeviceStatus.Unregistered);
 
             return onlineDevices.Union(offlineDevices).Union(unregisteredDevices).ToList();
-        }
-
-        public ValueTask<Lab> RetrieveLabByIdAsync(Guid labId)
-        {
-            throw new NotImplementedException();
         }
     }
 }
