@@ -12,6 +12,10 @@ namespace DMX.Core.Api.Services.Orchestrations
     {
         private void ValidateLabOnAdd(Lab lab) =>
             ValidateLabIsNotNull(lab);
+
+        private static void ValidateLabId(Guid labId) =>
+            Validate((Rule: IsInvalid(labId), Parameter: nameof(Lab.Id)));
+
         
         private static void ValidateLabIdIsNotEmpty(Guid labId)
         {
@@ -27,6 +31,29 @@ namespace DMX.Core.Api.Services.Orchestrations
             {
                 throw new NullLabException();
             }
+        }
+
+        private static dynamic IsInvalid(Guid id) => new
+        {
+            Condition = id == Guid.Empty,
+            Message = "Id is required",
+        };
+
+        private static void Validate(params (dynamic Rule, string Parameter)[] validations)
+        {
+            var invalidLabException = new InvalidLabException();
+
+            foreach ((dynamic rule, string parameter) in validations)
+            {
+                if (rule.Condition)
+                {
+                    invalidLabException.UpsertDataList(
+                        key: parameter,
+                        value: rule.Message);
+                }
+            }
+
+            invalidLabException.ThrowIfContainsErrors();
         }
     }
 }

@@ -86,7 +86,7 @@ namespace DMX.Core.Api.Services.Orchestrations
         public ValueTask<Lab> RemoveLabByIdAsync(Guid labId) =>
         TryCatch(async () =>
         {
-            ValidateLabIdIsNotEmpty(labId);
+            ValidateLabId(labId);
 
             return await this.labService.RemoveLabByIdAsync(labId);
         });
