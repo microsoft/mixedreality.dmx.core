@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
@@ -20,12 +21,14 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
         {
             // given
             var invalidLabId = Guid.Empty;
+            var invalidLabException = new InvalidLabException();
 
-            var invalidLabIdException =
-                new InvalidLabIdException(invalidLabId);
+            invalidLabException.AddData(
+                key: nameof(Lab.Id),
+                values: "Id is required");
 
             var expectedLabOrchestrationValidationException =
-                new LabOrchestrationValidationException(invalidLabIdException);
+                new LabOrchestrationValidationException(invalidLabException);
 
             // when
             ValueTask<Lab> actualLabTask =
