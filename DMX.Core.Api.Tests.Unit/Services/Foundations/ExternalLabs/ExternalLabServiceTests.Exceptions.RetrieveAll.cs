@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Foundations.ExternalLabs;
 using DMX.Core.Api.Models.Foundations.ExternalLabs.Exceptions;
 using DMX.Core.Api.Models.Foundations.Labs;
 using FluentAssertions;
