@@ -25,11 +25,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 key: nameof(Lab.Id),
                 values: "Id is required");
 
-            var expectedLabValidationException = 
+            var expectedLabValidationException =
                 new LabValidationException(invalidLabException);
 
             // when
-            ValueTask<Lab> retrieveLabByIdTask = 
+            ValueTask<Lab> retrieveLabByIdTask =
                 this.labService.RetrieveLabByIdAsync(invalidLabId);
 
             LabValidationException actualLabValidationException =

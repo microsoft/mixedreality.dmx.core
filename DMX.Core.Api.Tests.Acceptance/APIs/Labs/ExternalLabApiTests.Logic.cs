@@ -19,7 +19,7 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
 {
     public partial class ExternalLabApiTests
     {
-        [Fact (Skip = "ExternalLabsController removed. This logic to be reused for LabsController.")]
+        [Fact(Skip = "ExternalLabsController removed. This logic to be reused for LabsController.")]
         public async Task ShouldRetrieveAvailableLabsAsync()
         {
             // given

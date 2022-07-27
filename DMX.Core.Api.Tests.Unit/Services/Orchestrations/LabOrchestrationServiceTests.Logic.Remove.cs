@@ -28,7 +28,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                     .ReturnsAsync(returnedLab);
 
             // when
-            Lab actualLab = 
+            Lab actualLab =
                 await this.labOrchestrationService.RemoveLabByIdAsync(inputId);
 
             // then

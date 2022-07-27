@@ -3,9 +3,6 @@
 // ---------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Models.Orchestrations.Labs.Exceptions;
@@ -120,7 +117,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             this.labServiceMock.Setup(service =>
                 service.RemoveLabByIdAsync(It.IsAny<Guid>()))
                     .ThrowsAsync(exception);
-            
+
             // when
             ValueTask<Lab> actualLabTask =
                 this.labOrchestrationService.RemoveLabByIdAsync(someLabId);

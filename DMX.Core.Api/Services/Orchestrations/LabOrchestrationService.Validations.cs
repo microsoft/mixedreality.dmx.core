@@ -13,18 +13,6 @@ namespace DMX.Core.Api.Services.Orchestrations
         private void ValidateLabOnAdd(Lab lab) =>
             ValidateLabIsNotNull(lab);
 
-        private static void ValidateLabId(Guid labId) =>
-            Validate((Rule: IsInvalid(labId), Parameter: nameof(Lab.Id)));
-
-        
-        private static void ValidateLabIdIsNotEmpty(Guid labId)
-        {
-            if (labId == Guid.Empty)
-            {
-                throw new InvalidLabIdException(labId);
-            }
-        }
-
         private static void ValidateLabIsNotNull(Lab lab)
         {
             if (lab is null)
@@ -32,6 +20,9 @@ namespace DMX.Core.Api.Services.Orchestrations
                 throw new NullLabException();
             }
         }
+
+        private static void ValidateLabId(Guid labId) =>
+            Validate((Rule: IsInvalid(labId), Parameter: nameof(Lab.Id)));
 
         private static dynamic IsInvalid(Guid id) => new
         {

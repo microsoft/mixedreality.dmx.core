@@ -22,7 +22,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             Guid someLabId = Guid.NewGuid();
             SqlException sqlException = GetSqlException();
 
-            var failedLabStorageException = 
+            var failedLabStorageException =
                 new FailedLabStorageException(sqlException);
 
             var expectedLabDependencyException =
@@ -36,7 +36,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             ValueTask<Lab> retrieveByIdTask =
                 this.labService.RetrieveLabByIdAsync(someLabId);
 
-            LabDependencyException actualLabDependencyException = 
+            LabDependencyException actualLabDependencyException =
                 await Assert.ThrowsAsync<LabDependencyException>(
                     retrieveByIdTask.AsTask);
 
