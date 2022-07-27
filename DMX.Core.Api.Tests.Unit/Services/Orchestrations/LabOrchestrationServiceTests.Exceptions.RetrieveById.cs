@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// ---------------------------------------------------------------
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// ---------------------------------------------------------------
+
+using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Models.Orchestrations.Labs.Exceptions;
@@ -135,7 +136,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
-                    expectedLabOrchestrationServiceException))), 
+                    expectedLabOrchestrationServiceException))),
                         Times.Once);
 
             this.labServiceMock.VerifyNoOtherCalls();
