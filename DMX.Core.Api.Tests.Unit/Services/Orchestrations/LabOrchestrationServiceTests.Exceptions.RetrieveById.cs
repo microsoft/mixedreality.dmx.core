@@ -98,5 +98,49 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.externalLabServiceMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowOrchestrationServiceExceptionOnRetrieveByIdIfErrorOccursAndLogItAsync()
+        {
+            // given
+            Guid someLabId = Guid.NewGuid();
+            string randomMessage = GetRandomString();
+            var exception = new Exception(randomMessage);
+
+            var failedLabOrchestrationServiceException =
+                new FailedLabOrchestrationServiceException(exception);
+
+            var expectedLabOrchestrationServiceException =
+                new LabOrchestrationServiceException(failedLabOrchestrationServiceException);
+
+            this.labServiceMock.Setup(service =>
+                service.RetrieveLabByIdAsync(someLabId))
+                    .ThrowsAsync(exception);
+
+            // when
+            ValueTask<Lab> actualLabTask =
+                this.labOrchestrationService.RetrieveLabByIdAsync(someLabId);
+
+            LabOrchestrationServiceException actualLabOrchestrationServiceException =
+                await Assert.ThrowsAsync<LabOrchestrationServiceException>(
+                    actualLabTask.AsTask);
+
+            // then
+            actualLabOrchestrationServiceException.Should()
+                .BeEquivalentTo(expectedLabOrchestrationServiceException);
+
+            this.labServiceMock.Verify(broker =>
+                broker.RetrieveLabByIdAsync(someLabId),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabOrchestrationServiceException))), 
+                        Times.Once);
+
+            this.labServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.externalLabServiceMock.VerifyNoOtherCalls();
+        }
     }
 }
