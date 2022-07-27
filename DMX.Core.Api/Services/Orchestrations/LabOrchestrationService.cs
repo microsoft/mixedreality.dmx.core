@@ -133,5 +133,10 @@ namespace DMX.Core.Api.Services.Orchestrations
 
             return onlineDevices.Union(offlineDevices).Union(unregisteredDevices).ToList();
         }
+
+        public ValueTask<Lab> RetrieveLabByIdAsync(Guid labId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

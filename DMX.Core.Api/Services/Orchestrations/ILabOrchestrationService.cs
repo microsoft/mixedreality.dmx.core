@@ -14,5 +14,6 @@ namespace DMX.Core.Api.Services.Orchestrations
         public ValueTask<Lab> AddLabAsync(Lab lab);
         public ValueTask<List<Lab>> RetrieveAllLabsAsync();
         public ValueTask<Lab> RemoveLabByIdAsync(Guid labId);
+        public ValueTask<Lab> RetrieveLabByIdAsync(Guid labId);
     }
 }
