@@ -99,5 +99,48 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             this.externalLabServiceMock.VerifyNoOtherCalls();
         }
 
+        [Fact]
+        public async Task ShouldThrowOrchestrationServiceExceptionOnRemoveIfErrorOccursAndLogItAsync()
+        {
+            // given
+            Guid randomGuid = Guid.NewGuid();
+            string randomMessage = GetRandomString();
+            var exception = new Exception(randomMessage);
+
+            var failedLabOrchestrationServiceException =
+                new FailedLabOrchestrationServiceException(exception);
+
+            var expectedLabOrchestrationServiceException =
+                new LabOrchestrationServiceException(failedLabOrchestrationServiceException);
+
+            this.labServiceMock.Setup(service =>
+                service.RemoveLabByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(exception);
+            
+            // when
+            ValueTask<Lab> actualLabTask =
+                this.labOrchestrationService.RemoveLabByIdAsync(randomGuid);
+
+            LabOrchestrationServiceException actualLabOrchestrationServiceException =
+                await Assert.ThrowsAsync<LabOrchestrationServiceException>(
+                    actualLabTask.AsTask);
+
+            // then
+            actualLabOrchestrationServiceException.Should()
+                .BeEquivalentTo(expectedLabOrchestrationServiceException);
+
+            this.labServiceMock.Verify(service =>
+                service.RemoveLabByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabOrchestrationServiceException))),
+                        Times.Once);
+
+            this.labServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.externalLabServiceMock.VerifyNoOtherCalls();
+        }
     }
 }
