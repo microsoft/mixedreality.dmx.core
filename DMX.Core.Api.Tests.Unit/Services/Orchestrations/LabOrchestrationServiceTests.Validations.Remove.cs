@@ -16,19 +16,19 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
     public partial class LabOrchestrationServiceTests
     {
         [Fact]
-        public async Task ShouldThrowOrchestrationValidationExceptionOnAddIfLabIdIsInvalidAndLogItAsync()
+        public async Task ShouldThrowOrchestrationValidationExceptionOnRemoveIfLabIdIsInvalidAndLogItAsync()
         {
             // given
-            var inputGuid = Guid.Empty;
+            var emptyGuid = Guid.Empty;
             var invalidLabIdException =
-                new InvalidLabIdException(inputGuid);
+                new InvalidLabIdException(emptyGuid);
 
             var expectedLabOrchestrationValidationException =
                 new LabOrchestrationValidationException(invalidLabIdException);
 
             // when
             ValueTask<Lab> actualLabTask =
-                this.labOrchestrationService.RemoveLabByIdAsync(inputGuid);
+                this.labOrchestrationService.RemoveLabByIdAsync(emptyGuid);
 
             LabOrchestrationValidationException
                 actualLabOrchestrationValidationException =
@@ -40,7 +40,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                 .BeEquivalentTo(expectedLabOrchestrationValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is( SameExceptionAs(
+                broker.LogError(It.Is(SameExceptionAs(
                     expectedLabOrchestrationValidationException))),
                         Times.Once);
 
