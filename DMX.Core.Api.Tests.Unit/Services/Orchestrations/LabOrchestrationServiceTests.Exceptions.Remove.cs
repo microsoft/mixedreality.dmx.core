@@ -1,4 +1,8 @@
-﻿using System;
+﻿// ---------------------------------------------------------------
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// ---------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +24,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             Xeption validationException)
         {
             // given
-            Guid randomGuid = Guid.NewGuid();
+            Guid someLabId = Guid.NewGuid();
 
             var expectedLabOrchestrationDependencyValidationException =
                 new LabOrchestrationDependencyValidationException(
@@ -32,7 +36,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
 
             // when
             ValueTask<Lab> actualLabTask =
-                this.labOrchestrationService.RemoveLabByIdAsync(randomGuid);
+                this.labOrchestrationService.RemoveLabByIdAsync(someLabId);
 
             LabOrchestrationDependencyValidationException
                 actualLabOrchestrationDependencyValidationException =
@@ -63,7 +67,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             Xeption dependencyException)
         {
             // given
-            Guid someGuid = Guid.NewGuid();
+            Guid someLabId = Guid.NewGuid();
 
             var expectedLabOrchestrationDependencyException =
                 new LabOrchestrationDependencyException(
@@ -75,7 +79,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
 
             // when
             ValueTask<Lab> removeLabTask =
-                this.labOrchestrationService.RemoveLabByIdAsync(someGuid);
+                this.labOrchestrationService.RemoveLabByIdAsync(someLabId);
 
             LabOrchestrationDependencyException actualLabOrchestrationDependencyException =
                 await Assert.ThrowsAsync<LabOrchestrationDependencyException>(
@@ -103,7 +107,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
         public async Task ShouldThrowOrchestrationServiceExceptionOnRemoveIfErrorOccursAndLogItAsync()
         {
             // given
-            Guid randomGuid = Guid.NewGuid();
+            Guid someLabId = Guid.NewGuid();
             string randomMessage = GetRandomString();
             var exception = new Exception(randomMessage);
 
@@ -119,7 +123,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             
             // when
             ValueTask<Lab> actualLabTask =
-                this.labOrchestrationService.RemoveLabByIdAsync(randomGuid);
+                this.labOrchestrationService.RemoveLabByIdAsync(someLabId);
 
             LabOrchestrationServiceException actualLabOrchestrationServiceException =
                 await Assert.ThrowsAsync<LabOrchestrationServiceException>(

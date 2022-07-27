@@ -90,7 +90,6 @@ namespace DMX.Core.Api.Services.Orchestrations
 
             return await this.labService.RemoveLabByIdAsync(labId);
         });
-            
 
         private static void UpdateDeviceStatusForOnlineLabs(List<Lab> onlineLabs, List<Lab> externalOnlineLabs)
         {

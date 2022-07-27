@@ -19,16 +19,17 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
         public async Task ShouldThrowOrchestrationValidationExceptionOnRemoveIfLabIdIsInvalidAndLogItAsync()
         {
             // given
-            var emptyGuid = Guid.Empty;
+            var invalidLab = Guid.Empty;
+
             var invalidLabIdException =
-                new InvalidLabIdException(emptyGuid);
+                new InvalidLabIdException(invalidLab);
 
             var expectedLabOrchestrationValidationException =
                 new LabOrchestrationValidationException(invalidLabIdException);
 
             // when
             ValueTask<Lab> actualLabTask =
-                this.labOrchestrationService.RemoveLabByIdAsync(emptyGuid);
+                this.labOrchestrationService.RemoveLabByIdAsync(invalidLab);
 
             LabOrchestrationValidationException
                 actualLabOrchestrationValidationException =
