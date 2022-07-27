@@ -21,8 +21,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
         {
             // given
             Guid randomGuid = Guid.NewGuid();
-            Lab randomLab = CreateRandomLab();
-            Lab someLab = randomLab;
 
             var expectedLabOrchestrationDependencyValidationException =
                 new LabOrchestrationDependencyValidationException(
@@ -58,5 +56,48 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.externalLabServiceMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [MemberData(nameof(LabDependencyExceptions))]
+        public async Task ShouldThrowOrchestrationDependencyExceptionOnRemoveIfDependencyErrorOccursAndLogItAsync(
+            Xeption dependencyException)
+        {
+            // given
+            Guid someGuid = Guid.NewGuid();
+
+            var expectedLabOrchestrationDependencyException =
+                new LabOrchestrationDependencyException(
+                    dependencyException.InnerException as Xeption);
+
+            this.labServiceMock.Setup(service =>
+                service.RemoveLabByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(dependencyException);
+
+            // when
+            ValueTask<Lab> removeLabTask =
+                this.labOrchestrationService.RemoveLabByIdAsync(someGuid);
+
+            LabOrchestrationDependencyException actualLabOrchestrationDependencyException =
+                await Assert.ThrowsAsync<LabOrchestrationDependencyException>(
+                    removeLabTask.AsTask);
+
+            // then
+            actualLabOrchestrationDependencyException.Should()
+                .BeEquivalentTo(expectedLabOrchestrationDependencyException);
+
+            this.labServiceMock.Verify(service =>
+                service.RemoveLabByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabOrchestrationDependencyException))),
+                        Times.Once);
+
+            this.labServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.externalLabServiceMock.VerifyNoOtherCalls();
+        }
+
     }
 }
