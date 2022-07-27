@@ -59,6 +59,10 @@ namespace DMX.Core.Api.Services.Orchestrations
             {
                 throw CreateAndLogValidationException(nullLabException);
             }
+            catch (InvalidLabException invalidLabIdException)
+            {
+                throw CreateAndLogValidationException(invalidLabIdException);
+            }
             catch (LabValidationException labValidationException)
             {
                 throw CreateAndLogDependencyValidationException(labValidationException);

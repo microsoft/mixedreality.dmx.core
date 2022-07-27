@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -80,6 +81,14 @@ namespace DMX.Core.Api.Services.Orchestrations
 
 
             return onlineLabs.Union(offlineLabs).Union(unregisteredLabs).ToList();
+        });
+
+        public ValueTask<Lab> RemoveLabByIdAsync(Guid labId) =>
+        TryCatch(async () =>
+        {
+            ValidateLabId(labId);
+
+            return await this.labService.RemoveLabByIdAsync(labId);
         });
 
         private static void UpdateDeviceStatusForOnlineLabs(List<Lab> onlineLabs, List<Lab> externalOnlineLabs)

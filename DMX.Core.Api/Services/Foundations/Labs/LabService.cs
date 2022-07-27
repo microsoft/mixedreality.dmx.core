@@ -36,7 +36,7 @@ namespace DMX.Core.Api.Services.Foundations.Labs
         TryCatch(() => this.storageBroker.SelectAllLabsWithDevices());
 
         public ValueTask<Lab> RetrieveLabByIdAsync(Guid labId) =>
-        TryCatch(async () => 
+        TryCatch(async () =>
         {
             ValidateLabId(labId);
             Lab maybeLab = await this.storageBroker.SelectLabByIdAsync(labId);
@@ -44,7 +44,7 @@ namespace DMX.Core.Api.Services.Foundations.Labs
 
             return maybeLab;
         });
-        
+
         public ValueTask<Lab> RemoveLabByIdAsync(Guid labId) =>
         TryCatch(async () =>
         {
