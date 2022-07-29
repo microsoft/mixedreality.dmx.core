@@ -62,10 +62,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             // given
             Lab noLab = null;
             var someId = Guid.NewGuid();
-            var nullLabException = new NullLabException();
+            var notFoundLabException = new NotFoundLabException(someId);
 
             var expectedLabValidationException =
-                new LabValidationException(nullLabException);
+                new LabValidationException(notFoundLabException);
 
             storageBrokerMock.Setup(broker =>
                 broker.SelectLabByIdAsync(It.IsAny<Guid>()))
