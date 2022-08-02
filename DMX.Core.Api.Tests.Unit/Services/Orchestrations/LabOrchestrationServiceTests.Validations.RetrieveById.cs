@@ -16,11 +16,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
     public partial class LabOrchestrationServiceTests
     {
         [Fact]
-        public async Task ShouldThrowOrchestrationValidationExceptionOnRetrieveByIdIfLabIdIsInvalidAndLogItAsync()
+        public async Task ShouldThrowValidationExceptionOnRetrieveByIdIfLabIdIsInvalidAndLogItAsync()
         {
             // given
             var invalidLabId = Guid.Empty;
-            var invalidLabException = new InvalidLabException();
+            var invalidLabException = new InvalidLabOrchestrationException();
 
             invalidLabException.AddData(
                 key: nameof(Lab.Id),
