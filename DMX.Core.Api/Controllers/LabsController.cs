@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.Labs;
@@ -83,6 +84,47 @@ namespace DMX.Core.Api.Controllers
             catch (LabOrchestrationServiceException labOrchestrationServiceException)
             {
                 return InternalServerError(labOrchestrationServiceException);
+            }
+        }
+
+        [HttpDelete("{labId}")]
+#if RELEASE
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:DeleteLab")] 
+#endif
+        public async ValueTask<ActionResult<Lab>> DeleteLabByIdAsync(Guid labId)
+        {
+            try
+            {
+                Lab removedLab =
+                    await this.labOrchestrationService.RemoveLabByIdAsync(labId);
+
+                return Ok(removedLab);
+            }
+            catch (LabValidationException labValidationException)
+                when (labValidationException.InnerException is NotFoundLabException)
+            {
+                return NotFound(labValidationException.InnerException);
+            }
+            catch (LabValidationException labValidationException)
+            {
+                return BadRequest(labValidationException.InnerException);
+            }
+            catch (LabDependencyValidationException labDependencyValidationException)
+                when (labDependencyValidationException.InnerException is LockedLabException)
+            {
+                return Locked(labDependencyValidationException.InnerException);
+            }
+            catch (LabDependencyValidationException labDependencyValidationException)
+            {
+                return BadRequest(labDependencyValidationException);
+            }
+            catch (LabDependencyException labDependencyException)
+            {
+                return InternalServerError(labDependencyException);
+            }
+            catch (LabServiceException labServiceException)
+            {
+                return InternalServerError(labServiceException);
             }
         }
     }
