@@ -53,7 +53,7 @@ namespace DMX.Core.Api.Services.Foundations.Labs
             Lab maybeLab =
                 await this.storageBroker.SelectLabByIdAsync(labId);
 
-            ValidateLabIsNotNull(maybeLab);
+            ValidateLabExists(maybeLab, labId);
 
             return await this.storageBroker.DeleteLabAsync(maybeLab);
         });

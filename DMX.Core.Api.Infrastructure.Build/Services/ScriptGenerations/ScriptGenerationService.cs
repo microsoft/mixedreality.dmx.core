@@ -120,6 +120,7 @@ namespace DMX.Core.Api.Infrastructure.Build.Services.ScriptGenerations
                             { "AzureAdAppDmxCoreCallbackPath", "${{ secrets.AZURE_ADAPP_DMXCORE_CALLBACKPATH }}" },
                             { "AzureAdAppDmxCoreScopesGetAllLabs", "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_GETALLLABS }}" },
                             { "AzureAdAppDmxCoreScopesPostLab", "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_POSTLAB }}" },
+                            { "AzureAdAppDmxCoreScopesDeleteLab", "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_DELETELAB }}" },
                             { "AzureSqlServerAdminName", "${{ secrets.AZURE_SQLSERVER_ADMINNAME }}" },
                             { "AzureSqlServerAdminAccess", "${{ secrets.AZURE_SQLSERVER_ADMINACCESS }}" },
                             { "AzureAppServiceExternalLabApiUrl", "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_URL }}" },
