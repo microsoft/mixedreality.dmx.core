@@ -95,10 +95,10 @@ namespace DMX.Core.Api.Controllers
         {
             try
             {
-                Lab deletedLab =
+                Lab removedLab =
                     await this.labOrchestrationService.RemoveLabByIdAsync(labId);
 
-                return Ok(deletedLab);
+                return Ok(removedLab);
             }
             catch (LabValidationException labValidationException)
                 when (labValidationException.InnerException is NotFoundLabException)
@@ -127,6 +127,5 @@ namespace DMX.Core.Api.Controllers
                 return InternalServerError(labServiceException);
             }
         }
-
     }
 }
