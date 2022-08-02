@@ -21,12 +21,12 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             Guid randomLabId = Guid.NewGuid();
             Guid inputLabId = randomLabId;
             Lab randomLab = CreateRandomLab();
-            Lab selectedLab = randomLab;
-            Lab expectedLab = selectedLab.DeepClone();
+            Lab retrievedLab = randomLab;
+            Lab expectedLab = retrievedLab.DeepClone();
 
             this.labServiceMock.Setup(service =>
                 service.RetrieveLabByIdAsync(inputLabId))
-                    .ReturnsAsync(selectedLab);
+                    .ReturnsAsync(retrievedLab);
 
             // when
             Lab actualLab =
@@ -42,6 +42,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
 
             this.labServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.externalLabServiceMock.VerifyNoOtherCalls();
         }
     }
 }
