@@ -33,7 +33,7 @@ namespace DMX.Core.Api.Services.Orchestrations
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
-            var invalidLabException = new InvalidLabException();
+            var invalidLabException = new InvalidLabOrchestrationException();
 
             foreach ((dynamic rule, string parameter) in validations)
             {
