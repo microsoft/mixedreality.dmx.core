@@ -20,7 +20,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             // given
             Lab nullLab = null;
             Lab inputLab = nullLab;
-            var nullLabException = new NullLabException();
+            var nullLabException = new NullLabOrchestrationException();
 
             var expectedLabOrchestrationValidationException =
                 new LabOrchestrationValidationException(nullLabException);
