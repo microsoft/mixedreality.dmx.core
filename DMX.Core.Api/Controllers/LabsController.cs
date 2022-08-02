@@ -9,6 +9,7 @@ using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using DMX.Core.Api.Models.Orchestrations.Labs.Exceptions;
 using DMX.Core.Api.Services.Orchestrations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
@@ -27,7 +28,7 @@ namespace DMX.Core.Api.Controllers
 
         public LabsController(ILabOrchestrationService labOrchestrationService) =>
             this.labOrchestrationService = labOrchestrationService;
-        
+
         [HttpPost]
 #if RELEASE
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:PostLab")]

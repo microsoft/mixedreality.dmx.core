@@ -19,13 +19,17 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             // given
             Lab nullLab = null;
             Lab inputLab = nullLab;
-            var nullLabException = new NullLabOrchestrationException();
+
+            var nullLabOrchestrationException =
+                new NullLabOrchestrationException();
 
             var expectedLabOrchestrationValidationException =
-                new LabOrchestrationValidationException(nullLabException);
+                new LabOrchestrationValidationException(
+                    nullLabOrchestrationException);
 
             // when
-            ValueTask<Lab> addLabTask = this.labOrchestrationService.AddLabAsync(inputLab);
+            ValueTask<Lab> addLabTask =
+                this.labOrchestrationService.AddLabAsync(inputLab);
 
             LabOrchestrationValidationException actualLabOrchestrationValidationException =
                 await Assert.ThrowsAsync<LabOrchestrationValidationException>(
