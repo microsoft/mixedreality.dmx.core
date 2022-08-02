@@ -4,7 +4,6 @@
 
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.Labs;
-using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using DMX.Core.Api.Models.Orchestrations.Labs.Exceptions;
 using FluentAssertions;
 using Moq;

@@ -55,9 +55,9 @@ namespace DMX.Core.Api.Services.Orchestrations
             {
                 return await returningLabFunction();
             }
-            catch (NullLabException nullLabException)
+            catch (NullLabOrchestrationException nullLabOrchestrationException)
             {
-                throw CreateAndLogValidationException(nullLabException);
+                throw CreateAndLogValidationException(nullLabOrchestrationException);
             }
             catch (InvalidLabException invalidLabIdException)
             {

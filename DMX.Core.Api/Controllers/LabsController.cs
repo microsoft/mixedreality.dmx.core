@@ -24,7 +24,7 @@ namespace DMX.Core.Api.Controllers
 
         public LabsController(ILabOrchestrationService labOrchestrationService) =>
             this.labOrchestrationService = labOrchestrationService;
-
+        
         [HttpPost]
 #if RELEASE
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:PostLab")]
