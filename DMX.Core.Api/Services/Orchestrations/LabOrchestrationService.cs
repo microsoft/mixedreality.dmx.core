@@ -91,7 +91,6 @@ namespace DMX.Core.Api.Services.Orchestrations
             return await this.labService.RetrieveLabByIdAsync(labId);
         });
 
-
         public ValueTask<Lab> RemoveLabByIdAsync(Guid labId) =>
         TryCatch(async () =>
         {
