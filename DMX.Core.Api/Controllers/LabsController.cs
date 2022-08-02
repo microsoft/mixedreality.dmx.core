@@ -11,14 +11,15 @@ using DMX.Core.Api.Models.Orchestrations.Labs.Exceptions;
 using DMX.Core.Api.Services.Orchestrations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Web.Resource;
 using RESTFulSense.Controllers;
+
+#if RELEASE
+using Microsoft.Identity.Web.Resource;
+#endif
 
 namespace DMX.Core.Api.Controllers
 {
-#if RELEASE
     [Authorize]
-#endif
     [ApiController]
     [Route("api/[controller]")]
     public class LabsController : RESTFulController
