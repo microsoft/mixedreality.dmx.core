@@ -5,6 +5,7 @@
 using System;
 using DMX.Core.Api.Models.Foundations.Labs;
 using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
+using DMX.Core.Api.Models.Orchestrations.Labs.Exceptions;
 
 namespace DMX.Core.Api.Services.Orchestrations
 {
@@ -17,7 +18,7 @@ namespace DMX.Core.Api.Services.Orchestrations
         {
             if (lab is null)
             {
-                throw new NullLabException();
+                throw new NullLabOrchestrationException();
             }
         }
 
@@ -32,7 +33,7 @@ namespace DMX.Core.Api.Services.Orchestrations
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
-            var invalidLabException = new InvalidLabException();
+            var invalidLabException = new InvalidLabOrchestrationException();
 
             foreach ((dynamic rule, string parameter) in validations)
             {

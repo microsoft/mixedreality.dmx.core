@@ -83,6 +83,14 @@ namespace DMX.Core.Api.Services.Orchestrations
             return onlineLabs.Union(offlineLabs).Union(unregisteredLabs).ToList();
         });
 
+        public ValueTask<Lab> RetrieveLabByIdAsync(Guid labId) =>
+        TryCatch(async () =>
+        {
+            ValidateLabId(labId);
+
+            return await this.labService.RetrieveLabByIdAsync(labId);
+        });
+
         public ValueTask<Lab> RemoveLabByIdAsync(Guid labId) =>
         TryCatch(async () =>
         {

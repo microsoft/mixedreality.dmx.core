@@ -4,7 +4,6 @@
 
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.Labs;
-using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using DMX.Core.Api.Models.Orchestrations.Labs.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -20,13 +19,17 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
             // given
             Lab nullLab = null;
             Lab inputLab = nullLab;
-            var nullLabException = new NullLabException();
+
+            var nullLabOrchestrationException =
+                new NullLabOrchestrationException();
 
             var expectedLabOrchestrationValidationException =
-                new LabOrchestrationValidationException(nullLabException);
+                new LabOrchestrationValidationException(
+                    nullLabOrchestrationException);
 
             // when
-            ValueTask<Lab> addLabTask = this.labOrchestrationService.AddLabAsync(inputLab);
+            ValueTask<Lab> addLabTask =
+                this.labOrchestrationService.AddLabAsync(inputLab);
 
             LabOrchestrationValidationException actualLabOrchestrationValidationException =
                 await Assert.ThrowsAsync<LabOrchestrationValidationException>(
