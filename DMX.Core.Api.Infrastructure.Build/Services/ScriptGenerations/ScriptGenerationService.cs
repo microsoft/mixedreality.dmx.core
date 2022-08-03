@@ -124,7 +124,8 @@ namespace DMX.Core.Api.Infrastructure.Build.Services.ScriptGenerations
                             { "AzureSqlServerAdminName", "${{ secrets.AZURE_SQLSERVER_ADMINNAME }}" },
                             { "AzureSqlServerAdminAccess", "${{ secrets.AZURE_SQLSERVER_ADMINACCESS }}" },
                             { "AzureAppServiceExternalLabApiUrl", "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_URL }}" },
-                            { "AzureAppServiceExternalLabApiAccessKey", "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_ACCESSKEY }}" }
+                            { "AzureAppServiceExternalLabApiGetAllDevicesAccessKey", "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_GETALLDEVICES_ACCESSKEY }}" },
+                            { "AzureAppServiceExternalLabApiGetAvailableDevicesAccessKey", "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_GETAVAILABLEDEVICES_ACCESSKEY }}" }
                         },
 
                         Steps = new List<GithubTask>
