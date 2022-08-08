@@ -101,14 +101,18 @@ namespace DMX.Core.Api.Controllers
 
                 return Ok(lab);
             }
-            catch (LabOrchestrationValidationException labOrchestrationValidationException)
-                when (labOrchestrationValidationException.InnerException is NotFoundLabException)
+            catch (LabOrchestrationDependencyValidationException labOrchestrationDependencyValidationException)
+                when (labOrchestrationDependencyValidationException.InnerException is NotFoundLabException)
             {
-                return NotFound(labOrchestrationValidationException.InnerException);
+                return NotFound(labOrchestrationDependencyValidationException.InnerException);
             }
             catch (LabOrchestrationValidationException labOrchestrationValidationException)
             {
                 return BadRequest(labOrchestrationValidationException);
+            }
+            catch (LabOrchestrationDependencyValidationException labOrchestrationDependencyValidationException)
+            {
+                return BadRequest(labOrchestrationDependencyValidationException);
             }
             catch (LabOrchestrationDependencyException labOrchestrationDependencyException)
             {
