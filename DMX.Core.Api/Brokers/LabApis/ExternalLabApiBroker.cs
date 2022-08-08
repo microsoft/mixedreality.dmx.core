@@ -52,7 +52,6 @@ namespace DMX.Core.Api.Brokers.LabApis
             return localConfigurations.ApiConfigurations.GetAvailableDevicesAccessKey;
         }
 
-
         private static string GetAllDevicesAccessToken(IConfiguration configuration)
         {
             LocalConfigurations localConfigurations =
