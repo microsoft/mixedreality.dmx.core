@@ -88,7 +88,7 @@ namespace DMX.Core.Api.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("{labId}")]
 #if RELEASE
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:GetAllLabs")]
 #endif
