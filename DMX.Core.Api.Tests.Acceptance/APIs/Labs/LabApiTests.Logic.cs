@@ -11,13 +11,14 @@ using DMX.Core.Api.Tests.Acceptance.Models.Labs;
 using FluentAssertions;
 using Force.DeepCloner;
 using Newtonsoft.Json;
+using RESTFulSense.Exceptions;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using Xunit;
 
 namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
 {
-    public partial class ExternalLabApiTests
+    public partial class LabApiTests
     {
         [Fact(Skip = "ExternalLabsController removed. This logic to be reused for LabsController.")]
         public async Task ShouldRetrieveAvailableLabsAsync()
@@ -66,6 +67,27 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
 
             // then
             actualLabs.Should().BeEquivalentTo(expectedRandomLabs);
+        }
+
+        [Fact]
+        public async Task ShouldDeleteLabWithoutDevicesAsync()
+        {
+            // given
+            Lab randomLab = await PostRandomLabWithoutDevicesAsync();
+            Lab inputLab = randomLab;
+            Lab expectedLab = inputLab;
+
+            // when
+            Lab deletedLab =
+                await this.dmxCoreApiBroker.DeleteLabByIdAsync(inputLab.Id);
+
+            ValueTask<Lab> getLabByIdTask =
+                this.dmxCoreApiBroker.GetLabByIdAsync(inputLab.Id);
+
+            // then
+            deletedLab.Should().BeEquivalentTo(expectedLab);
+
+            await Assert.ThrowsAsync<HttpResponseNotFoundException>(getLabByIdTask.AsTask);
         }
     }
 }
