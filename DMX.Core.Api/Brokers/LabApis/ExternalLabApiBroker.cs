@@ -49,7 +49,7 @@ namespace DMX.Core.Api.Brokers.LabApis
             LocalConfigurations localConfigurations =
                 configuration.Get<LocalConfigurations>();
 
-            return localConfigurations.ApiConfigurations.GetAvailableDevicesAccessKey;
+            return localConfigurations.ApiConfigurations.AvailableDevicesAccessKey;
         }
 
         private static string GetAllDevicesAccessToken(IConfiguration configuration)
@@ -57,7 +57,7 @@ namespace DMX.Core.Api.Brokers.LabApis
             LocalConfigurations localConfigurations =
                 configuration.Get<LocalConfigurations>();
 
-            return localConfigurations.ApiConfigurations.GetAllDevicesAccessKey;
+            return localConfigurations.ApiConfigurations.AllDevicesAccessKey;
         }
 
         private static ExternalLabServiceInformation GetExternalLabServiceInformation(IConfiguration configuration) =>
