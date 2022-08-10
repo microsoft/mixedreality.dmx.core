@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System.Text.Json.Serialization;
+using DMX.Core.Api.Brokers.DateTimes;
 using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
@@ -78,6 +79,7 @@ namespace DMX.Core.Api
             services.AddTransient<ILoggingBroker, LoggingBroker>();
             services.AddTransient<IExternalLabApiBroker, ExternalLabApiBroker>();
             services.AddTransient<IStorageBroker, StorageBroker>();
+            services.AddTransient<IDateTimeBroker, DateTimeBroker>();
         }
 
         private static void AddFoundationServices(IServiceCollection services)
