@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -20,39 +21,43 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
 {
     public partial class LabApiTests
     {
-        [Fact(Skip = "ExternalLabsController removed. This logic to be reused for LabsController.")]
-        public async Task ShouldRetrieveAvailableLabsAsync()
+        [Fact]
+        public async Task ShouldRetrieveAllLabsAsync()
         {
             // given
-            List<dynamic> randomLabsData = CreateRandomLabsData();
+            List<Lab> randomLabsData = CreateRandomLabsData();
 
             var retrievedRandomExternalLabCollection = new ExternalLabCollection
             {
                 ExternalLabs = randomLabsData.Select(randomProperty =>
                     new ExternalLab
                     {
-                        Id = randomProperty.Id,
+                        Id = randomProperty.Name,
                         Name = randomProperty.Name,
-                        IsConnected = randomProperty.IsConnected,
-                        IsReserved = randomProperty.IsReserved,
-                        Properties = randomProperty.Properties
+                        IsConnected = true,
+                        IsReserved = false,
+                        Properties = new Dictionary<string, string>()
                     }).ToArray()
             };
 
-            string retrievedExternalRandomLabCollectionBody =
-                JsonConvert.SerializeObject(retrievedRandomExternalLabCollection);
-
-            List<Lab> randomLabs = randomLabsData.Select(randomProperty =>
+            List<Lab> randomExternalLabs = randomLabsData.Select(randomProperty =>
                 new Lab
                 {
-                    ExternalId = randomProperty.Id,
+                    ExternalId = randomProperty.Name,
                     Name = randomProperty.Name,
-                    Status = randomProperty.LabStatus,
-                    Devices = randomProperty.Devices,
+                    Status = LabStatus.Unregistered,
+                    Devices = new List<LabDevice>(),
                 }).ToList();
 
-            List<Lab> retrievedRandomLabs = randomLabs;
+            List<Lab> retrievedRandomLabs = randomExternalLabs;
             List<Lab> expectedRandomLabs = retrievedRandomLabs.DeepClone();
+            Lab randomPostedLab = await PostRandomLabWithoutDevicesAsync();
+            randomPostedLab.Devices = new List<LabDevice>();
+            randomPostedLab.Status = LabStatus.Offline;
+            expectedRandomLabs.Add(randomPostedLab.DeepClone());
+
+            string retrievedExternalRandomLabCollectionBody =
+                JsonConvert.SerializeObject(retrievedRandomExternalLabCollection);
 
             this.wireMockServer
                 .Given(Request.Create()
@@ -67,6 +72,8 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
 
             // then
             actualLabs.Should().BeEquivalentTo(expectedRandomLabs);
+            await this.dmxCoreApiBroker.DeleteLabByIdAsync(randomPostedLab.Id);
+            this.wireMockServer.Stop();
         }
 
         [Fact]
@@ -87,7 +94,10 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
             // then
             deletedLab.Should().BeEquivalentTo(expectedLab);
 
-            await Assert.ThrowsAsync<HttpResponseNotFoundException>(getLabByIdTask.AsTask);
+            await Assert.ThrowsAsync<HttpResponseNotFoundException>(
+                getLabByIdTask.AsTask);
+
+            this.wireMockServer.Stop();
         }
     }
 }
