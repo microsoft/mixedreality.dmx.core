@@ -16,16 +16,16 @@ namespace DMX.Core.Api.Brokers.LabApis
     {
         private readonly HttpClient httpClient;
         private readonly IRESTFulApiFactoryClient apiClient;
-        private readonly string getAllDevicesAccessKey;
-        private readonly string getAvailableDevicesAccessKey;
+        private readonly string allDevicesAccessKey;
+        private readonly string availableDevicesAccessKey;
         private readonly ExternalLabServiceInformation externalLabServiceInformation;
 
         public ExternalLabApiBroker(HttpClient httpClient, IConfiguration configuration)
         {
             this.httpClient = httpClient;
             this.apiClient = GetApiClient(configuration);
-            this.getAvailableDevicesAccessKey = GetAvailableDevicesAccessToken(configuration);
-            this.getAllDevicesAccessKey = GetAllDevicesAccessToken(configuration);
+            this.availableDevicesAccessKey = GetAvailableDevicesAccessToken(configuration);
+            this.allDevicesAccessKey = GetAllDevicesAccessToken(configuration);
             this.externalLabServiceInformation = GetExternalLabServiceInformation(configuration);
         }
 
@@ -49,16 +49,15 @@ namespace DMX.Core.Api.Brokers.LabApis
             LocalConfigurations localConfigurations =
                 configuration.Get<LocalConfigurations>();
 
-            return localConfigurations.ApiConfigurations.GetAvailableDevicesAccessKey;
+            return localConfigurations.ApiConfigurations.AvailableDevicesAccessKey;
         }
-
 
         private static string GetAllDevicesAccessToken(IConfiguration configuration)
         {
             LocalConfigurations localConfigurations =
                 configuration.Get<LocalConfigurations>();
 
-            return localConfigurations.ApiConfigurations.GetAllDevicesAccessKey;
+            return localConfigurations.ApiConfigurations.AllDevicesAccessKey;
         }
 
         private static ExternalLabServiceInformation GetExternalLabServiceInformation(IConfiguration configuration) =>
