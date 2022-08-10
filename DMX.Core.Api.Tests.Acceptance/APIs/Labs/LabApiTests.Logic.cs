@@ -72,9 +72,7 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
 
             // then
             actualLabs.Should().BeEquivalentTo(expectedRandomLabs);
-
             await this.dmxCoreApiBroker.DeleteLabByIdAsync(randomPostedLab.Id);
-
             this.wireMockServer.Stop();
         }
 
@@ -96,7 +94,8 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
             // then
             deletedLab.Should().BeEquivalentTo(expectedLab);
 
-            await Assert.ThrowsAsync<HttpResponseNotFoundException>(getLabByIdTask.AsTask);
+            await Assert.ThrowsAsync<HttpResponseNotFoundException>(
+                getLabByIdTask.AsTask);
 
             this.wireMockServer.Stop();
         }
