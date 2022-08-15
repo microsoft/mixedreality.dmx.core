@@ -4,12 +4,14 @@
 
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
+using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Services.Foundations.LabCommands;
 using Moq;
+using Tynamix.ObjectFiller;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 {
-    public class LabCommandServiceTests
+    public partial class LabCommandServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
@@ -24,5 +26,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                 storageBroker: this.storageBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        public static LabCommand CreateRandomLabCommand() =>
+            CreateLabCommandFiller().Create();
+
+        private static Filler<LabCommand> CreateLabCommandFiller() =>
+            new Filler<LabCommand>();
     }
 }
