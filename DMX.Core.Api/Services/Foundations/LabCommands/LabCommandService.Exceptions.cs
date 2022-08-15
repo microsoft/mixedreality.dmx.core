@@ -54,6 +54,23 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
 
                 throw CreateAndLogDependencyException(failedLabCommandStorageException);
             }
+            catch (Exception exception)
+            {
+                var failedLabCommandServiceException = 
+                    new FailedLabCommandServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLabCommandServiceException);
+            }
+        }
+
+        private Xeption CreateAndLogServiceException(Xeption exception)
+        {
+            var labCommandServiceException =
+                new LabCommandServiceException(exception);
+
+            this.loggingBroker.LogError(labCommandServiceException);
+
+            return labCommandServiceException;
         }
 
         private Xeption CreateAndLogDependencyException(Xeption exception)
