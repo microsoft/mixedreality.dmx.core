@@ -23,9 +23,9 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<LabCommand> AddLabCommandAsync(LabCommand labCommand)
+        public async ValueTask<LabCommand> AddLabCommandAsync(LabCommand labCommand)
         {
-            throw new NotImplementedException();
+            return await this.storageBroker.InsertLabCommandAsync(labCommand);
         }
     }
 }

@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Models.Foundations.LabCommands;
@@ -30,7 +31,18 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         public static LabCommand CreateRandomLabCommand() =>
             CreateLabCommandFiller().Create();
 
-        private static Filler<LabCommand> CreateLabCommandFiller() =>
-            new Filler<LabCommand>();
+        private static Filler<LabCommand> CreateLabCommandFiller()
+        {
+            var filler = new Filler<LabCommand>();
+
+            filler.Setup()
+                .OnType<DateTimeOffset>()
+                    .Use(GetRandomDateTimeOffset());
+
+            return filler;
+        }
+
+        private static DateTimeOffset GetRandomDateTimeOffset() =>
+            new DateTimeRange(earliestDate: new DateTime()).GetValue();
     }
 }
