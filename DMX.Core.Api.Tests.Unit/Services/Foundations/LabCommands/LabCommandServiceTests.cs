@@ -68,6 +68,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                 new IntRange(min: int.MinValue, max: int.MaxValue).GetValue();
         }
 
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
+
         private static SqlException GetSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
     }

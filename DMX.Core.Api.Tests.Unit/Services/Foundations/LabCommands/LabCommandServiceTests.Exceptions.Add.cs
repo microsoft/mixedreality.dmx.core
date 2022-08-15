@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
+using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
+using EFxceptions.Models.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
@@ -54,6 +56,51 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(
                     expectedLabCommandDependencyException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfLabCommandAlreadyExistsAndLogItAsync()
+        {
+            // given
+            LabCommand someLabCommand = CreateRandomLabCommand();
+            string someMessage = GetRandomString();
+
+            var duplicateKeyException =
+                new DuplicateKeyException(someMessage);
+
+            var alreadyExistsLabException =
+                new AlreadyExistsLabCommandException(duplicateKeyException);
+
+            var expectedLabCommandDependencyValidationException =
+                new LabCommandDependencyValidationException(alreadyExistsLabException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertLabCommandAsync(It.IsAny<LabCommand>()))
+                    .ThrowsAsync(duplicateKeyException);
+
+            // when
+            ValueTask<LabCommand> addLabCommandTask =
+                this.labCommandService.AddLabCommandAsync(someLabCommand);
+
+            LabCommandDependencyValidationException actualLabCommandDependencyValidationException =
+                await Assert.ThrowsAsync<LabCommandDependencyValidationException>(
+                    addLabCommandTask.AsTask);
+
+            // then
+            actualLabCommandDependencyValidationException.Should()
+                .BeEquivalentTo(expectedLabCommandDependencyValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabCommandAsync(It.IsAny<LabCommand>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabCommandDependencyValidationException))),
                         Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
