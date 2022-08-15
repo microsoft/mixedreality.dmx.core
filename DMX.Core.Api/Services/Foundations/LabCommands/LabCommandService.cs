@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Models.Foundations.LabCommands;
+using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 
 namespace DMX.Core.Api.Services.Foundations.LabCommands
 {
@@ -28,7 +29,12 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
         {
             ValidateLabCommandId(labCommandId);
 
-            return await this.storageBroker.SelectLabCommandByIdAsync(labCommandId);
+            LabCommand maybeLabCommand =
+                await this.storageBroker.SelectLabCommandByIdAsync(labCommandId);
+
+            ValidateLabCommandExists(maybeLabCommand, labCommandId);
+
+            return maybeLabCommand;
         });
     }
 }
