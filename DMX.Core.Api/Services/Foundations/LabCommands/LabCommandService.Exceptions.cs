@@ -9,6 +9,7 @@ using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace DMX.Core.Api.Services.Foundations.LabCommands
@@ -46,6 +47,23 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsLabException);
             }
+            catch (DbUpdateException dbUpdateException)
+            {
+                var failedLabCommandStorageException =
+                    new FailedLabCommandStorageException(dbUpdateException);
+
+                throw CreateAndLogDependencyException(failedLabCommandStorageException);
+            }
+        }
+
+        private Xeption CreateAndLogDependencyException(Xeption exception)
+        {
+            var labCommandDependencyException =
+                new LabCommandDependencyException(exception);
+
+            this.loggingBroker.LogError(labCommandDependencyException);
+
+            return labCommandDependencyException;
         }
 
         private Xeption CreateAndLogDependencyValidationException(Xeption exception)
