@@ -8,6 +8,6 @@ namespace DMX.Core.Api.Brokers.DateTimes
 {
     public interface IDateTimeBroker
     {
-        DateTimeOffset GetCurrentDateTime(); 
+        DateTimeOffset GetCurrentDateTime();
     }
 }
