@@ -88,6 +88,42 @@ namespace DMX.Core.Api.Controllers
             }
         }
 
+        [HttpGet("{labId}")]
+#if RELEASE
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:GetAllLabs")]
+#endif
+        public async ValueTask<ActionResult<Lab>> GetLabByIdAsync(Guid labId)
+        {
+            try
+            {
+                Lab lab =
+                    await this.labOrchestrationService.RetrieveLabByIdAsync(labId);
+
+                return Ok(lab);
+            }
+            catch (LabOrchestrationDependencyValidationException labOrchestrationDependencyValidationException)
+                when (labOrchestrationDependencyValidationException.InnerException is NotFoundLabException)
+            {
+                return NotFound(labOrchestrationDependencyValidationException.InnerException);
+            }
+            catch (LabOrchestrationValidationException labOrchestrationValidationException)
+            {
+                return BadRequest(labOrchestrationValidationException);
+            }
+            catch (LabOrchestrationDependencyValidationException labOrchestrationDependencyValidationException)
+            {
+                return BadRequest(labOrchestrationDependencyValidationException);
+            }
+            catch (LabOrchestrationDependencyException labOrchestrationDependencyException)
+            {
+                return InternalServerError(labOrchestrationDependencyException);
+            }
+            catch (LabOrchestrationServiceException labOrchestrationServiceException)
+            {
+                return InternalServerError(labOrchestrationServiceException);
+            }
+        }
+
         [HttpDelete("{labId}")]
 #if RELEASE
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:DeleteLab")] 

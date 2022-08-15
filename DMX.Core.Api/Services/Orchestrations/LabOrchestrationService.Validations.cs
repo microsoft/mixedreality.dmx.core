@@ -4,7 +4,6 @@
 
 using System;
 using DMX.Core.Api.Models.Foundations.Labs;
-using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using DMX.Core.Api.Models.Orchestrations.Labs.Exceptions;
 
 namespace DMX.Core.Api.Services.Orchestrations
