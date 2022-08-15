@@ -5,6 +5,7 @@
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
+using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -46,6 +47,67 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ShouldThrowValidationExceptionOnAddIfLabIsInvalidAndLogItAsync(
+    string invalidString)
+        {
+            // given
+            var invalidLabCommand = new LabCommand
+            {
+                Arguments = invalidString,
+                Notes = invalidString,
+                Results = invalidString
+            };
+
+            var invalidLabException = new InvalidLabCommandException();
+
+            invalidLabException.AddData(
+                key: nameof(LabCommand.Id),
+                values: "Id is required");
+
+            invalidLabException.AddData(
+                key: nameof(LabCommand.LabId),
+                values: "Id is required");
+
+            invalidLabException.AddData(
+                key: nameof(LabCommand.Arguments),
+                values: "Text is required");
+
+            invalidLabException.AddData(
+                key: nameof(LabCommand.Notes),
+                values: "Text is required");
+
+            var expectedLabCommandValidationException =
+                new LabCommandValidationException(invalidLabException);
+
+            // when
+            ValueTask<LabCommand> addLabCommandTask =
+                this.labCommandService.AddLabCommandAsync(invalidLabCommand);
+
+            LabCommandValidationException actualLabCommandValidationException =
+                await Assert.ThrowsAsync<LabCommandValidationException>(
+                    addLabCommandTask.AsTask);
+
+            // then
+            actualLabCommandValidationException.Should().BeEquivalentTo(
+                expectedLabCommandValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabCommandValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabCommandAsync(It.IsAny<LabCommand>()),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
