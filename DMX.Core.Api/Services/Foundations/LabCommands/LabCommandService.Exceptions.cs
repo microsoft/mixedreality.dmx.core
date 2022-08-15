@@ -94,7 +94,9 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
 
         private Xeption CreateAndLogCriticalDependencyException(Xeption exception)
         {
-            var labCommandDependencyException = new LabCommandDependencyException(exception);
+            var labCommandDependencyException =
+                new LabCommandDependencyException(exception);
+
             this.loggingBroker.LogCritical(labCommandDependencyException);
 
             return labCommandDependencyException;

@@ -9,10 +9,9 @@ namespace DMX.Core.Api.Models.Foundations.LabCommands.Exceptions
 {
     public class AlreadyExistsLabCommandException : Xeption
     {
-        public AlreadyExistsLabCommandException(Exception exception)
-            : base(message: "Lab Command with same Id already exists.",
-                  exception)
-        {
-        }
+        public AlreadyExistsLabCommandException(Exception innerException)
+            : base(message: "Lab command with same Id already exists.",
+                  innerException)
+        { }
     }
 }

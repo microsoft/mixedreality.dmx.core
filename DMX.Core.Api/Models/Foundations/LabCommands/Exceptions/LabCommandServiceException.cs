@@ -8,9 +8,9 @@ namespace DMX.Core.Api.Models.Foundations.LabCommands.Exceptions
 {
     public class LabCommandServiceException : Xeption
     {
-        public LabCommandServiceException(Xeption exception)
-            : base(message: "Lab Command service error occurred. Contact support.",
-                  exception)
+        public LabCommandServiceException(Xeption innerException)
+            : base(message: "Lab command service error occurred, please contact support.",
+                  innerException)
         { }
     }
 }
