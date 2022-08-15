@@ -110,8 +110,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             // given
             LabCommand someLabCommand = CreateRandomLabCommand();
 
-            var dbUpdateException =
-                new DbUpdateException();
+            var dbUpdateException = new DbUpdateException();
 
             var failedLabCommandStorageException =
                 new FailedLabCommandStorageException(dbUpdateException);
@@ -153,8 +152,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             // given
             LabCommand someLabCommand = CreateRandomLabCommand();
 
-            var exception =
-                new Exception();
+            var exception = new Exception();
 
             var failedLabCommandServiceException =
                 new FailedLabCommandServiceException(exception);

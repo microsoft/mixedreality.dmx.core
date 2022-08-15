@@ -52,7 +52,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         [InlineData("")]
         [InlineData(" ")]
         public async Task ShouldThrowValidationExceptionOnAddIfLabIsInvalidAndLogItAsync(
-    string invalidString)
+            string invalidString)
         {
             // given
             var invalidLabCommand = new LabCommand
