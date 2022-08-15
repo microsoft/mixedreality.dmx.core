@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
+using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using Xeptions;
 
 namespace DMX.Core.Api.Services.Foundations.LabCommands
@@ -24,6 +25,10 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             catch (NullLabCommandException nullLabCommandException)
             {
                 throw CreateAndLogValidationException(nullLabCommandException);
+            }
+            catch (InvalidLabCommandException invalidLabCommandException)
+            {
+                throw CreateAndLogValidationException(invalidLabCommandException);
             }
         }
 
