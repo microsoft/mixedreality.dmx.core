@@ -24,6 +24,11 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
         }
 
         public ValueTask<LabCommand> RetrieveLabCommandByIdAsync(Guid labCommandId) =>
-            this.storageBroker.SelectLabCommandByIdAsync(labCommandId);
+        TryCatch(async () =>
+        {
+            ValidateLabCommandId(labCommandId);
+
+            return await this.storageBroker.SelectLabCommandByIdAsync(labCommandId);
+        });
     }
 }
