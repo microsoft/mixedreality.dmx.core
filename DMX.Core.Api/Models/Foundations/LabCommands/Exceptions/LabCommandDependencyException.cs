@@ -8,8 +8,8 @@ namespace DMX.Core.Api.Models.Foundations.LabCommands.Exceptions
 {
     public class LabCommandDependencyException : Xeption
     {
-        public LabCommandDependencyException(Xeption exception)
-            : base(message: "Lab command dependency error occured. Please contact support.", exception)
+        public LabCommandDependencyException(Xeption innerException)
+            : base(message: "Lab command dependency error occured. Please contact support.", innerException)
         { }
     }
 }
