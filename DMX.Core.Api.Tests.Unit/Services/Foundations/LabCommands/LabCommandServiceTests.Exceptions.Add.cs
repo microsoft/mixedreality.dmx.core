@@ -150,5 +150,48 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccurredAndLogItAsync()
+        {
+            // given
+            LabCommand someLabCommand = CreateRandomLabCommand();
+
+            var exception =
+                new Exception();
+
+            var failedLabCommandServiceException =
+                new FailedLabCommandServiceException(exception);
+
+            var expectedLabCommandServiceException =
+                new LabCommandServiceException(failedLabCommandServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertLabCommandAsync(It.IsAny<LabCommand>()))
+                    .ThrowsAsync(exception);
+
+            // when
+            ValueTask<LabCommand> addLabCommandTask =
+                this.labCommandService.AddLabCommandAsync(someLabCommand);
+
+            LabCommandServiceException actualLabCommandServiceException =
+                await Assert.ThrowsAsync<LabCommandServiceException>(addLabCommandTask.AsTask);
+
+            // then
+            actualLabCommandServiceException.Should()
+                .BeEquivalentTo(expectedLabCommandServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabCommandAsync(It.IsAny<LabCommand>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabCommandServiceException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
