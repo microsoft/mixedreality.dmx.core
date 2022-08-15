@@ -6,7 +6,6 @@ using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
-using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -56,7 +55,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             }
             catch (Exception exception)
             {
-                var failedLabCommandServiceException = 
+                var failedLabCommandServiceException =
                     new FailedLabCommandServiceException(exception);
 
                 throw CreateAndLogServiceException(failedLabCommandServiceException);
