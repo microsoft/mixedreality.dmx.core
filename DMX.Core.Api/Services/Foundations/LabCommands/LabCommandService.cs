@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Models.Foundations.LabCommands;
-using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 
 namespace DMX.Core.Api.Services.Foundations.LabCommands
 {
