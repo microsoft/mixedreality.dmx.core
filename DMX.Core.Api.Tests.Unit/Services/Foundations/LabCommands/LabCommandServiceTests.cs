@@ -3,12 +3,15 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Linq.Expressions;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Services.Foundations.LabCommands;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
+using Xunit.Sdk;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 {
@@ -44,5 +47,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
+
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption exception) =>
+            actualException => actualException.SameExceptionAs(exception);
     }
 }
