@@ -2,9 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using System;
 using System.Threading.Tasks;
-using DMX.Core.Api.Tests.Acceptance.Models.Labs;
 
 namespace DMX.Core.Api.Tests.Acceptance.Brokers
 {
