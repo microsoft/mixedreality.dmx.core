@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,13 @@ namespace DMX.Core.Api.Brokers.Storages
             await broker.SaveChangesAsync();
 
             return labCommandEntityEntry.Entity;
+        }
+
+        public async ValueTask<LabCommand> SelectLabCommandByIdAsync(Guid labCommandId)
+        {
+            var broker = new StorageBroker(this.configuration);
+
+            return await broker.LabCommands.FindAsync(labCommandId);
         }
     }
 }
