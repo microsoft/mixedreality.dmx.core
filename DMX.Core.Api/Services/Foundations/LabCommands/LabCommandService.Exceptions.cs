@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
+using Microsoft.Data.SqlClient;
 using Xeptions;
 
 namespace DMX.Core.Api.Services.Foundations.LabCommands
@@ -30,6 +31,21 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             {
                 throw CreateAndLogValidationException(invalidLabCommandException);
             }
+            catch (SqlException sqlException)
+            {
+                var failedLabCommandStorageException = 
+                    new FailedLabCommandStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedLabCommandStorageException);
+            }
+        }
+
+        private Xeption CreateAndLogCriticalDependencyException(Xeption exception)
+        {
+            var labCommandDependencyException = new LabCommandDependencyException(exception);
+            this.loggingBroker.LogCritical(labCommandDependencyException);
+
+            return labCommandDependencyException;
         }
 
         private Xeption CreateAndLogValidationException(Xeption exception)
