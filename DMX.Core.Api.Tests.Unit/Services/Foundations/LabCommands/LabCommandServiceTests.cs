@@ -13,7 +13,6 @@ using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
-using Xunit.Sdk;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 {
@@ -57,7 +56,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         {
             int randomNumber = GetRandomNumber();
 
-            while(Enum.IsDefined(typeof(T), randomNumber))
+            while (Enum.IsDefined(typeof(T), randomNumber))
             {
                 randomNumber = GetRandomNumber();
             }

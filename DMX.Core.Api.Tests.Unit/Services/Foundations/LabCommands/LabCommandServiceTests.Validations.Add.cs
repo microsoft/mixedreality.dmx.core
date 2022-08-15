@@ -8,7 +8,6 @@ using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xunit;
-using Xunit.Sdk;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 {
@@ -124,7 +123,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             invalidLabException.AddData(
                 nameof(LabCommand.Status),
                 "Value is not recognized");
-            
+
             invalidLabException.AddData(
                 nameof(LabCommand.Type),
                 "Value is not recognized");

@@ -3,12 +3,8 @@
 // ---------------------------------------------------------------
 
 using System;
-using System.Data;
-using System.Diagnostics.CodeAnalysis;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
-using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
-using Microsoft.IdentityModel.Tokens;
 using CommandType = DMX.Core.Api.Models.Foundations.LabCommands.CommandType;
 
 namespace DMX.Core.Api.Services.Foundations.LabCommands
@@ -47,26 +43,26 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             Condition = id == Guid.Empty,
             Message = "Id is required"
         };
-        
+
         private static dynamic IsInvalid(CommandStatus status) => new
         {
             Condition = Enum.IsDefined(status) is false,
             Message = "Value is not recognized"
         };
-        
+
         private static dynamic IsInvalid(CommandType type) => new
         {
             Condition = Enum.IsDefined(type) is false,
             Message = "Value is not recognized"
         };
 
-        private static void Validate(params (dynamic Rule,string Parameter)[] validations)
+        private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidLabCommandException = new InvalidLabCommandException();
 
-            foreach((dynamic rule, string parameter) in validations)
+            foreach ((dynamic rule, string parameter) in validations)
             {
-                if(rule.Condition)
+                if (rule.Condition)
                 {
                     invalidLabCommandException.UpsertDataList(
                         key: parameter,
