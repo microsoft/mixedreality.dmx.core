@@ -109,5 +109,53 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnAddIfLabCommandStatusOrTypeIsInvalidAndLogItAsync()
+        {
+            // given
+            LabCommand randomLabCommand = CreateRandomLabCommand();
+            LabCommand invalidLabCommand = randomLabCommand;
+            invalidLabCommand.Status = GetInvalidEnum<CommandStatus>();
+            invalidLabCommand.Type = GetInvalidEnum<CommandType>();
+
+            var invalidLabException =
+                new InvalidLabCommandException();
+
+            invalidLabException.AddData(
+                nameof(LabCommand.Status),
+                "Value is not recognized");
+            
+            invalidLabException.AddData(
+                nameof(LabCommand.Type),
+                "Value is not recognized");
+
+            var expectedLabCommandValidationException =
+                new LabCommandValidationException(invalidLabException);
+
+            // when
+            ValueTask<LabCommand> addLabCommandTask =
+                this.labCommandService.AddLabCommandAsync(invalidLabCommand);
+
+            LabCommandValidationException actualLabCommandValidationException =
+                await Assert.ThrowsAsync<LabCommandValidationException>(
+                    addLabCommandTask.AsTask);
+
+            // then
+            actualLabCommandValidationException.Should().BeEquivalentTo(
+                expectedLabCommandValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabCommandValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabCommandAsync(It.IsAny<LabCommand>()),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }

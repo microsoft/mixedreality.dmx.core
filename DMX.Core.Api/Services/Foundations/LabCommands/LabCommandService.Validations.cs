@@ -51,13 +51,13 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
         private static dynamic IsInvalid(CommandStatus status) => new
         {
             Condition = Enum.IsDefined(status) is false,
-            Message = "Value is not recognised"
+            Message = "Value is not recognized"
         };
         
         private static dynamic IsInvalid(CommandType type) => new
         {
             Condition = Enum.IsDefined(type) is false,
-            Message = "Value is not recognised"
+            Message = "Value is not recognized"
         };
 
         private static void Validate(params (dynamic Rule,string Parameter)[] validations)
