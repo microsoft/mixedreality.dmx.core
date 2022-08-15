@@ -5,7 +5,6 @@
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
-using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xunit;
