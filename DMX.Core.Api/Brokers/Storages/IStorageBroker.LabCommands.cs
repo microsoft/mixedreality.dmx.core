@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------------
+// ---------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
@@ -12,5 +12,6 @@ namespace DMX.Core.Api.Brokers.Storages
     {
         ValueTask<LabCommand> InsertLabCommandAsync(LabCommand labCommand);
         ValueTask<LabCommand> SelectLabCommandByIdAsync(Guid labCommandId);
+        ValueTask<LabCommand> UpdateLabCommandAsync(LabCommand command);
     }
 }
