@@ -13,7 +13,7 @@ namespace DMX.Core.Api.Brokers.Storages
     {
         public DbSet<LabCommand> LabCommands { get; set; }
 
-        public async ValueTask<LabCommand> InsertLabCommand(LabCommand command)
+        public async ValueTask<LabCommand> InsertLabCommandAsync(LabCommand command)
         {
             var broker = new StorageBroker(this.configuration);
 
