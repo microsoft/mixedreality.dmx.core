@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
@@ -34,6 +35,12 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
 
                 throw CreateAndLogDepedendencyException(failedLabCommandStorageException);
             }
+            catch (Exception exception)
+            {
+                var failedLabCommandServiceException = new FailedLabCommandServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLabCommandServiceException);
+            }
         }
 
         private LabCommandValidationException CreateAndLogValidationException(Xeption exception)
@@ -50,6 +57,14 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             this.loggingBroker.LogCritical(labCommandDependencyException);
 
             return labCommandDependencyException;
+        }
+
+        private Exception CreateAndLogServiceException(Xeption exception)
+        {
+            var LabCommandServiceException = new LabCommandServiceException(exception);
+            this.loggingBroker.LogError(exception: LabCommandServiceException);
+
+            return LabCommandServiceException;
         }
     }
 }
