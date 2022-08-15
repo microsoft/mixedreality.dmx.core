@@ -24,6 +24,6 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
         }
 
         public ValueTask<LabCommand> RetrieveLabCommandByIdAsync(Guid labCommandId) =>
-            throw new NotImplementedException();
+            this.storageBroker.SelectLabCommandByIdAsync(labCommandId);
     }
 }

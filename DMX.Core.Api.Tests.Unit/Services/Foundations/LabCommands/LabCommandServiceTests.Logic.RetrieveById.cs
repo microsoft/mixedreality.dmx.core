@@ -36,7 +36,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             actualLabCommand.Should().BeEquivalentTo(expectedLabCommand);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLabByIdAsync(inputLabCommandId),
+                broker.SelectLabCommandByIdAsync(inputLabCommandId),
                     Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
