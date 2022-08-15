@@ -24,5 +24,17 @@ namespace DMX.Core.Api.Brokers.Storages
 
             return labCommandEntityEntry.Entity;
         }
+
+        public async ValueTask<LabCommand> InsertLabCommandAsync(LabCommand command)
+        {
+            var broker = new StorageBroker(this.configuration);
+
+            EntityEntry<LabCommand> labCommandEntityEntry =
+                await broker.LabCommands.AddAsync(command);
+
+            await broker.SaveChangesAsync();
+
+            return labCommandEntityEntry.Entity;
+        }
     }
 }
