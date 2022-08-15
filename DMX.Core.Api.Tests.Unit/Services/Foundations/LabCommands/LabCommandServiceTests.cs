@@ -4,10 +4,12 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Services.Foundations.LabCommands;
+using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -35,6 +37,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
         private static LabCommand CreateRandomLabCommand() =>
             GetLabCommandFiller().Create();
+
+        private static SqlException GetSqlException() =>
+            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
         private static Filler<LabCommand> GetLabCommandFiller()
         {
