@@ -3,6 +3,8 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using CommandType = DMX.Core.Api.Models.Foundations.LabCommands.CommandType;
@@ -23,11 +25,15 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 (Rule: IsInvalid(labCommand.Type), Parameter: nameof(LabCommand.Type)),
                 (Rule: IsInvalid(labCommand.CreatedDate), Parameter: nameof(LabCommand.CreatedDate)),
                 (Rule: IsInvalid(labCommand.UpdatedDate), Parameter: nameof(LabCommand.UpdatedDate)),
+
                 (Rule: IsNotSame(
                     labCommand.UpdatedDate,
                     labCommand.CreatedDate,
                     nameof(LabCommand.CreatedDate)),
-                Parameter: nameof(LabCommand.UpdatedDate)));
+                Parameter: nameof(LabCommand.UpdatedDate)),
+
+                (Rule: IsNotRecent(labCommand.CreatedDate), Parameter: nameof(LabCommand.CreatedDate))
+                );
         }
 
         private void ValidateLabCommandIsNotNull(LabCommand labCommand)
@@ -76,6 +82,23 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 Condition = firstDate != secondDate,
                 Message = $"Date is not the same as {nameOfSecondDate}"
             };
+
+        private dynamic IsNotRecent(DateTimeOffset date) => new
+        {
+            Condition = IsDateNotRecent(date),
+            Message = "Date is not recent"
+        };
+
+        private bool IsDateNotRecent(DateTimeOffset date)
+        {
+            DateTimeOffset currentDateTime =
+                this.dateTimeBroker.GetCurrentDateTime();
+
+            TimeSpan timeDifference = currentDateTime.Subtract(date);
+            TimeSpan oneMinute = TimeSpan.FromMinutes(1);
+
+            return timeDifference.Duration() > oneMinute;
+        }
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
