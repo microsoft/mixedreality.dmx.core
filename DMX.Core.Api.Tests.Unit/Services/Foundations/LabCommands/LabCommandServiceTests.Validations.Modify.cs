@@ -73,14 +73,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                 values: "Text is required");
             
             invalidLabCommandException.AddData(
-                key: nameof(LabCommand.Notes),
-                values: "Text is required");
-
-            invalidLabCommandException.AddData(
-                key: nameof(LabCommand.Results),
-                values: "Text is required");
-
-            invalidLabCommandException.AddData(
                 key: nameof(LabCommand.Id),
                 values: "Id is required");
 

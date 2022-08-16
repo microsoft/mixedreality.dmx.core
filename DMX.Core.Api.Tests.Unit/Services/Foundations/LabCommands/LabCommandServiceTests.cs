@@ -74,7 +74,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
         private static LabCommand CreateRandomLabCommand() =>
-            CreateLabCommandFiller(new DateTimeOffset()).Create();
+            CreateLabCommandFiller(GetRandomDateTimeOffset()).Create();
 
         private static LabCommand CreateRandomLabCommand(DateTimeOffset date) =>
             CreateLabCommandFiller(date).Create();

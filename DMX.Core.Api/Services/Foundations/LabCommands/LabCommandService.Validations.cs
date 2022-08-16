@@ -36,6 +36,15 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
         private void ValidateLabCommandOnModify(LabCommand labCommand)
         {
             ValidateLabCommandIsNotNull(labCommand);
+
+            Validate(
+                (Rule: IsInvalid(labCommand.Id), Parameter: nameof(LabCommand.Id)),
+                (Rule: IsInvalid(labCommand.LabId), Parameter: nameof(LabCommand.LabId)),
+                (Rule: IsInvalid(labCommand.Arguments), Parameter: nameof(LabCommand.Arguments)),
+                (Rule: IsInvalid(labCommand.CreatedDate), Parameter: nameof(LabCommand.CreatedDate)),
+                (Rule: IsInvalid(labCommand.UpdatedDate), Parameter: nameof(LabCommand.UpdatedDate)),
+                (Rule: IsInvalid(labCommand.CreatedBy), Parameter: nameof(LabCommand.CreatedBy)),
+                (Rule: IsInvalid(labCommand.UpdatedBy), Parameter: nameof(LabCommand.UpdatedBy)));
         }
 
         private static void ValidateLabCommandId(Guid labCommandId) =>
@@ -67,6 +76,12 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
         {
             Condition = id == Guid.Empty,
             Message = "Id is required"
+        };
+
+        private static dynamic IsInvalid(ulong userId) => new
+        {
+            Condition = userId == default,
+            Message = "User is required"
         };
 
         private static dynamic IsInvalid(CommandStatus status) => new
