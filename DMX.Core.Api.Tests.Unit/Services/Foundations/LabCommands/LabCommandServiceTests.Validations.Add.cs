@@ -28,7 +28,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             ValueTask<LabCommand> addLabCommandTask =
                 this.labCommandService.AddLabCommandAsync(nullCommand);
 
-            var actualLabCommandValidationException =
+            LabCommandValidationException actualLabCommandValidationException =
                 await Assert.ThrowsAsync<LabCommandValidationException>(addLabCommandTask.AsTask);
 
             // then
@@ -40,11 +40,16 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                     expectedLabCommandValidationException))),
                         Times.Once);
 
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                        Times.Never);
+
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLabCommandAsync(It.IsAny<LabCommand>()),
                     Times.Never);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
 
@@ -77,12 +82,12 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                 values: "Text is required");
 
             invalidLabException.AddData(
-                nameof(LabCommand.CreatedDate),
-                "Date is required");
+                key: nameof(LabCommand.CreatedDate),
+                values: "Date is required");
 
             invalidLabException.AddData(
-                nameof(LabCommand.UpdatedDate),
-                "Date is required");
+                key: nameof(LabCommand.UpdatedDate),
+                values: "Date is required");
 
             var expectedLabCommandValidationException =
                 new LabCommandValidationException(invalidLabException);
@@ -104,11 +109,16 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                     expectedLabCommandValidationException))),
                         Times.Once);
 
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                        Times.Once);
+
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLabCommandAsync(It.IsAny<LabCommand>()),
                     Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
 
@@ -130,12 +140,12 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                 new InvalidLabCommandException();
 
             invalidLabException.AddData(
-                nameof(LabCommand.Status),
-                "Value is not recognized");
+                key: nameof(LabCommand.Status),
+                values: "Value is not recognized");
 
             invalidLabException.AddData(
-                nameof(LabCommand.Type),
-                "Value is not recognized");
+                key: nameof(LabCommand.Type),
+                values: "Value is not recognized");
 
             var expectedLabCommandValidationException =
                 new LabCommandValidationException(invalidLabException);
@@ -157,11 +167,16 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                     expectedLabCommandValidationException))),
                         Times.Once);
 
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                        Times.Once);
+
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLabCommandAsync(It.IsAny<LabCommand>()),
                     Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
 
@@ -185,8 +200,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                 new InvalidLabCommandException();
 
             invalidLabCommandException.AddData(
-                nameof(LabCommand.UpdatedDate),
-                $"Date is not the same as {nameof(LabCommand.CreatedDate)}");
+                key: nameof(LabCommand.UpdatedDate),
+                values: $"Date is not the same as {nameof(LabCommand.CreatedDate)}");
 
             var expectedLabCommandValidationException =
                 new LabCommandValidationException(invalidLabCommandException);
@@ -195,11 +210,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             ValueTask<LabCommand> addLabCommandTask =
                 this.labCommandService.AddLabCommandAsync(invalidLabCommand);
 
-            // then
             LabCommandValidationException actualLabCommandValidationException =
                 await Assert.ThrowsAsync<LabCommandValidationException>(
                     addLabCommandTask.AsTask);
 
+            // then
             actualLabCommandValidationException.Should().BeEquivalentTo(
                 expectedLabCommandValidationException);
 
@@ -208,11 +223,16 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                     expectedLabCommandValidationException))),
                         Times.Once);
 
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                        Times.Once);
+
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLabCommandAsync(It.IsAny<LabCommand>()),
                     Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
 
@@ -224,13 +244,12 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             // given
             DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
             var invalidDateTime = randomDateTime.AddMinutes(randomMinutes);
-
             LabCommand randomLabCommand = CreateRandomLabCommand();
             LabCommand invalidLabCommand = randomLabCommand;
             randomLabCommand.CreatedDate = invalidDateTime;
             randomLabCommand.UpdatedDate = invalidDateTime;
 
-            InvalidLabCommandException invalidLabCommandException =
+            var invalidLabCommandException =
                 new InvalidLabCommandException();
 
             invalidLabCommandException.AddData(
@@ -248,11 +267,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             ValueTask<LabCommand> addLabCommandTask =
                 this.labCommandService.AddLabCommandAsync(invalidLabCommand);
 
-            // then
             LabCommandValidationException actualLabCommandValidationException =
                 await Assert.ThrowsAsync<LabCommandValidationException>(
                     addLabCommandTask.AsTask);
 
+            // then
             actualLabCommandValidationException.Should().BeEquivalentTo(
                 expectedLabCommandValidationException);
 
@@ -270,9 +289,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                     Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
-            this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
-
+            this.storageBrokerMock.VerifyNoOtherCalls();
         }
     }
 }

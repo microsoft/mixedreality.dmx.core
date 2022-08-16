@@ -25,6 +25,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             this.dateTimeBroker = dateTimeBroker;
             this.loggingBroker = loggingBroker;
         }
+
         public ValueTask<LabCommand> AddLabCommandAsync(LabCommand labCommand) =>
         TryCatch(async () =>
         {
