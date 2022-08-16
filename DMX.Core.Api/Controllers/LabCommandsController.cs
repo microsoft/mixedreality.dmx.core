@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
-using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using DMX.Core.Api.Services.Foundations.LabCommands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +46,7 @@ namespace DMX.Core.Api.Controllers
                 return InternalServerError(labCommandDependencyException);
             }
             catch (LabCommandDependencyValidationException labCommandDependencyValidationException)
-                when (labCommandDependencyValidationException.InnerException is AlreadyExistsLabException)
+                when (labCommandDependencyValidationException.InnerException is AlreadyExistsLabCommandException)
             {
                 return Conflict(labCommandDependencyValidationException.InnerException);
             }
