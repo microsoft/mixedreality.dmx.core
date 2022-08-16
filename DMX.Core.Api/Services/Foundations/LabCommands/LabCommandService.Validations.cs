@@ -4,6 +4,7 @@
 
 using System;
 using System.Data;
+using System.Reflection.Metadata;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using CommandType = DMX.Core.Api.Models.Foundations.LabCommands.CommandType;
@@ -23,7 +24,12 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 (Rule: IsInvalid(labCommand.Status), Parameter: nameof(LabCommand.Status)),
                 (Rule: IsInvalid(labCommand.Type), Parameter: nameof(LabCommand.Type)),
                 (Rule: IsInvalid(labCommand.CreatedDate), Parameter: nameof(LabCommand.CreatedDate)),
-                (Rule: IsInvalid(labCommand.UpdatedDate), Parameter: nameof(LabCommand.UpdatedDate)));
+                (Rule: IsInvalid(labCommand.UpdatedDate), Parameter: nameof(LabCommand.UpdatedDate)),
+                (Rule: IsNotSame(
+                    labCommand.UpdatedDate,
+                    labCommand.CreatedDate,
+                    nameof(LabCommand.CreatedDate)), 
+                Parameter: nameof(LabCommand.UpdatedDate)));
         }
 
         private void ValidateLabCommandIsNotNull(LabCommand labCommand)
@@ -63,6 +69,15 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             Condition = date == default,
             Message = "Date is required"
         };
+
+        private static dynamic IsNotSame(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string nameOfSecondDate) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not the same as {nameOfSecondDate}"
+            };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
