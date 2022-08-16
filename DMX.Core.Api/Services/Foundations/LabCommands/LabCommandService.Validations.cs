@@ -33,6 +33,11 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 (Rule: IsNotRecent(labCommand.CreatedDate), Parameter: nameof(LabCommand.CreatedDate)));
         }
 
+        private void ValidateLabCommandOnModify(LabCommand labCommand)
+        {
+            ValidateLabCommandIsNotNull(labCommand);
+        }
+
         private static void ValidateLabCommandId(Guid labCommandId) =>
             Validate((Rule: IsInvalid(labCommandId), Parameter: nameof(LabCommand.Id)));
 

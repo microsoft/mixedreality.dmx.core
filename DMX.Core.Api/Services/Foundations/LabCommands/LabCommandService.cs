@@ -47,11 +47,13 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             return maybeLabCommand;
         });
 
-        public async ValueTask<LabCommand> ModifyLabCommandAsync(LabCommand labCommand)
+        public ValueTask<LabCommand> ModifyLabCommandAsync(LabCommand labCommand) =>
+        TryCatch(async () =>
         {
+            ValidateLabCommandOnModify(labCommand);
             var maybeLabCommand = await this.storageBroker.SelectLabCommandByIdAsync(labCommand.Id);
 
             return await this.storageBroker.UpdateLabCommandAsync(maybeLabCommand);
-        }
+        });
     }
 }
