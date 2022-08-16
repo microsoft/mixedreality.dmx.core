@@ -42,7 +42,9 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 (Rule: IsInvalid(labCommand.LabId), Parameter: nameof(LabCommand.LabId)),
                 (Rule: IsInvalid(labCommand.Arguments), Parameter: nameof(LabCommand.Arguments)),
                 (Rule: IsInvalid(labCommand.CreatedDate), Parameter: nameof(LabCommand.CreatedDate)),
-                (Rule: IsInvalid(labCommand.UpdatedDate), Parameter: nameof(LabCommand.UpdatedDate)));
+                (Rule: IsInvalid(labCommand.UpdatedDate), Parameter: nameof(LabCommand.UpdatedDate)),
+                (Rule: IsInvalid(labCommand.Status), Parameter: nameof(LabCommand.Status)),
+                (Rule: IsInvalid(labCommand.Type), Parameter: nameof(LabCommand.Type)));
         }
 
         private static void ValidateLabCommandId(Guid labCommandId) =>
