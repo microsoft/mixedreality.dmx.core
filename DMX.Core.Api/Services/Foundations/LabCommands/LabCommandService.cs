@@ -35,5 +35,8 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
 
             return maybeLabCommand;
         });
+
+        public ValueTask<LabCommand> ModifyLabCommandAsync(LabCommand labCommand) =>
+            throw new NotImplementedException();
     }
 }

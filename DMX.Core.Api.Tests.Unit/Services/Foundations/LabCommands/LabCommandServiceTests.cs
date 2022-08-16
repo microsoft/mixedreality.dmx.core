@@ -5,6 +5,7 @@
 using System;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
+using DMX.Core.Api.Brokers.DateTimes;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Models.Foundations.LabCommands;
@@ -20,12 +21,14 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
+        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly ILabCommandService labCommandService;
 
         public LabCommandServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
+            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
 
             this.labCommandService = new LabCommandService(
                 storageBroker: this.storageBrokerMock.Object,
@@ -36,23 +39,26 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             actualException => actualException.SameExceptionAs(exptectedException);
 
         private static LabCommand CreateRandomLabCommand() =>
-            GetLabCommandFiller().Create();
+            GetLabCommandFiller(GetRandomDateTimeOffset()).Create();
 
         private static SqlException GetSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
-        private static Filler<LabCommand> GetLabCommandFiller()
+        private static Filler<LabCommand> GetLabCommandFiller(DateTimeOffset dateTimeOffset)
         {
             var filler = new Filler<LabCommand>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>()
-                    .Use(GetRandomDateTimeOffset());
+                    .Use(dateTimeOffset);
 
             return filler;
         }
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
+
+        private static DateTimeOffset GetRandomDateTimeOffset(DateTimeOffset earliestDate) =>
+            new DateTimeRange(earliestDate: earliestDate.DateTime).GetValue();
     }
 }
