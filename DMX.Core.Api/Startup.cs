@@ -8,6 +8,7 @@ using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Services.Foundations.ExternalLabs;
+using DMX.Core.Api.Services.Foundations.LabCommands;
 using DMX.Core.Api.Services.Foundations.Labs;
 using DMX.Core.Api.Services.Orchestrations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -86,6 +87,7 @@ namespace DMX.Core.Api
         {
             services.AddTransient<IExternalLabService, ExternalLabService>();
             services.AddTransient<ILabService, LabService>();
+            services.AddTransient<ILabCommandService, LabCommandService>();
         }
 
         private static void AddOrchestrationServices(IServiceCollection services) =>
