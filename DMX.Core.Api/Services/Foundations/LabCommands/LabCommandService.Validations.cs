@@ -3,8 +3,6 @@
 // ---------------------------------------------------------------
 
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.Data;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using CommandType = DMX.Core.Api.Models.Foundations.LabCommands.CommandType;
