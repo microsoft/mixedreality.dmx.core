@@ -21,9 +21,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             LabCommand randomLabCommand = CreateRandomLabCommand();
             LabCommand inputLabCommand = randomLabCommand;
             LabCommand storageLabCommand = inputLabCommand;
-            LabCommand updatedLabCommand = inputLabCommand.DeepClone();
             DateTimeOffset randomDate = GetRandomDateTimeOffset(earliestDate: inputLabCommand.CreatedDate);
-            updatedLabCommand.UpdatedDate = randomDate;
+            inputLabCommand.UpdatedDate = randomDate;
+            LabCommand updatedLabCommand = inputLabCommand.DeepClone();
             LabCommand expectedLabCommand = updatedLabCommand.DeepClone();
             Guid labCommandId = inputLabCommand.Id;
 

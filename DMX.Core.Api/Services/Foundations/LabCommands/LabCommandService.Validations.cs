@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Reflection.Metadata;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using CommandType = DMX.Core.Api.Models.Foundations.LabCommands.CommandType;
@@ -44,7 +45,13 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 (Rule: IsInvalid(labCommand.CreatedDate), Parameter: nameof(LabCommand.CreatedDate)),
                 (Rule: IsInvalid(labCommand.UpdatedDate), Parameter: nameof(LabCommand.UpdatedDate)),
                 (Rule: IsInvalid(labCommand.Status), Parameter: nameof(LabCommand.Status)),
-                (Rule: IsInvalid(labCommand.Type), Parameter: nameof(LabCommand.Type)));
+                (Rule: IsInvalid(labCommand.Type), Parameter: nameof(LabCommand.Type)),
+
+                (Rule: IsSame(
+                    labCommand.UpdatedDate,
+                    labCommand.CreatedDate,
+                    nameof(LabCommand.CreatedDate)),
+                Parameter: nameof(LabCommand.UpdatedDate)));
         }
 
         private static void ValidateLabCommandId(Guid labCommandId) =>
@@ -101,6 +108,15 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             Condition = date == default,
             Message = "Date is required"
         };
+
+        private static dynamic IsSame(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string nameOfSecondDate) => new
+            {
+                Condition = firstDate != default && firstDate == secondDate,
+                Message = $"Date is the same as {nameOfSecondDate}"
+            };
 
         private static dynamic IsNotSame(
             DateTimeOffset firstDate,

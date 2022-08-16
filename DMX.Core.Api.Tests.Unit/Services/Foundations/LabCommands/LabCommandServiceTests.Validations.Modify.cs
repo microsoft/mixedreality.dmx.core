@@ -131,8 +131,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             DateTimeOffset randomDate =
                 GetRandomDateTimeOffset(earliestDate: invalidLabCommand.CreatedDate);
 
+            invalidLabCommand.UpdatedDate = randomDate;
+
             LabCommand updatedLabCommand = invalidLabCommand.DeepClone();
-            updatedLabCommand.UpdatedDate = randomDate;
             LabCommand expectedLabCommand = updatedLabCommand.DeepClone();
 
             var invalidLabCommandException = new InvalidLabCommandException();
