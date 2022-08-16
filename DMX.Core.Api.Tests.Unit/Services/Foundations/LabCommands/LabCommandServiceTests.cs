@@ -79,6 +79,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         public static LabCommand CreateRandomLabCommand() =>
             CreateLabCommandFiller().Create();
 
+        public static LabCommand CreateRandomLabCommand(DateTimeOffset date) =>
+            CreateLabCommandFiller(date).Create();
+
         private static Filler<LabCommand> CreateLabCommandFiller()
         {
             var filler = new Filler<LabCommand>();
@@ -86,6 +89,17 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             filler.Setup()
                 .OnType<DateTimeOffset>()
                     .Use(GetRandomDateTimeOffset());
+
+            return filler;
+        }
+
+        private static Filler<LabCommand> CreateLabCommandFiller(DateTimeOffset date)
+        {
+            var filler = new Filler<LabCommand>();
+
+            filler.Setup()
+                .OnType<DateTimeOffset>()
+                    .Use(date);
 
             return filler;
         }

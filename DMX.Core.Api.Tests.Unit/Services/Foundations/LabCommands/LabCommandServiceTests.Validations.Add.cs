@@ -116,10 +116,15 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         public async Task ShouldThrowValidationExceptionOnAddIfLabCommandStatusOrTypeIsInvalidAndLogItAsync()
         {
             // given
-            LabCommand randomLabCommand = CreateRandomLabCommand();
+            DateTimeOffset dateTime = GetRandomDateTimeOffset();
+            LabCommand randomLabCommand = CreateRandomLabCommand(dateTime);
             LabCommand invalidLabCommand = randomLabCommand;
             invalidLabCommand.Status = GetInvalidEnum<CommandStatus>();
             invalidLabCommand.Type = GetInvalidEnum<CommandType>();
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(dateTime);
 
             var invalidLabException =
                 new InvalidLabCommandException();
@@ -164,9 +169,14 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         public async Task ShouldThrowValidationExceptionOnAddIfCreateAndUpdatesIsNotSameAndLogItAsync()
         {
             // given
+            DateTimeOffset dateTime = GetRandomDateTimeOffset();
             int randomNumber = GetRandomNumber();
-            LabCommand randomLabCommand = CreateRandomLabCommand();
+            LabCommand randomLabCommand = CreateRandomLabCommand(dateTime);
             LabCommand invalidLabCommand = randomLabCommand;
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(dateTime);
 
             invalidLabCommand.UpdatedDate =
                 invalidLabCommand.CreatedDate.AddDays(randomNumber);

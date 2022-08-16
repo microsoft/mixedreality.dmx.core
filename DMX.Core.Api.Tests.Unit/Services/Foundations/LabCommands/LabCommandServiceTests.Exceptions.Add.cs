@@ -21,7 +21,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         public async Task ShouldThrowCriticalDependencyExceptionOnAddIfSqlErrorOccursAndLogItAsync()
         {
             // given
-            LabCommand someLabCommand = CreateRandomLabCommand();
+            DateTimeOffset dateTime = GetRandomDateTimeOffset();
+            LabCommand someLabCommand = CreateRandomLabCommand(dateTime);
             SqlException sqlException = GetSqlException();
 
             var failedLabCommandStorageException =
@@ -29,6 +30,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             var expectedLabCommandDependencyException =
                 new LabCommandDependencyException(failedLabCommandStorageException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(dateTime);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertLabCommandAsync(It.IsAny<LabCommand>()))
@@ -45,6 +50,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             // then
             actualLabCommandDependencyException.Should().BeEquivalentTo(
                 expectedLabCommandDependencyException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLabCommandAsync(It.IsAny<LabCommand>()),
@@ -63,7 +72,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         public async Task ShouldThrowDependencyValidationExceptionOnAddIfLabCommandAlreadyExistsAndLogItAsync()
         {
             // given
-            LabCommand someLabCommand = CreateRandomLabCommand();
+            DateTimeOffset dateTime = GetRandomDateTimeOffset();
+            LabCommand someLabCommand = CreateRandomLabCommand(dateTime);
             string someMessage = GetRandomString();
 
             var duplicateKeyException =
@@ -74,6 +84,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             var expectedLabCommandDependencyValidationException =
                 new LabCommandDependencyValidationException(alreadyExistsLabException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(dateTime);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertLabCommandAsync(It.IsAny<LabCommand>()))
@@ -91,6 +105,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             actualLabCommandDependencyValidationException.Should()
                 .BeEquivalentTo(expectedLabCommandDependencyValidationException);
 
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLabCommandAsync(It.IsAny<LabCommand>()),
                     Times.Once);
@@ -100,6 +118,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                     expectedLabCommandDependencyValidationException))),
                         Times.Once);
 
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
@@ -108,7 +127,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateErrorsOccursAndLogItAsync()
         {
             // given
-            LabCommand someLabCommand = CreateRandomLabCommand();
+            DateTimeOffset dateTime = GetRandomDateTimeOffset();
+            LabCommand someLabCommand = CreateRandomLabCommand(dateTime);
 
             var dbUpdateException = new DbUpdateException();
 
@@ -117,6 +137,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             var expectedLabCommandDependencyException =
                 new LabCommandDependencyException(failedLabCommandStorageException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(dateTime);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertLabCommandAsync(It.IsAny<LabCommand>()))
@@ -133,6 +157,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             actualLabCommandDependencyException.Should()
                 .BeEquivalentTo(expectedLabCommandDependencyException);
 
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLabCommandAsync(It.IsAny<LabCommand>()),
                     Times.Once);
@@ -142,6 +170,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                     expectedLabCommandDependencyException))),
                         Times.Once);
 
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
@@ -150,7 +179,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccurredAndLogItAsync()
         {
             // given
-            LabCommand someLabCommand = CreateRandomLabCommand();
+            DateTimeOffset dateTime = GetRandomDateTimeOffset();
+            LabCommand someLabCommand = CreateRandomLabCommand(dateTime);
 
             var exception = new Exception();
 
@@ -159,6 +189,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             var expectedLabCommandServiceException =
                 new LabCommandServiceException(failedLabCommandServiceException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(dateTime);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertLabCommandAsync(It.IsAny<LabCommand>()))
@@ -175,6 +209,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             actualLabCommandServiceException.Should()
                 .BeEquivalentTo(expectedLabCommandServiceException);
 
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLabCommandAsync(It.IsAny<LabCommand>()),
                     Times.Once);
@@ -184,6 +222,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                     expectedLabCommandServiceException))),
                         Times.Once);
 
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
