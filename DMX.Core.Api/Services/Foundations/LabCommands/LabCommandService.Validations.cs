@@ -3,8 +3,6 @@
 // ---------------------------------------------------------------
 
 using System;
-using System.Data;
-using System.Reflection.Metadata;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using CommandType = DMX.Core.Api.Models.Foundations.LabCommands.CommandType;
@@ -28,7 +26,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 (Rule: IsNotSame(
                     labCommand.UpdatedDate,
                     labCommand.CreatedDate,
-                    nameof(LabCommand.CreatedDate)), 
+                    nameof(LabCommand.CreatedDate)),
                 Parameter: nameof(LabCommand.UpdatedDate)));
         }
 
