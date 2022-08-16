@@ -62,22 +62,22 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             }
         }
 
-        private Xeption CreateAndLogServiceException(Xeption exception)
+        private Xeption CreateAndLogValidationException(Xeption exception)
         {
-            var labCommandServiceException =
-                new LabCommandServiceException(exception);
+            var labCommandValidationException =
+                new LabCommandValidationException(exception);
 
-            this.loggingBroker.LogError(labCommandServiceException);
+            this.loggingBroker.LogError(labCommandValidationException);
 
-            return labCommandServiceException;
+            return labCommandValidationException;
         }
 
-        private Xeption CreateAndLogDependencyException(Xeption exception)
+        private Xeption CreateAndLogCriticalDependencyException(Xeption exception)
         {
             var labCommandDependencyException =
                 new LabCommandDependencyException(exception);
 
-            this.loggingBroker.LogError(labCommandDependencyException);
+            this.loggingBroker.LogCritical(labCommandDependencyException);
 
             return labCommandDependencyException;
         }
@@ -92,24 +92,24 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             return labCommandDependencyValidationException;
         }
 
-        private Xeption CreateAndLogCriticalDependencyException(Xeption exception)
+        private Xeption CreateAndLogDependencyException(Xeption exception)
         {
             var labCommandDependencyException =
                 new LabCommandDependencyException(exception);
 
-            this.loggingBroker.LogCritical(labCommandDependencyException);
+            this.loggingBroker.LogError(labCommandDependencyException);
 
             return labCommandDependencyException;
         }
 
-        private Xeption CreateAndLogValidationException(Xeption exception)
+        private Xeption CreateAndLogServiceException(Xeption exception)
         {
-            var labCommandValidationException =
-                new LabCommandValidationException(exception);
+            var labCommandServiceException =
+                new LabCommandServiceException(exception);
 
-            this.loggingBroker.LogError(labCommandValidationException);
+            this.loggingBroker.LogError(labCommandServiceException);
 
-            return labCommandValidationException;
+            return labCommandServiceException;
         }
     }
 }

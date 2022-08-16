@@ -32,20 +32,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
-        public static LabCommand CreateRandomLabCommand() =>
-            CreateLabCommandFiller().Create();
-
-        private static Filler<LabCommand> CreateLabCommandFiller()
-        {
-            var filler = new Filler<LabCommand>();
-
-            filler.Setup()
-                .OnType<DateTimeOffset>()
-                    .Use(GetRandomDateTimeOffset());
-
-            return filler;
-        }
-
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
 
@@ -72,5 +58,19 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
         private static SqlException GetSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
+
+        public static LabCommand CreateRandomLabCommand() =>
+            CreateLabCommandFiller().Create();
+
+        private static Filler<LabCommand> CreateLabCommandFiller()
+        {
+            var filler = new Filler<LabCommand>();
+
+            filler.Setup()
+                .OnType<DateTimeOffset>()
+                    .Use(GetRandomDateTimeOffset());
+
+            return filler;
+        }
     }
 }

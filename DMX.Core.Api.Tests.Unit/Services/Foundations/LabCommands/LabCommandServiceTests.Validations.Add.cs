@@ -58,7 +58,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             var invalidLabCommand = new LabCommand
             {
                 Arguments = invalidString,
-                Notes = invalidString,
                 Results = invalidString
             };
 
@@ -74,10 +73,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             invalidLabException.AddData(
                 key: nameof(LabCommand.Arguments),
-                values: "Text is required");
-
-            invalidLabException.AddData(
-                key: nameof(LabCommand.Notes),
                 values: "Text is required");
 
             var expectedLabCommandValidationException =

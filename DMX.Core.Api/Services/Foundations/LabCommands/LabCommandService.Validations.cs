@@ -19,7 +19,6 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 (Rule: IsInvalid(labCommand.Id), Parameter: nameof(LabCommand.Id)),
                 (Rule: IsInvalid(labCommand.LabId), Parameter: nameof(LabCommand.LabId)),
                 (Rule: IsInvalid(labCommand.Arguments), Parameter: nameof(LabCommand.Arguments)),
-                (Rule: IsInvalid(labCommand.Notes), Parameter: nameof(LabCommand.Notes)),
                 (Rule: IsInvalid(labCommand.Status), Parameter: nameof(LabCommand.Status)),
                 (Rule: IsInvalid(labCommand.Type), Parameter: nameof(LabCommand.Type)));
         }
