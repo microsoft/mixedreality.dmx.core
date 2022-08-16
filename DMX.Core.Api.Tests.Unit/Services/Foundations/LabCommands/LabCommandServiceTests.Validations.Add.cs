@@ -174,8 +174,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                 new InvalidLabCommandException();
 
             invalidLabCommandException.AddData(
-                key: nameof(LabCommand.UpdatedDate),
-                values: $"Date is not the same as {nameof(LabCommand.CreatedDate)}");
+                nameof(LabCommand.UpdatedDate),
+                $"Date is not the same as {nameof(LabCommand.CreatedDate)}");
 
             var expectedLabCommandValidationException =
                 new LabCommandValidationException(invalidLabCommandException);
