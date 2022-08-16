@@ -12,6 +12,5 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
     {
         ValueTask<LabCommand> AddLabCommandAsync(LabCommand labCommand);
         ValueTask<LabCommand> RetrieveLabCommandByIdAsync(Guid labCommandId);
-
     }
 }
