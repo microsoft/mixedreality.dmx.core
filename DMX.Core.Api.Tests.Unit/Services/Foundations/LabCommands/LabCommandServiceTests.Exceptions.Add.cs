@@ -181,7 +181,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             // given
             DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
             LabCommand someLabCommand = CreateRandomLabCommand(randomDateTime);
-
             var exception = new Exception();
 
             var failedLabCommandServiceException =
