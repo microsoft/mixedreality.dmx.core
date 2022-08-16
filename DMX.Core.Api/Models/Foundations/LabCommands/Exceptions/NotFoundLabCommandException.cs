@@ -7,11 +7,10 @@ using Xeptions;
 
 namespace DMX.Core.Api.Models.Foundations.LabCommands.Exceptions
 {
-    public class FailedLabCommandServiceException : Xeption
+    public class NotFoundLabCommandException : Xeption
     {
-        public FailedLabCommandServiceException(Exception innerException)
-            : base(message: "Failed lab command service error occurred, please contact support.",
-                  innerException)
+        public NotFoundLabCommandException(Guid labCommandId)
+            : base(message: $"Could not find lab command with id {labCommandId}")
         { }
     }
 }

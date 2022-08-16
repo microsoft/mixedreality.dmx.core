@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.DateTimes;
 using DMX.Core.Api.Brokers.Loggings;
@@ -32,6 +33,19 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             ValidateLabCommandOnAdd(labCommand);
 
             return await this.storageBroker.InsertLabCommandAsync(labCommand);
+        });
+
+        public ValueTask<LabCommand> RetrieveLabCommandByIdAsync(Guid labCommandId) =>
+        TryCatch(async () =>
+        {
+            ValidateLabCommandId(labCommandId);
+
+            LabCommand maybeLabCommand =
+                await this.storageBroker.SelectLabCommandByIdAsync(labCommandId);
+
+            ValidateLabCommandExists(maybeLabCommand, labCommandId);
+
+            return maybeLabCommand;
         });
     }
 }

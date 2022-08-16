@@ -36,6 +36,17 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 );
         }
 
+        private static void ValidateLabCommandId(Guid labCommandId) =>
+            Validate((Rule: IsInvalid(labCommandId), Parameter: nameof(LabCommand.Id)));
+
+        private static void ValidateLabCommandExists(LabCommand maybeLabCommand, Guid labCommandId)
+        {
+            if (maybeLabCommand is null)
+            {
+                throw new NotFoundLabCommandException(labCommandId);
+            }
+        }
+
         private void ValidateLabCommandIsNotNull(LabCommand labCommand)
         {
             if (labCommand is null)

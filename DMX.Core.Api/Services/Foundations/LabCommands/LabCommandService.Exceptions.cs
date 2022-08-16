@@ -13,12 +13,11 @@ using Xeptions;
 
 namespace DMX.Core.Api.Services.Foundations.LabCommands
 {
-    public partial class LabCommandService
+    public partial class LabCommandService : ILabCommandService
     {
         private delegate ValueTask<LabCommand> ReturningLabCommandFunction();
 
-        private async ValueTask<LabCommand> TryCatch(
-            ReturningLabCommandFunction returningLabCommandFunction)
+        private async ValueTask<LabCommand> TryCatch(ReturningLabCommandFunction returningLabCommandFunction)
         {
             try
             {
@@ -31,6 +30,10 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             catch (InvalidLabCommandException invalidLabCommandException)
             {
                 throw CreateAndLogValidationException(invalidLabCommandException);
+            }
+            catch (NotFoundLabCommandException notFoundLabCommandException)
+            {
+                throw CreateAndLogValidationException(notFoundLabCommandException);
             }
             catch (SqlException sqlException)
             {
@@ -55,8 +58,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             }
             catch (Exception exception)
             {
-                var failedLabCommandServiceException =
-                    new FailedLabCommandServiceException(exception);
+                var failedLabCommandServiceException = new FailedLabCommandServiceException(exception);
 
                 throw CreateAndLogServiceException(failedLabCommandServiceException);
             }

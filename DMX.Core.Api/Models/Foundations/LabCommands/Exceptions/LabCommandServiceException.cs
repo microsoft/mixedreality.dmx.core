@@ -14,3 +14,4 @@ namespace DMX.Core.Api.Models.Foundations.LabCommands.Exceptions
         { }
     }
 }
+
