@@ -64,7 +64,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             }
         }
 
-        private Xeption CreateAndLogValidationException(Xeption exception)
+        private LabCommandValidationException CreateAndLogValidationException(Xeption exception)
         {
             var labCommandValidationException =
                 new LabCommandValidationException(exception);
@@ -74,7 +74,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             return labCommandValidationException;
         }
 
-        private Xeption CreateAndLogCriticalDependencyException(Xeption exception)
+        private LabCommandDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
             var labCommandDependencyException =
                 new LabCommandDependencyException(exception);
@@ -84,7 +84,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             return labCommandDependencyException;
         }
 
-        private Xeption CreateAndLogDependencyValidationException(Xeption exception)
+        private LabCommandDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
         {
             var labCommandDependencyValidationException =
                 new LabCommandDependencyValidationException(exception);
@@ -94,7 +94,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             return labCommandDependencyValidationException;
         }
 
-        private Xeption CreateAndLogDependencyException(Xeption exception)
+        private LabCommandDependencyException CreateAndLogDependencyException(Xeption exception)
         {
             var labCommandDependencyException =
                 new LabCommandDependencyException(exception);
@@ -104,7 +104,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             return labCommandDependencyException;
         }
 
-        private Xeption CreateAndLogServiceException(Xeption exception)
+        private LabCommandServiceException CreateAndLogServiceException(Xeption exception)
         {
             var labCommandServiceException =
                 new LabCommandServiceException(exception);

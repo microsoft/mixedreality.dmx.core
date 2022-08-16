@@ -30,8 +30,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                     nameof(LabCommand.CreatedDate)),
                 Parameter: nameof(LabCommand.UpdatedDate)),
 
-                (Rule: IsNotRecent(labCommand.CreatedDate), Parameter: nameof(LabCommand.CreatedDate))
-                );
+                (Rule: IsNotRecent(labCommand.CreatedDate), Parameter: nameof(LabCommand.CreatedDate)));
         }
 
         private static void ValidateLabCommandId(Guid labCommandId) =>
