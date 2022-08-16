@@ -36,7 +36,11 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             return maybeLabCommand;
         });
 
-        public ValueTask<LabCommand> ModifyLabCommandAsync(LabCommand labCommand) =>
-            throw new NotImplementedException();
+        public async ValueTask<LabCommand> ModifyLabCommandAsync(LabCommand labCommand)
+        {
+            var maybeLabCommand = await this.storageBroker.SelectLabCommandByIdAsync(labCommand.Id);
+
+            return await this.storageBroker.UpdateLabCommandAsync(maybeLabCommand);
+        }
     }
 }
