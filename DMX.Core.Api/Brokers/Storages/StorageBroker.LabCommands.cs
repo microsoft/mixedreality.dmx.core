@@ -55,7 +55,6 @@ namespace DMX.Core.Api.Brokers.Storages
             await broker.SaveChangesAsync();
 
             return labCommandEntityEntry.Entity;
-
         }
     }
 }
