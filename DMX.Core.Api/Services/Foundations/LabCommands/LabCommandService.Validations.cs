@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Data;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using CommandType = DMX.Core.Api.Models.Foundations.LabCommands.CommandType;
@@ -20,7 +21,9 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 (Rule: IsInvalid(labCommand.LabId), Parameter: nameof(LabCommand.LabId)),
                 (Rule: IsInvalid(labCommand.Arguments), Parameter: nameof(LabCommand.Arguments)),
                 (Rule: IsInvalid(labCommand.Status), Parameter: nameof(LabCommand.Status)),
-                (Rule: IsInvalid(labCommand.Type), Parameter: nameof(LabCommand.Type)));
+                (Rule: IsInvalid(labCommand.Type), Parameter: nameof(LabCommand.Type)),
+                (Rule: IsInvalid(labCommand.CreatedDate), Parameter: nameof(LabCommand.CreatedDate)),
+                (Rule: IsInvalid(labCommand.UpdatedDate), Parameter: nameof(LabCommand.UpdatedDate)));
         }
 
         private void ValidateLabCommandIsNotNull(LabCommand labCommand)
@@ -53,6 +56,12 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
         {
             Condition = Enum.IsDefined(type) is false,
             Message = "Value is not recognized"
+        };
+
+        private static dynamic IsInvalid(DateTimeOffset date) => new
+        {
+            Condition = date == default,
+            Message = "Date is required"
         };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)

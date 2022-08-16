@@ -75,6 +75,14 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                 key: nameof(LabCommand.Arguments),
                 values: "Text is required");
 
+            invalidLabException.AddData(
+                nameof(LabCommand.CreatedDate),
+                "Date is required");
+
+            invalidLabException.AddData(
+                nameof(LabCommand.UpdatedDate),
+                "Date is required");
+
             var expectedLabCommandValidationException =
                 new LabCommandValidationException(invalidLabException);
 
@@ -122,14 +130,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             invalidLabException.AddData(
                 nameof(LabCommand.Type),
                 "Value is not recognized");
-            
-            invalidLabException.AddData(
-                nameof(LabCommand.CreatedDate),
-                "Date is required");
-            
-            invalidLabException.AddData(
-                nameof(LabCommand.UpdatedDate),
-                "Date is required");
 
             var expectedLabCommandValidationException =
                 new LabCommandValidationException(invalidLabException);
