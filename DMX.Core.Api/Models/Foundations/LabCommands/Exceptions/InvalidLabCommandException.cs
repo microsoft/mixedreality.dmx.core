@@ -9,7 +9,7 @@ namespace DMX.Core.Api.Models.Foundations.LabCommands.Exceptions
     public class InvalidLabCommandException : Xeption
     {
         public InvalidLabCommandException()
-            : base(message: "Lab command is is invalid. Please fix and try again.")
+            : base(message: "Invalid lab command error occurred. Please fix the errors and try again.")
         { }
     }
 }

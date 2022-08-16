@@ -6,7 +6,9 @@ using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace DMX.Core.Api.Services.Foundations.LabCommands
@@ -21,6 +23,10 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             {
                 return await returningLabCommandFunction();
             }
+            catch (NullLabCommandException nullLabCommandException)
+            {
+                throw CreateAndLogValidationException(nullLabCommandException);
+            }
             catch (InvalidLabCommandException invalidLabCommandException)
             {
                 throw CreateAndLogValidationException(invalidLabCommandException);
@@ -31,9 +37,24 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             }
             catch (SqlException sqlException)
             {
-                var failedLabCommandStorageException = new FailedLabCommandStorageException(sqlException);
+                var failedLabCommandStorageException =
+                    new FailedLabCommandStorageException(sqlException);
 
-                throw CreateAndLogDepedendencyException(failedLabCommandStorageException);
+                throw CreateAndLogCriticalDependencyException(failedLabCommandStorageException);
+            }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsLabException =
+                    new AlreadyExistsLabCommandException(duplicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistsLabException);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                var failedLabCommandStorageException =
+                    new FailedLabCommandStorageException(dbUpdateException);
+
+                throw CreateAndLogDependencyException(failedLabCommandStorageException);
             }
             catch (Exception exception)
             {
@@ -45,26 +66,52 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
 
         private LabCommandValidationException CreateAndLogValidationException(Xeption exception)
         {
-            var labCommandValidationException = new LabCommandValidationException(exception);
-            this.loggingBroker.LogError(exception: labCommandValidationException);
+            var labCommandValidationException =
+                new LabCommandValidationException(exception);
+
+            this.loggingBroker.LogError(labCommandValidationException);
 
             return labCommandValidationException;
         }
 
-        private LabCommandDependencyException CreateAndLogDepedendencyException(Xeption exception)
+        private LabCommandDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
-            var labCommandDependencyException = new LabCommandDependencyException(exception);
+            var labCommandDependencyException =
+                new LabCommandDependencyException(exception);
+
             this.loggingBroker.LogCritical(labCommandDependencyException);
 
             return labCommandDependencyException;
         }
 
-        private Exception CreateAndLogServiceException(Xeption exception)
+        private LabCommandDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
         {
-            var LabCommandServiceException = new LabCommandServiceException(exception);
-            this.loggingBroker.LogError(exception: LabCommandServiceException);
+            var labCommandDependencyValidationException =
+                new LabCommandDependencyValidationException(exception);
 
-            return LabCommandServiceException;
+            this.loggingBroker.LogError(labCommandDependencyValidationException);
+
+            return labCommandDependencyValidationException;
+        }
+
+        private LabCommandDependencyException CreateAndLogDependencyException(Xeption exception)
+        {
+            var labCommandDependencyException =
+                new LabCommandDependencyException(exception);
+
+            this.loggingBroker.LogError(labCommandDependencyException);
+
+            return labCommandDependencyException;
+        }
+
+        private LabCommandServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var labCommandServiceException =
+                new LabCommandServiceException(exception);
+
+            this.loggingBroker.LogError(labCommandServiceException);
+
+            return labCommandServiceException;
         }
     }
 }
