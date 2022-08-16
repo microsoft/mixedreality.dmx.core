@@ -44,5 +44,18 @@ namespace DMX.Core.Api.Brokers.Storages
 
             return labCommandEntityEntry.Entity;
         }
+
+        public async ValueTask<LabCommand> DeleteLabCommandAsync(LabCommand command)
+        {
+            var broker = new StorageBroker(this.configuration);
+
+            EntityEntry<LabCommand> labCommandEntityEntry =
+               broker.LabCommands.Remove(command);
+
+            await broker.SaveChangesAsync();
+
+            return labCommandEntityEntry.Entity;
+
+        }
     }
 }
