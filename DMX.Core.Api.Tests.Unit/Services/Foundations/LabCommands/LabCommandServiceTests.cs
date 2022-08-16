@@ -48,10 +48,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             }
 
             return (T)(object)randomNumber;
-
-            static int GetRandomNumber() =>
-                new IntRange(min: int.MinValue, max: int.MaxValue).GetValue();
         }
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: int.MinValue, max: int.MaxValue).GetValue();
 
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
