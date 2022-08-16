@@ -64,6 +64,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                     expectedLabCommandDependencyException))),
                         Times.Once);
 
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
