@@ -73,7 +73,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             invalidLabCommandException.AddData(
                 key: nameof(LabCommand.Arguments),
                 values: "Text is required");
-            
+
             invalidLabCommandException.AddData(
                 key: nameof(LabCommand.Id),
                 values: "Id is required");
@@ -163,6 +163,46 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     exptectedLabCommandValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateLabCommandAsync(It.IsAny<LabCommand>()),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnModifyIfUpdatedDateIsSameAsCreatedDateAndLogItAsync()
+        {
+            // given
+            LabCommand randomLabCommand = CreateRandomLabCommand();
+            LabCommand invalidLabCommand = randomLabCommand;
+            var invalidLabCommandException = new InvalidLabCommandException();
+
+            invalidLabCommandException.AddData(
+                key: nameof(LabCommand.UpdatedDate),
+                values: $"Date is the same as {nameof(LabCommand.CreatedDate)}");
+
+            var expectedLabCommandException =
+                new LabCommandValidationException(invalidLabCommandException);
+
+            // when
+            ValueTask<LabCommand> modifyLabCommandTask =
+                this.labCommandService.ModifyLabCommandAsync(invalidLabCommand);
+
+            LabCommandValidationException actualLabCommandValidationException =
+                await Assert.ThrowsAsync<LabCommandValidationException>(
+                    modifyLabCommandTask.AsTask);
+
+            // then
+            actualLabCommandValidationException.Should().BeEquivalentTo(expectedLabCommandException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabCommandException))),
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
