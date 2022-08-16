@@ -8,8 +8,9 @@ using DMX.Core.Api.Models.Foundations.LabCommands;
 
 namespace DMX.Core.Api.Services.Foundations.LabCommands
 {
-    public interface ILabCommandService
+    public partial interface ILabCommandService
     {
+        ValueTask<LabCommand> AddLabCommandAsync(LabCommand labCommand);
         ValueTask<LabCommand> RetrieveLabCommandByIdAsync(Guid labCommandId);
         ValueTask<LabCommand> ModifyLabCommandAsync(LabCommand labCommand);
     }
