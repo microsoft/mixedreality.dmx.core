@@ -25,7 +25,6 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.LabCommands
         {
             var filler = new Filler<LabCommand>();
             DateTimeOffset now = DateTimeOffset.UtcNow;
-            Guid id = Guid.NewGuid();
 
             filler.Setup()
                 .OnType<DateTimeOffset>().Use(now);
