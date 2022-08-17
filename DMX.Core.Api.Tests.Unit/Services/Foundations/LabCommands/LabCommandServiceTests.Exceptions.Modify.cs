@@ -2,16 +2,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
+using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
@@ -22,7 +19,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         public async Task ShouldThrowCriticalDependencyExceptionOnModifyIfSqlExceptionOccursAndLogItAsync()
         {
             // given
-            LabCommand someLabCommand = CreateRandomLabCommand();
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            LabCommand someLabCommand = CreateRandomLabCommand(randomDateTimeOffset);
             int randomNumber = GetRandomNumber();
             someLabCommand.UpdatedDate = someLabCommand.CreatedDate.AddSeconds(randomNumber);
             SqlException sqlException = GetSqlException();
@@ -30,8 +28,12 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             var failedLabCommandStorageException =
                 new FailedLabCommandStorageException(sqlException);
 
-            var expectedLabCommandDependencyException = 
+            var expectedLabCommandDependencyException =
                 new LabCommandDependencyException(failedLabCommandStorageException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(randomDateTimeOffset);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectLabCommandByIdAsync(It.IsAny<Guid>()))
@@ -64,7 +66,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             this.storageBrokerMock.Verify(broker =>
                 broker.UpdateLabCommandAsync(It.IsAny<LabCommand>()),
-                    Times.Once());
+                    Times.Never());
 
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
