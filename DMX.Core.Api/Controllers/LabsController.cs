@@ -108,11 +108,11 @@ namespace DMX.Core.Api.Controllers
             }
             catch (LabOrchestrationValidationException labOrchestrationValidationException)
             {
-                return BadRequest(labOrchestrationValidationException);
+                return BadRequest(labOrchestrationValidationException.InnerException);
             }
             catch (LabOrchestrationDependencyValidationException labOrchestrationDependencyValidationException)
             {
-                return BadRequest(labOrchestrationDependencyValidationException);
+                return BadRequest(labOrchestrationDependencyValidationException.InnerException);
             }
             catch (LabOrchestrationDependencyException labOrchestrationDependencyException)
             {
@@ -153,7 +153,7 @@ namespace DMX.Core.Api.Controllers
             }
             catch (LabDependencyValidationException labDependencyValidationException)
             {
-                return BadRequest(labDependencyValidationException);
+                return BadRequest(labDependencyValidationException.InnerException);
             }
             catch (LabDependencyException labDependencyException)
             {
