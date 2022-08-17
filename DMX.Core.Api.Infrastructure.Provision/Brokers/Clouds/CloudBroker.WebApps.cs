@@ -32,6 +32,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
                     { "AzureAd:Scopes:GetAllLabs", this.dmxCoreScopesGetAllLabs },
                     { "AzureAd:Scopes:PostLab", this.dmxCoreScopesPostLab },
                     { "AzureAd:Scopes:DeleteLab", this.dmxCoreScopesDeleteLab },
+                    { "AzureAd:Scopes:PostLabCommand", this.dmxCoreScopesPostLabCommand },
                     { "AzureAd:Scopes:GetLabCommand", this.dmxCoreScopesGetLabCommand},
                 };
 
