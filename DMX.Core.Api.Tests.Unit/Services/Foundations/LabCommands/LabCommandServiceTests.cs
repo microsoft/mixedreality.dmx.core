@@ -67,6 +67,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 10).GetValue();
 
+        private static long GetRandomLong(long min, long max) =>
+            new LongRange(min, max).GetValue();
+
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
@@ -79,10 +82,14 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         private static LabCommand CreateRandomLabCommand(DateTimeOffset date) =>
             CreateLabCommandFiller(date).Create();
 
-        private static TimeSpan GetRandomPositiveTimeSpan()
+        private static TimeSpan GetRandomPositiveTimeSpanUpToMaxDate(DateTimeOffset maxDateTimeOffset) =>
+            GetRandomTimeSpanUpToMaxTicks(maxDateTimeOffset.UtcTicks).Duration();
+
+        private static TimeSpan GetRandomTimeSpanUpToMaxTicks(long maxTicks)
         {
-            var randomDateTimeOffset = GetRandomDateTimeOffset();
-            return GetRandomDateTimeOffset(randomDateTimeOffset) - randomDateTimeOffset;
+            long randomLong = GetRandomLong(min: 1, max: maxTicks);
+
+            return new TimeSpan(ticks: randomLong);
         }
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
