@@ -21,11 +21,20 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             LabCommand randomLabCommand = CreateRandomLabCommand();
             LabCommand inputLabCommand = randomLabCommand;
             LabCommand storageLabCommand = inputLabCommand;
-            DateTimeOffset randomDate = GetRandomDateTimeOffset(earliestDate: inputLabCommand.CreatedDate);
-            inputLabCommand.UpdatedDate = randomDate;
+
+            DateTimeOffset randomDate = GetValidDateTimeOffset(
+                inputLabCommand.CreatedDate,
+                new TimeSpan(0, 1, 0));
+
+            DateTimeOffset currentDate = randomDate;
+            inputLabCommand.UpdatedDate = currentDate;
             LabCommand updatedLabCommand = inputLabCommand.DeepClone();
             LabCommand expectedLabCommand = updatedLabCommand.DeepClone();
             Guid labCommandId = inputLabCommand.Id;
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(currentDate);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectLabCommandByIdAsync(labCommandId))
@@ -41,6 +50,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             // then
             actualLabCommand.Should().BeEquivalentTo(expectedLabCommand);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLabCommandByIdAsync(labCommandId),

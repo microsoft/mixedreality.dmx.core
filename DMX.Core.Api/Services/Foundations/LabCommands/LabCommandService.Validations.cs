@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Data;
 using System.Reflection.Metadata;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
@@ -57,7 +58,9 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                     labCommand.UpdatedDate,
                     labCommand.CreatedDate,
                     nameof(LabCommand.CreatedDate)),
-                Parameter: nameof(LabCommand.UpdatedDate)));
+                Parameter: nameof(LabCommand.UpdatedDate)),
+                
+                (Rule: IsNotRecent(labCommand.UpdatedDate), Parameter: nameof(LabCommand.UpdatedDate)));
         }
 
         private static void ValidateLabCommandId(Guid labCommandId) =>

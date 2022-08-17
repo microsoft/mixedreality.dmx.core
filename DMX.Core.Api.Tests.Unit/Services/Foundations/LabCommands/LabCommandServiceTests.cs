@@ -15,6 +15,7 @@ using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 {
@@ -25,8 +26,13 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly ILabCommandService labCommandService;
 
-        public LabCommandServiceTests()
+        private readonly ITestOutputHelper output;
+
+        public LabCommandServiceTests(ITestOutputHelper output)
         {
+            this.output = output;
+
+
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
             this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
@@ -63,6 +69,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             return randomDateTimeOffset;
         }
+
+        private static DateTimeOffset GetValidDateTimeOffset(DateTimeOffset dateTimeOffset, TimeSpan timeWindow) =>
+            GetRandomDateTimeOffset(dateTimeOffset, dateTimeOffset.Add(timeWindow));
 
         public static TheoryData<int> MinuteBeforeAndAfter()
         {
@@ -105,10 +114,13 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         }
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
-            new DateTimeRange(earliestDate: new DateTime()).GetValue();
+            new DateTimeRange(TimeZoneInfo.Utc).GetValue();
 
         private static DateTimeOffset GetRandomDateTimeOffset(DateTimeOffset earliestDate) =>
-            new DateTimeRange(earliestDate: earliestDate.DateTime).GetValue();
+            new DateTimeRange(earliestDate: earliestDate.DateTime, TimeZoneInfo.Utc).GetValue();
+
+        private static DateTimeOffset GetRandomDateTimeOffset(DateTimeOffset earliestDate, DateTimeOffset latestDate) =>
+            new DateTimeRange(earliestDate: earliestDate.DateTime, latestDate: latestDate.DateTime, TimeZoneInfo.Utc).GetValue();
 
         private static Filler<LabCommand> CreateLabCommandFiller(DateTimeOffset dateTimeOffset)
         {
