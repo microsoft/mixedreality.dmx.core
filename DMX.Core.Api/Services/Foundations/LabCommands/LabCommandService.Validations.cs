@@ -85,6 +85,8 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
 
         private void ValidateLabCommandAgainstStorageLabCommand(LabCommand labCommand, LabCommand storageLabCommand)
         {
+            ValidateLabCommandExists(storageLabCommand, labCommand.Id);
+
             Validate(
                 (Rule: IsNotSameAsStorage(
                     labCommand.CreatedDate,
