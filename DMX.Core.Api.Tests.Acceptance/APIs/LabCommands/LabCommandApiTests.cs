@@ -15,10 +15,8 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.LabCommands
     {
         private readonly DmxCoreApiBroker dmxCoreApiBroker;
 
-        public LabCommandApiTests(DmxCoreApiBroker dmxCoreApiBroker)
-        {
+        public LabCommandApiTests(DmxCoreApiBroker dmxCoreApiBroker) =>
             this.dmxCoreApiBroker = dmxCoreApiBroker;
-        }
 
         private static LabCommand CreateRandomLabCommand() =>
             CreateRandomLabCommandFiller().Create();
@@ -30,10 +28,7 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.LabCommands
             Guid id = Guid.NewGuid();
 
             filler.Setup()
-                .OnProperty(labCommand => labCommand.Id).Use(id)
-                .OnProperty(labCommand => labCommand.LabId).Use(id)
-                .OnProperty(labCommand => labCommand.CreatedDate).Use(now)
-                .OnProperty(labCommand => labCommand.UpdatedDate).Use(now);
+                .OnType<DateTimeOffset>().Use(now);
 
             return filler;
         }
