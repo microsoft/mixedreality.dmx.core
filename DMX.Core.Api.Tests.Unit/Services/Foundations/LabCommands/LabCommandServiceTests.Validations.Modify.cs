@@ -214,5 +214,51 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnModifyIfUpdatedDateIsBeforeCreatedDateAndLogItAsync()
+        {
+            // given
+            LabCommand randomLabCommand = CreateRandomLabCommand();
+            LabCommand inputLabCommand = randomLabCommand;
+
+            inputLabCommand.UpdatedDate =
+                inputLabCommand.CreatedDate - GetRandomPositiveTimeSpan();
+
+            var invalidLabCommandException =
+                new InvalidLabCommandException();
+
+            invalidLabCommandException.AddData(
+                key: nameof(LabCommand.UpdatedDate),
+                values: $"Updated date can not be before {nameof(LabCommand.CreatedDate)}");
+
+            var expectedLabCommandValidationException =
+                new LabCommandValidationException(invalidLabCommandException);
+
+            // when
+            ValueTask<LabCommand> labCommandTask =
+                this.labCommandService.ModifyLabCommandAsync(inputLabCommand);
+
+            LabCommandValidationException actualLabCommandValidationException =
+                await Assert.ThrowsAsync<LabCommandValidationException>(
+                    labCommandTask.AsTask);
+
+            // then
+            actualLabCommandValidationException.Should().BeEquivalentTo(
+                expectedLabCommandValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabCommandValidationException))),
+                        Times.Once());
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateLabCommandAsync(It.IsAny<LabCommand>()),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }

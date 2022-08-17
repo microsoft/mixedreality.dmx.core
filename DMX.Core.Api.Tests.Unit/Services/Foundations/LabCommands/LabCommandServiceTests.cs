@@ -79,6 +79,12 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         private static LabCommand CreateRandomLabCommand(DateTimeOffset date) =>
             CreateLabCommandFiller(date).Create();
 
+        private static TimeSpan GetRandomPositiveTimeSpan()
+        {
+            var randomDateTimeOffset = GetRandomDateTimeOffset();
+            return GetRandomDateTimeOffset(randomDateTimeOffset) - randomDateTimeOffset;
+        }
+
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
 
