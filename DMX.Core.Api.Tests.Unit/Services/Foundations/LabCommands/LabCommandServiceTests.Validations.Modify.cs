@@ -258,12 +258,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         public async Task ShouldThrowValidationExceptionOnModifyIfUpdatedDateIsBeforeCreatedDateAndLogItAsync()
         {
             // given
-            LabCommand randomLabCommand = CreateRandomLabCommand();
-            LabCommand inputLabCommand = randomLabCommand;
             DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
-            inputLabCommand.CreatedDate = randomDateTime;
+            LabCommand randomLabCommand = CreateRandomLabCommand(randomDateTime);
+            LabCommand inputLabCommand = randomLabCommand;
             int randomNumber = GetRandomNumber();
-            inputLabCommand.UpdatedDate = inputLabCommand.CreatedDate.AddSeconds(randomNumber * -1);
+            inputLabCommand.CreatedDate = randomDateTime.AddMinutes(randomNumber);
 
             var invalidLabCommandException =
                 new InvalidLabCommandException();
@@ -442,6 +441,66 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnModifyIfLabCommandIsNotFoundAndLogItAsync()
+        {
+            // given
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            LabCommand randomLabCommand = CreateRandomLabCommand(randomDateTimeOffset);
+            int randomNumber = GetRandomNumber();
+            LabCommand invalidLabCommand = randomLabCommand;
+            invalidLabCommand.UpdatedDate = invalidLabCommand.CreatedDate.AddSeconds(randomNumber);
+            Guid notFoundId = invalidLabCommand.Id;
+            LabCommand nullLabCommand = null;
+
+            var notFoundLabCommandException =
+                new NotFoundLabCommandException(notFoundId);
+
+            var expectedLabCommandValidationException =
+                new LabCommandValidationException(notFoundLabCommandException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(randomDateTimeOffset);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLabCommandByIdAsync(notFoundId))
+                    .ReturnsAsync(nullLabCommand);
+
+            // when
+            ValueTask<LabCommand> modifyLabCommandTask =
+                this.labCommandService.ModifyLabCommandAsync(invalidLabCommand);
+
+            LabCommandValidationException actualLabCommandValidationException =
+                await Assert.ThrowsAsync<LabCommandValidationException>(
+                    modifyLabCommandTask.AsTask);
+
+            // then
+            actualLabCommandValidationException.Should().BeEquivalentTo(
+                expectedLabCommandValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLabCommandByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabCommandValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateLabCommandAsync(It.IsAny<LabCommand>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
