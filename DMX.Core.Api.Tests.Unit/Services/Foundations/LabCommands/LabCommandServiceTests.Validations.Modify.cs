@@ -230,7 +230,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             invalidLabCommandException.AddData(
                 key: nameof(LabCommand.UpdatedDate),
-                values: $"Updated date can not be before {nameof(LabCommand.CreatedDate)}");
+                values: $"Date can not be before {nameof(LabCommand.CreatedDate)}");
 
             var expectedLabCommandValidationException =
                 new LabCommandValidationException(invalidLabCommandException);

@@ -16,6 +16,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
         private readonly IStorageBroker storageBroker;
         private readonly IDateTimeBroker dateTimeBroker;
         private readonly ILoggingBroker loggingBroker;
+
         public LabCommandService(
             IStorageBroker storageBroker,
             IDateTimeBroker dateTimeBroker,

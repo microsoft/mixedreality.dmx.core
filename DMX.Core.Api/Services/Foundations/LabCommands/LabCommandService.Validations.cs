@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------
 
 using System;
-using System.Reflection.Metadata;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using CommandType = DMX.Core.Api.Models.Foundations.LabCommands.CommandType;
@@ -48,6 +47,12 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 (Rule: IsInvalid(labCommand.Type), Parameter: nameof(LabCommand.Type)),
 
                 (Rule: IsSame(
+                    labCommand.UpdatedDate,
+                    labCommand.CreatedDate,
+                    nameof(LabCommand.CreatedDate)),
+                Parameter: nameof(LabCommand.UpdatedDate)),
+
+                (Rule: IsBefore(
                     labCommand.UpdatedDate,
                     labCommand.CreatedDate,
                     nameof(LabCommand.CreatedDate)),
@@ -132,6 +137,15 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             Condition = IsDateNotRecent(date),
             Message = "Date is not recent"
         };
+
+        private static dynamic IsBefore(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string nameOfSecondDate) => new
+            {
+                Condition = DateTimeOffset.Compare(firstDate, secondDate) < 0,
+                Message = $"Date can not be before {nameOfSecondDate}"
+            };
 
         private bool IsDateNotRecent(DateTimeOffset date)
         {
