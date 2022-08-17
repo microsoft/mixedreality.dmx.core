@@ -76,65 +76,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         }
 
         [Fact]
-        public async Task ShouldThrowServiceExceptionOnModifyIfServiceErrorOccursAndLogItAsync()
-        {
-            // given
-            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
-            LabCommand randomLabCommand = CreateRandomLabCommand(randomDateTimeOffset);
-            LabCommand inputLabCommand = randomLabCommand;
-            int randomNumber = GetRandomNumber();
-            inputLabCommand.UpdatedDate = inputLabCommand.CreatedDate.AddSeconds(randomNumber);
-            var serviceException = new Exception();
-
-            var failedLabCommandServiceException =
-                new FailedLabCommandServiceException(serviceException);
-
-            var expectedLabCommandServiceException =
-                new LabCommandServiceException(failedLabCommandServiceException);
-
-            this.dateTimeBrokerMock.Setup(broker =>
-                broker.GetCurrentDateTime())
-                    .Returns(randomDateTimeOffset);
-
-            this.storageBrokerMock.Setup(broker =>
-                broker.SelectLabCommandByIdAsync(It.IsAny<Guid>()))
-                    .ThrowsAsync(serviceException);
-
-            // when
-            ValueTask<LabCommand> modifyLabCommandTask =
-                this.labCommandService.ModifyLabCommandAsync(inputLabCommand);
-
-            LabCommandServiceException actualLabCommandServiceException =
-                await Assert.ThrowsAsync<LabCommandServiceException>(
-                    modifyLabCommandTask.AsTask);
-
-            // then
-            actualLabCommandServiceException.Should().BeEquivalentTo(
-                expectedLabCommandServiceException);
-
-            this.dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTime(),
-                    Times.Once);
-
-            this.storageBrokerMock.Verify(broker =>
-                broker.SelectLabCommandByIdAsync(It.IsAny<Guid>()),
-                    Times.Once);
-
-            this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is(SameExceptionAs(
-                    expectedLabCommandServiceException))),
-                        Times.Once);
-
-            this.storageBrokerMock.Verify(broker =>
-                broker.UpdateLabCommandAsync(It.IsAny<LabCommand>()),
-                    Times.Never);
-
-            this.dateTimeBrokerMock.VerifyNoOtherCalls();
-            this.storageBrokerMock.VerifyNoOtherCalls();
-            this.loggingBrokerMock.VerifyNoOtherCalls();
-        }
-
-        [Fact]
         public async Task ShouldThrowDependencyExceptionOAddIfDbUpdateErrorOccursAndLogItAsync()
         {
             // given
@@ -197,6 +138,65 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
                     
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnModifyIfServiceErrorOccursAndLogItAsync()
+        {
+            // given
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            LabCommand randomLabCommand = CreateRandomLabCommand(randomDateTimeOffset);
+            LabCommand inputLabCommand = randomLabCommand;
+            int randomNumber = GetRandomNumber();
+            inputLabCommand.UpdatedDate = inputLabCommand.CreatedDate.AddSeconds(randomNumber);
+            var serviceException = new Exception();
+
+            var failedLabCommandServiceException =
+                new FailedLabCommandServiceException(serviceException);
+
+            var expectedLabCommandServiceException =
+                new LabCommandServiceException(failedLabCommandServiceException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(randomDateTimeOffset);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLabCommandByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<LabCommand> modifyLabCommandTask =
+                this.labCommandService.ModifyLabCommandAsync(inputLabCommand);
+
+            LabCommandServiceException actualLabCommandServiceException =
+                await Assert.ThrowsAsync<LabCommandServiceException>(
+                    modifyLabCommandTask.AsTask);
+
+            // then
+            actualLabCommandServiceException.Should().BeEquivalentTo(
+                expectedLabCommandServiceException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLabCommandByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabCommandServiceException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateLabCommandAsync(It.IsAny<LabCommand>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
