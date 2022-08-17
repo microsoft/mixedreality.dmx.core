@@ -393,7 +393,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             invalidLabCommand.UpdatedDate = randomDateTimeOffset;
 
             var invalidLabCommandException =
-                new InvalidLabCommandException(); 
+                new InvalidLabCommandException();
 
             invalidLabCommandException.AddData(
                 key: nameof(LabCommand.UpdatedDate),

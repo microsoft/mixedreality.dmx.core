@@ -137,7 +137,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
-                    
+
         }
 
         [Fact]
