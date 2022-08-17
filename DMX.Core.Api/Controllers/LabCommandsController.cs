@@ -63,5 +63,41 @@ namespace DMX.Core.Api.Controllers
                 return InternalServerError(labCommandServiceException);
             }
         }
+
+        [HttpGet("{labCommandId}")]
+#if RELEASE
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:GetLabCommand")]
+#endif
+        public async ValueTask<ActionResult<LabCommand>> GetLabByIdAsync(Guid labCommandId)
+        {
+            try
+            {
+                LabCommand lab =
+                    await this.labCommandService.RetrieveLabCommandByIdAsync(labCommandId);
+
+                return Ok(lab);
+            }
+            catch (LabCommandValidationException labCommandValidationException)
+                when (labCommandValidationException.InnerException is NotFoundLabCommandException)
+            {
+                return NotFound(labCommandValidationException.InnerException);
+            }
+            catch (LabCommandValidationException labCommandValidationException)
+            {
+                return BadRequest(labCommandValidationException);
+            }
+            catch (LabCommandDependencyValidationException labCommandDependencyValidationException)
+            {
+                return BadRequest(labCommandDependencyValidationException);
+            }
+            catch (LabCommandDependencyException labCommandDependencyException)
+            {
+                return InternalServerError(labCommandDependencyException);
+            }
+            catch (LabCommandServiceException labCommandServiceException)
+            {
+                return InternalServerError(labCommandServiceException);
+            }
+        }
     }
 }
