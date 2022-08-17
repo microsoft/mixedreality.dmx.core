@@ -88,7 +88,7 @@ namespace DMX.Core.Api.Controllers
             }
             catch (LabCommandDependencyValidationException labCommandDependencyValidationException)
             {
-                return BadRequest(labCommandDependencyValidationException);
+                return BadRequest(labCommandDependencyValidationException.InnerException);
             }
             catch (LabCommandDependencyException labCommandDependencyException)
             {
