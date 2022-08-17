@@ -15,7 +15,7 @@ using Xunit;
 namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
 {
     [Collection(nameof(ApiTestCollection))]
-    public partial class LabApiTests
+    public partial class LabApiTests : IDisposable
     {
         private readonly DmxCoreApiBroker dmxCoreApiBroker;
         private readonly WireMockServer wireMockServer;
@@ -54,5 +54,10 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.Labs
 
         private static Filler<Lab> CreateRandomLabFiller() =>
              new Filler<Lab>();
+
+        public void Dispose()
+        {
+            this.wireMockServer.Stop();
+        }
     }
 }
