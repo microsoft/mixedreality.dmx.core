@@ -337,5 +337,68 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnModifyIfUpdatedDateIsNotRecentAndLogItAsync()
+        {
+            // given
+            LabCommand randomLabCommand = CreateRandomLabCommand();
+            LabCommand invalidLabCommand = randomLabCommand;
+
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset(
+                earliestDate: invalidLabCommand.CreatedDate);
+
+            invalidLabCommand.UpdatedDate = randomDateTimeOffset;
+
+            var invalidLabCommandException =
+                new InvalidLabCommandException(); 
+
+            invalidLabCommandException.AddData(
+                key: nameof(LabCommand.UpdatedDate),
+                values: "Date is not recent");
+
+            var expectedLabCommandValidationException =
+                new LabCommandValidationException(invalidLabCommandException);
+
+            DateTimeOffset invalidDateTimeOffset =
+                GetInvalidDateTimeOffset(invalidLabCommand.UpdatedDate, new TimeSpan(0, 1, 0));
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(invalidDateTimeOffset);
+
+            // when
+            ValueTask<LabCommand> labCommandTask =
+                this.labCommandService.ModifyLabCommandAsync(invalidLabCommand);
+
+            LabCommandValidationException actualLabCommandValidationException =
+                await Assert.ThrowsAsync<LabCommandValidationException>(
+                    labCommandTask.AsTask);
+
+            // then
+            actualLabCommandValidationException.Should().BeEquivalentTo(
+                expectedLabCommandValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabCommandValidationException))),
+                        Times.Once());
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLabCommandByIdAsync(It.IsAny<Guid>()),
+                    Times.Never);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateLabCommandAsync(It.IsAny<LabCommand>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }

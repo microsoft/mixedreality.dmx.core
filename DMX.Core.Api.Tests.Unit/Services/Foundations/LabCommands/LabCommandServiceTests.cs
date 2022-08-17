@@ -52,6 +52,18 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             return (T)(object)randomNumber;
         }
 
+        private static DateTimeOffset GetInvalidDateTimeOffset(DateTimeOffset dateTimeOffset, TimeSpan timeWindow)
+        {
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+
+            while ((randomDateTimeOffset - dateTimeOffset).Duration() <= timeWindow.Duration())
+            {
+                randomDateTimeOffset = GetRandomDateTimeOffset();
+            }
+
+            return randomDateTimeOffset;
+        }
+
         public static TheoryData<int> MinuteBeforeAndAfter()
         {
             var randomNumber = GetRandomNumber();
