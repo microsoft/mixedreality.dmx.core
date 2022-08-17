@@ -125,7 +125,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         }
 
         [Fact]
-        public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateErrorsOccursAndLogItAsync()
+        public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateErrorOccursAndLogItAsync()
         {
             // given
             DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
