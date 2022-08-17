@@ -52,7 +52,11 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
         TryCatch(async () =>
         {
             ValidateLabCommandOnModify(labCommand);
-            var maybeLabCommand = await this.storageBroker.SelectLabCommandByIdAsync(labCommand.Id);
+
+            var maybeLabCommand =
+                await this.storageBroker.SelectLabCommandByIdAsync(labCommand.Id);
+
+            ValidateLabCommandAgainstStorageLabCommand(labCommand, maybeLabCommand);
 
             return await this.storageBroker.UpdateLabCommandAsync(maybeLabCommand);
         });

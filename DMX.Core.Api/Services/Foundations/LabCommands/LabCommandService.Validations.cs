@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Reflection.Metadata;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using CommandType = DMX.Core.Api.Models.Foundations.LabCommands.CommandType;
@@ -62,6 +63,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
         private static void ValidateLabCommandId(Guid labCommandId) =>
             Validate((Rule: IsInvalid(labCommandId), Parameter: nameof(LabCommand.Id)));
 
+
         private static void ValidateLabCommandExists(LabCommand maybeLabCommand, Guid labCommandId)
         {
             if (maybeLabCommand is null)
@@ -76,6 +78,16 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             {
                 throw new NullLabCommandException();
             }
+        }
+
+        private void ValidateLabCommandAgainstStorageLabCommand(LabCommand labCommand, LabCommand storageLabCommand)
+        {
+            Validate(
+                (Rule: IsNotSameAsStorage(
+                    labCommand.CreatedDate,
+                    storageLabCommand.CreatedDate,
+                    nameof(LabCommand.CreatedDate)),
+                Parameter: nameof(LabCommand.CreatedDate)));
         }
 
         private static dynamic IsInvalid(string text) => new
@@ -131,6 +143,15 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 Condition = firstDate != secondDate,
                 Message = $"Date is not the same as {nameOfSecondDate}"
             };
+
+        private static dynamic IsNotSameAsStorage(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string nameOfSecondDate) => new
+        {
+            Condition = firstDate != secondDate,
+            Message = $"Date is not the same as stored {nameOfSecondDate}"
+        };
 
         private dynamic IsNotRecent(DateTimeOffset date) => new
         {
