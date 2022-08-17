@@ -27,5 +27,24 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.LabCommands
             // then
             actualLabCommand.Should().BeEquivalentTo(expectedLabCommand);
         }
+
+        [Fact]
+        public async Task ShouldRetrieveByIdLabCommandAsync()
+        {
+            // given
+            LabCommand randomLabCommand = CreateRandomLabCommand();
+            var inputLabCommand = randomLabCommand;
+            var inputLabCommandId = inputLabCommand.Id;
+            var expectedLabCommand = randomLabCommand.DeepClone();
+
+            // when
+            await this.dmxCoreApiBroker.PostLabCommandAsync(inputLabCommand);
+
+            LabCommand actualLabCommand =
+                await this.dmxCoreApiBroker.GetLabCommandByIdAsync(inputLabCommandId);
+
+            // then
+            actualLabCommand.Should().BeEquivalentTo(expectedLabCommand);
+        }
     }
 }
