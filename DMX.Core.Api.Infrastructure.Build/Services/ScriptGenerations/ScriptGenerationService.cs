@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------------
+// ---------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
@@ -126,6 +126,12 @@ namespace DMX.Core.Api.Infrastructure.Build.Services.ScriptGenerations
 
                             { "AzureAdAppDmxCoreScopesDeleteLab",
                                 "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_DELETELAB }}" },
+
+                            { "AzureAdAppDmxCoreScopesPostLabCommand", 
+                                "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_POSTLABCOMMAND }}" },
+                          
+                            { "AzureAdAppDmxCoreScopesGetLabCommand", 
+                                "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_GETLABCOMMAND }}" },
 
                             { "AzureSqlServerAdminName", "${{ secrets.AZURE_SQLSERVER_ADMINNAME }}" },
                             { "AzureSqlServerAdminAccess", "${{ secrets.AZURE_SQLSERVER_ADMINACCESS }}" },

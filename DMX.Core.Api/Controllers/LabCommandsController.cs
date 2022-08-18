@@ -1,9 +1,8 @@
-﻿// ---------------------------------------------------------------
+// ---------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
@@ -84,7 +83,7 @@ namespace DMX.Core.Api.Controllers
             }
             catch (LabCommandValidationException labCommandValidationException)
             {
-                return BadRequest(labCommandValidationException);
+                return BadRequest(labCommandValidationException.InnerException);
             }
             catch (LabCommandDependencyValidationException labCommandDependencyValidationException)
             {

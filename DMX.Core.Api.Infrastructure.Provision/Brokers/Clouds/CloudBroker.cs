@@ -21,6 +21,8 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
         private readonly string dmxCoreScopesGetAllLabs;
         private readonly string dmxCoreScopesPostLab;
         private readonly string dmxCoreScopesDeleteLab;
+        private readonly string dmxCoreScopesPostLabCommand;
+        private readonly string dmxCoreScopesGetLabCommand;
         private readonly string provisionClientId;
         private readonly string provisionClientSecret;
         private readonly string provisionAdminName;
@@ -40,6 +42,8 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
             this.dmxCoreScopesGetAllLabs = Environment.GetEnvironmentVariable("AzureAdAppDmxCoreScopesGetAllLabs");
             this.dmxCoreScopesPostLab = Environment.GetEnvironmentVariable("AzureAdAppDmxCoreScopesPostLab");
             this.dmxCoreScopesDeleteLab = Environment.GetEnvironmentVariable("AzureAdAppDmxCoreScopesDeleteLab");
+            this.dmxCoreScopesPostLabCommand = Environment.GetEnvironmentVariable("AzureAdAppDmxCoreScopesPostLabCommand");
+            this.dmxCoreScopesGetLabCommand = Environment.GetEnvironmentVariable("AzureAdAppDmxCoreScopesGetLabCommand");
             this.provisionClientId = Environment.GetEnvironmentVariable("AzureAdAppProvisionClientId");
             this.provisionClientSecret = Environment.GetEnvironmentVariable("AzureAdAppProvisionClientSecret");
             this.provisionAdminName = Environment.GetEnvironmentVariable("AzureSqlServerAdminName");
