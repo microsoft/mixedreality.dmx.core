@@ -15,7 +15,6 @@ using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 {
@@ -26,13 +25,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly ILabCommandService labCommandService;
 
-        private readonly ITestOutputHelper output;
-
-        public LabCommandServiceTests(ITestOutputHelper output)
+        public LabCommandServiceTests()
         {
-            this.output = output;
-
-
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
             this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
