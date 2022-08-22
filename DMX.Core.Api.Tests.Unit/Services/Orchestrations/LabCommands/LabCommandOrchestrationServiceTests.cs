@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Linq.Expressions;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Services.Foundations.LabCommands;
@@ -10,6 +11,7 @@ using DMX.Core.Api.Services.Orchestrations;
 using DMX.Core.Api.Services.Orchestrations.LabCommands;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
 {
@@ -48,5 +50,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
 
             return filler;
         }
+
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
     }
 }
