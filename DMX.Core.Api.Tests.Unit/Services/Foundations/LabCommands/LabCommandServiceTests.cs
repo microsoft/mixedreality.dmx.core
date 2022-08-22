@@ -52,38 +52,26 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             return (T)(object)randomNumber;
         }
 
-        private static DateTimeOffset GetValidDateTimeOffset(DateTimeOffset dateTimeOffset, TimeSpan timeWindow) =>
-            GetRandomDateTimeOffset(dateTimeOffset, dateTimeOffset.Add(timeWindow));
-
-        public static TheoryData<int> MinuteBeforeAndAfter()
-        {
-            var randomNumber = GetRandomNumber();
-            var randomNegativeNumber = GetRandomNumber() * -1;
-
-            return new TheoryData<int>
-            {
-                randomNumber,
-                randomNegativeNumber
-            };
-        }
-
         public static TheoryData InvalidSeconds()
         {
             int secondsInPast =
-                new IntRange(
-                    min: 60,
-                    max: int.MaxValue).GetValue() * -1;
+                GetRandomNumberInRange(
+                    minValue: 60,
+                    maxValue: int.MaxValue) * -1;
 
             int secondsInFuture =
-                new IntRange(
-                    min: 0,
-                    max: int.MaxValue).GetValue();
+                GetRandomNumberInRange(
+                    minValue: 0,
+                    maxValue: int.MaxValue);
 
             return new TheoryData<int>
             {
                 secondsInPast,
                 secondsInFuture
             };
+
+            static int GetRandomNumberInRange(int minValue, int maxValue) =>
+                new IntRange(minValue, maxValue).GetValue();
         }
 
         private static int GetRandomNegativeNumber() =>

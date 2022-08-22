@@ -237,17 +237,21 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         }
 
         [Theory]
-        [MemberData(nameof(MinuteBeforeAndAfter))]
+        [MemberData(nameof(InvalidSeconds))]
         public async Task ShouldThrowValidationExceptionOnAddIfCreatedDateIsNotRecentAndLogItAsync(
-            int randomMinutes)
+            int invalidSeconds)
         {
             // given
+            int randomMinutesInPast = GetRandomNegativeNumber();
             DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
-            var invalidDateTime = randomDateTime.AddMinutes(randomMinutes);
             LabCommand randomLabCommand = CreateRandomLabCommand();
             LabCommand invalidLabCommand = randomLabCommand;
-            randomLabCommand.CreatedDate = invalidDateTime;
-            randomLabCommand.UpdatedDate = invalidDateTime;
+
+            randomLabCommand.UpdatedDate =
+                randomDateTime.AddSeconds(invalidSeconds);
+
+            randomLabCommand.CreatedDate =
+                invalidLabCommand.UpdatedDate.AddMinutes(randomMinutesInPast);
 
             var invalidLabCommandException =
                 new InvalidLabCommandException();
