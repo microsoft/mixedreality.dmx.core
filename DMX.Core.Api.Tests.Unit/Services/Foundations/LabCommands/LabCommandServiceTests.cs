@@ -4,7 +4,6 @@
 
 using System;
 using System.Linq.Expressions;
-using System.Reflection.Metadata.Ecma335;
 using System.Runtime.Serialization;
 using DMX.Core.Api.Brokers.DateTimes;
 using DMX.Core.Api.Brokers.Loggings;
@@ -53,18 +52,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             return (T)(object)randomNumber;
         }
 
-        private static DateTimeOffset GetInvalidDateTimeOffset(DateTimeOffset dateTimeOffset, TimeSpan timeWindow)
-        {
-            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
-
-            while ((randomDateTimeOffset - dateTimeOffset).Duration() <= timeWindow.Duration())
-            {
-                randomDateTimeOffset = GetRandomDateTimeOffset();
-            }
-
-            return randomDateTimeOffset;
-        }
-
         private static DateTimeOffset GetValidDateTimeOffset(DateTimeOffset dateTimeOffset, TimeSpan timeWindow) =>
             GetRandomDateTimeOffset(dateTimeOffset, dateTimeOffset.Add(timeWindow));
 
@@ -105,9 +92,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 10).GetValue();
 
-        private static long GetRandomLong(long min, long max) =>
-            new LongRange(min, max).GetValue();
-
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
@@ -119,16 +103,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
         private static LabCommand CreateRandomLabCommand(DateTimeOffset date) =>
             CreateLabCommandFiller(date).Create();
-
-        private static TimeSpan GetRandomPositiveTimeSpanUpToMaxDate(DateTimeOffset maxDateTimeOffset) =>
-            GetRandomTimeSpanUpToMaxTicks(maxDateTimeOffset.UtcTicks).Duration();
-
-        private static TimeSpan GetRandomTimeSpanUpToMaxTicks(long maxTicks)
-        {
-            long randomLong = GetRandomLong(min: 1, max: maxTicks);
-
-            return new TimeSpan(ticks: randomLong);
-        }
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(TimeZoneInfo.Utc).GetValue();
