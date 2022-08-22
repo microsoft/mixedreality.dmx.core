@@ -33,6 +33,34 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 (Rule: IsNotRecent(labCommand.CreatedDate), Parameter: nameof(LabCommand.CreatedDate)));
         }
 
+        private void ValidateLabCommandOnModify(LabCommand labCommand)
+        {
+            ValidateLabCommandIsNotNull(labCommand);
+
+            Validate(
+                (Rule: IsInvalid(labCommand.Id), Parameter: nameof(LabCommand.Id)),
+                (Rule: IsInvalid(labCommand.LabId), Parameter: nameof(LabCommand.LabId)),
+                (Rule: IsInvalid(labCommand.Arguments), Parameter: nameof(LabCommand.Arguments)),
+                (Rule: IsInvalid(labCommand.CreatedDate), Parameter: nameof(LabCommand.CreatedDate)),
+                (Rule: IsInvalid(labCommand.UpdatedDate), Parameter: nameof(LabCommand.UpdatedDate)),
+                (Rule: IsInvalid(labCommand.Status), Parameter: nameof(LabCommand.Status)),
+                (Rule: IsInvalid(labCommand.Type), Parameter: nameof(LabCommand.Type)),
+
+                (Rule: IsSame(
+                    labCommand.UpdatedDate,
+                    labCommand.CreatedDate,
+                    nameof(LabCommand.CreatedDate)),
+                Parameter: nameof(LabCommand.UpdatedDate)),
+
+                (Rule: IsBefore(
+                    labCommand.UpdatedDate,
+                    labCommand.CreatedDate,
+                    nameof(LabCommand.CreatedDate)),
+                Parameter: nameof(LabCommand.UpdatedDate)),
+
+                (Rule: IsNotRecent(labCommand.UpdatedDate), Parameter: nameof(LabCommand.UpdatedDate)));
+        }
+
         private static void ValidateLabCommandId(Guid labCommandId) =>
             Validate((Rule: IsInvalid(labCommandId), Parameter: nameof(LabCommand.Id)));
 
@@ -44,12 +72,26 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             }
         }
 
-        private void ValidateLabCommandIsNotNull(LabCommand labCommand)
+        private static void ValidateLabCommandIsNotNull(LabCommand labCommand)
         {
             if (labCommand is null)
             {
                 throw new NullLabCommandException();
             }
+        }
+
+        private static void ValidateLabCommandAgainstStorageLabCommand(
+            LabCommand labCommand,
+            LabCommand storageLabCommand)
+        {
+            ValidateLabCommandExists(storageLabCommand, labCommand.Id);
+
+            Validate(
+                (Rule: IsNotSameAsStorage(
+                    labCommand.CreatedDate,
+                    storageLabCommand.CreatedDate,
+                    nameof(LabCommand.CreatedDate)),
+                Parameter: nameof(LabCommand.CreatedDate)));
         }
 
         private static dynamic IsInvalid(string text) => new
@@ -62,6 +104,12 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
         {
             Condition = id == Guid.Empty,
             Message = "Id is required"
+        };
+
+        private static dynamic IsInvalid(ulong userId) => new
+        {
+            Condition = userId == default,
+            Message = "User is required"
         };
 
         private static dynamic IsInvalid(CommandStatus status) => new
@@ -82,6 +130,15 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             Message = "Date is required"
         };
 
+        private static dynamic IsSame(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string nameOfSecondDate) => new
+            {
+                Condition = firstDate != default && firstDate == secondDate,
+                Message = $"Date is the same as {nameOfSecondDate}"
+            };
+
         private static dynamic IsNotSame(
             DateTimeOffset firstDate,
             DateTimeOffset secondDate,
@@ -91,11 +148,29 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 Message = $"Date is not the same as {nameOfSecondDate}"
             };
 
+        private static dynamic IsNotSameAsStorage(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string nameOfSecondDate) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not the same as stored {nameOfSecondDate}"
+            };
+
         private dynamic IsNotRecent(DateTimeOffset date) => new
         {
             Condition = IsDateNotRecent(date),
             Message = "Date is not recent"
         };
+
+        private static dynamic IsBefore(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string nameOfSecondDate) => new
+            {
+                Condition = firstDate < secondDate,
+                Message = $"Date can not be before {nameOfSecondDate}"
+            };
 
         private bool IsDateNotRecent(DateTimeOffset date)
         {
@@ -103,9 +178,8 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 this.dateTimeBroker.GetCurrentDateTime();
 
             TimeSpan timeDifference = currentDateTime.Subtract(date);
-            TimeSpan oneMinute = TimeSpan.FromMinutes(1);
 
-            return timeDifference.Duration() > oneMinute;
+            return timeDifference.TotalSeconds is > 60 or < 0;
         }
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)

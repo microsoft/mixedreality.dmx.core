@@ -67,14 +67,14 @@ namespace DMX.Core.Api.Controllers
 #if RELEASE
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:GetLabCommand")]
 #endif
-        public async ValueTask<ActionResult<LabCommand>> GetLabByIdAsync(Guid labCommandId)
+        public async ValueTask<ActionResult<LabCommand>> GetLabCommandByIdAsync(Guid labCommandId)
         {
             try
             {
-                LabCommand lab =
+                LabCommand labCommand =
                     await this.labCommandService.RetrieveLabCommandByIdAsync(labCommandId);
 
-                return Ok(lab);
+                return Ok(labCommand);
             }
             catch (LabCommandValidationException labCommandValidationException)
                 when (labCommandValidationException.InnerException is NotFoundLabCommandException)
