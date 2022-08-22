@@ -449,9 +449,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             // given
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
             LabCommand randomLabCommand = CreateRandomLabCommand(randomDateTimeOffset);
-            int randomNumber = GetRandomNumber();
+            int randomNegativeNumber = GetRandomNegativeNumber();
             LabCommand invalidLabCommand = randomLabCommand;
-            invalidLabCommand.UpdatedDate = invalidLabCommand.CreatedDate.AddSeconds(randomNumber);
+            invalidLabCommand.CreatedDate = invalidLabCommand.CreatedDate.AddSeconds(randomNegativeNumber);
             Guid notFoundId = invalidLabCommand.Id;
             LabCommand nullLabCommand = null;
 

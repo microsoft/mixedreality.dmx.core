@@ -4,6 +4,7 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.Serialization;
 using DMX.Core.Api.Brokers.DateTimes;
 using DMX.Core.Api.Brokers.Loggings;
@@ -78,6 +79,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                 randomNegativeNumber
             };
         }
+
+
+        private static int GetRandomNegativeNumber() =>
+            GetRandomNumber() * -1;
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 10).GetValue();
