@@ -80,6 +80,24 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             };
         }
 
+        public static TheoryData InvalidSeconds()
+        {
+            int secondsInPast = 
+                new IntRange(
+                    min: 60, 
+                    max: int.MaxValue).GetValue() * -1;
+            
+            int secondsInFuture =
+                new IntRange(
+                    min: 0,
+                    max: int.MaxValue).GetValue();
+
+            return new TheoryData<int>
+            {
+                secondsInPast,
+                secondsInFuture
+            };
+        }
 
         private static int GetRandomNegativeNumber() =>
             GetRandomNumber() * -1;

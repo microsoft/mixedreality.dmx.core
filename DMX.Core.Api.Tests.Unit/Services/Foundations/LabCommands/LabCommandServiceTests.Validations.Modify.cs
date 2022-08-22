@@ -143,10 +143,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             invalidLabCommand.Status = GetInvalidEnum<CommandStatus>();
             invalidLabCommand.Type = GetInvalidEnum<CommandType>();
             invalidLabCommand.UpdatedDate = randomDateTimeOffset;
-            
-            invalidLabCommand.CreatedDate = 
+
+            invalidLabCommand.CreatedDate =
                 invalidLabCommand.CreatedDate.AddMinutes(minutesInPast);
-            
+
             LabCommand updatedLabCommand = invalidLabCommand.DeepClone();
             LabCommand expectedLabCommand = updatedLabCommand.DeepClone();
 
@@ -374,17 +374,22 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
 
-        [Fact]
-        public async Task ShouldThrowValidationExceptionOnModifyIfUpdatedDateIsNotRecentAndLogItAsync()
+        [Theory]
+        [MemberData(nameof(InvalidSeconds))]
+        public async Task ShouldThrowValidationExceptionOnModifyIfUpdatedDateIsNotRecentAndLogItAsync(
+            int invalidSeconds)
         {
             // given
+            int randomMinutesInPast = GetRandomNegativeNumber();
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
             LabCommand randomLabCommand = CreateRandomLabCommand();
             LabCommand invalidLabCommand = randomLabCommand;
 
-            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset(
-                earliestDate: invalidLabCommand.CreatedDate);
+            invalidLabCommand.UpdatedDate =
+                randomDateTimeOffset.AddSeconds(invalidSeconds);
 
-            invalidLabCommand.UpdatedDate = randomDateTimeOffset;
+            invalidLabCommand.CreatedDate =
+                invalidLabCommand.UpdatedDate.AddMinutes(randomMinutesInPast);
 
             var invalidLabCommandException =
                 new InvalidLabCommandException();
@@ -396,12 +401,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             var expectedLabCommandValidationException =
                 new LabCommandValidationException(invalidLabCommandException);
 
-            DateTimeOffset invalidDateTimeOffset =
-                GetInvalidDateTimeOffset(invalidLabCommand.UpdatedDate, new TimeSpan(0, 1, 0));
-
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
-                    .Returns(invalidDateTimeOffset);
+                    .Returns(randomDateTimeOffset);
 
             // when
             ValueTask<LabCommand> labCommandTask =
