@@ -8,6 +8,7 @@ using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using FluentAssertions;
 using Force.DeepCloner;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Moq;
 using Xunit;
 
@@ -135,18 +136,17 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         public async Task ShouldThrowValidationExceptionOnModifyIfLabCommandStatusOrTypeIsInvalidAndLogItAsync()
         {
             // given
-            LabCommand randomLabCommand = CreateRandomLabCommand();
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            int minutesInPast = GetRandomNegativeNumber();
+            LabCommand randomLabCommand = CreateRandomLabCommand(randomDateTimeOffset);
             LabCommand invalidLabCommand = randomLabCommand;
             invalidLabCommand.Status = GetInvalidEnum<CommandStatus>();
             invalidLabCommand.Type = GetInvalidEnum<CommandType>();
-
-            DateTimeOffset randomDate =
-                GetValidDateTimeOffset(
-                    invalidLabCommand.CreatedDate,
-                    new TimeSpan(0, 1, 0));
-
-            DateTimeOffset currentDate = randomDate;
-            invalidLabCommand.UpdatedDate = currentDate;
+            invalidLabCommand.UpdatedDate = randomDateTimeOffset;
+            
+            invalidLabCommand.CreatedDate = 
+                invalidLabCommand.CreatedDate.AddMinutes(minutesInPast);
+            
             LabCommand updatedLabCommand = invalidLabCommand.DeepClone();
             LabCommand expectedLabCommand = updatedLabCommand.DeepClone();
 
@@ -165,7 +165,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
-                    .Returns(currentDate);
+                    .Returns(randomDateTimeOffset);
 
             // when
             ValueTask<LabCommand> labCommandTask =
