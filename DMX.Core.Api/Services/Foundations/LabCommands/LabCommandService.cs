@@ -16,6 +16,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
         private readonly IStorageBroker storageBroker;
         private readonly IDateTimeBroker dateTimeBroker;
         private readonly ILoggingBroker loggingBroker;
+
         public LabCommandService(
             IStorageBroker storageBroker,
             IDateTimeBroker dateTimeBroker,
@@ -45,6 +46,19 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             ValidateLabCommandExists(maybeLabCommand, labCommandId);
 
             return maybeLabCommand;
+        });
+
+        public ValueTask<LabCommand> ModifyLabCommandAsync(LabCommand labCommand) =>
+        TryCatch(async () =>
+        {
+            ValidateLabCommandOnModify(labCommand);
+
+            var maybeLabCommand =
+                await this.storageBroker.SelectLabCommandByIdAsync(labCommand.Id);
+
+            ValidateLabCommandAgainstStorageLabCommand(labCommand, maybeLabCommand);
+
+            return await this.storageBroker.UpdateLabCommandAsync(labCommand);
         });
     }
 }

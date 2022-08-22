@@ -37,9 +37,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
-        private static DateTimeOffset GetRandomDateTimeOffset() =>
-            new DateTimeRange(earliestDate: new DateTime()).GetValue();
-
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption exception) =>
             actualException => actualException.SameExceptionAs(exception);
 
@@ -55,6 +52,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             return (T)(object)randomNumber;
         }
 
+        private static DateTimeOffset GetValidDateTimeOffset(DateTimeOffset dateTimeOffset, TimeSpan timeWindow) =>
+            GetRandomDateTimeOffset(dateTimeOffset, dateTimeOffset.Add(timeWindow));
+
         public static TheoryData<int> MinuteBeforeAndAfter()
         {
             var randomNumber = GetRandomNumber();
@@ -67,6 +67,28 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             };
         }
 
+        public static TheoryData InvalidSeconds()
+        {
+            int secondsInPast =
+                new IntRange(
+                    min: 60,
+                    max: int.MaxValue).GetValue() * -1;
+
+            int secondsInFuture =
+                new IntRange(
+                    min: 0,
+                    max: int.MaxValue).GetValue();
+
+            return new TheoryData<int>
+            {
+                secondsInPast,
+                secondsInFuture
+            };
+        }
+
+        private static int GetRandomNegativeNumber() =>
+            GetRandomNumber() * -1;
+
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 10).GetValue();
 
@@ -76,30 +98,28 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         private static SqlException GetSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
-        public static LabCommand CreateRandomLabCommand() =>
-            CreateLabCommandFiller().Create();
+        private static LabCommand CreateRandomLabCommand() =>
+            CreateLabCommandFiller(GetRandomDateTimeOffset()).Create();
 
-        public static LabCommand CreateRandomLabCommand(DateTimeOffset date) =>
+        private static LabCommand CreateRandomLabCommand(DateTimeOffset date) =>
             CreateLabCommandFiller(date).Create();
 
-        private static Filler<LabCommand> CreateLabCommandFiller()
+        private static DateTimeOffset GetRandomDateTimeOffset() =>
+            new DateTimeRange(TimeZoneInfo.Utc).GetValue();
+
+        private static DateTimeOffset GetRandomDateTimeOffset(DateTimeOffset earliestDate) =>
+            new DateTimeRange(earliestDate: earliestDate.DateTime, TimeZoneInfo.Utc).GetValue();
+
+        private static DateTimeOffset GetRandomDateTimeOffset(DateTimeOffset earliestDate, DateTimeOffset latestDate) =>
+            new DateTimeRange(earliestDate: earliestDate.DateTime, latestDate: latestDate.DateTime, TimeZoneInfo.Utc).GetValue();
+
+        private static Filler<LabCommand> CreateLabCommandFiller(DateTimeOffset dateTimeOffset)
         {
             var filler = new Filler<LabCommand>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>()
-                    .Use(GetRandomDateTimeOffset());
-
-            return filler;
-        }
-
-        private static Filler<LabCommand> CreateLabCommandFiller(DateTimeOffset date)
-        {
-            var filler = new Filler<LabCommand>();
-
-            filler.Setup()
-                .OnType<DateTimeOffset>()
-                    .Use(date);
+                    .Use(dateTimeOffset);
 
             return filler;
         }
