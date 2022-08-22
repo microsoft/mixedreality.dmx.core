@@ -6,12 +6,14 @@ using System;
 using System.Linq.Expressions;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Models.Foundations.LabCommands;
+using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
+using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using DMX.Core.Api.Services.Foundations.LabCommands;
-using DMX.Core.Api.Services.Orchestrations;
 using DMX.Core.Api.Services.Orchestrations.LabCommands;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
+using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
 {
@@ -30,6 +32,21 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
                 labCommandService: this.labCommandServiceMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        public static TheoryData<Xeption> LabCommandDependencyValidationExceptions()
+        {
+            string randomErrorMessage = GetRandomString();
+            var innerException = new Xeption(randomErrorMessage);
+
+            return new TheoryData<Xeption>
+            {
+                new LabCommandValidationException(innerException),
+                new LabCommandDependencyValidationException(innerException),
+            };
+        }
+
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
 
         private static LabCommand CreateRandomLabCommand() =>
             CreateLabCommandFiller(GetRandomDateTimeOffset()).Create();
