@@ -98,5 +98,41 @@ namespace DMX.Core.Api.Controllers
                 return InternalServerError(labCommandServiceException);
             }
         }
+
+        [HttpPut("{labCommand}")]
+#if RELEASE
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:PutLabCommand")]
+#endif
+        public async ValueTask<ActionResult<LabCommand>> PutLabCommandAsync(LabCommand labCommand)
+        {
+            try
+            {
+                LabCommand modifiedLabCommand =
+                    await this.labCommandService.ModifyLabCommandAsync(labCommand);
+
+                return Ok(modifiedLabCommand);
+            }
+            catch (LabCommandValidationException labCommandValidationException)
+                when (labCommandValidationException.InnerException is NotFoundLabCommandException)
+            {
+                return NotFound(labCommandValidationException.InnerException);
+            }
+            catch (LabCommandValidationException labCommandValidationException)
+            {
+                return BadRequest(labCommandValidationException.InnerException);
+            }
+            catch (LabCommandDependencyValidationException labCommandDependencyValidationException)
+            {
+                return BadRequest(labCommandDependencyValidationException.InnerException);
+            }
+            catch (LabCommandDependencyException labCommandDependencyException)
+            {
+                return InternalServerError(labCommandDependencyException);
+            }
+            catch (LabCommandServiceException labCommandServiceException)
+            {
+                return InternalServerError(labCommandServiceException);
+            }
+        }
     }
 }
