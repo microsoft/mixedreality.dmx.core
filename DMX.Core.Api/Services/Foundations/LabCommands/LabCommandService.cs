@@ -58,7 +58,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
 
             ValidateLabCommandAgainstStorageLabCommand(labCommand, maybeLabCommand);
 
-            return await this.storageBroker.UpdateLabCommandAsync(maybeLabCommand);
+            return await this.storageBroker.UpdateLabCommandAsync(labCommand);
         });
     }
 }
