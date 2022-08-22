@@ -8,7 +8,6 @@ using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using FluentAssertions;
 using Force.DeepCloner;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Moq;
 using Xunit;
 
@@ -316,12 +315,13 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         public async Task ShouldThrowValidationExceptionOnModifyIfStorageCreatedDateNotSameAsCreatedDateAndLogItAsync()
         {
             // given
-            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
-            int minutesInPast = GetRandomNegativeNumber();
-            LabCommand randomLabCommand = CreateRandomLabCommand(randomDateTimeOffset);
+            LabCommand randomLabCommand = CreateRandomLabCommand();
             LabCommand storageLabCommand = randomLabCommand;
             LabCommand invalidLabCommand = randomLabCommand.DeepClone();
-            invalidLabCommand.CreatedDate = GetRandomDateTimeOffset();
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            int randomSecondsInPast = GetRandomNegativeNumber();
+            invalidLabCommand.UpdatedDate = randomDateTimeOffset;
+            invalidLabCommand.CreatedDate = invalidLabCommand.UpdatedDate.AddSeconds(randomSecondsInPast);
             Guid labCommandId = invalidLabCommand.Id;
             var invalidLabCommandException = new InvalidLabCommandException();
 

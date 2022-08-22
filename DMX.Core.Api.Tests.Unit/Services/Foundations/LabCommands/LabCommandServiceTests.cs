@@ -69,11 +69,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
         public static TheoryData InvalidSeconds()
         {
-            int secondsInPast = 
+            int secondsInPast =
                 new IntRange(
-                    min: 60, 
+                    min: 60,
                     max: int.MaxValue).GetValue() * -1;
-            
+
             int secondsInFuture =
                 new IntRange(
                     min: 0,
