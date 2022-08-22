@@ -72,7 +72,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             }
         }
 
-        private void ValidateLabCommandIsNotNull(LabCommand labCommand)
+        private static void ValidateLabCommandIsNotNull(LabCommand labCommand)
         {
             if (labCommand is null)
             {
@@ -80,7 +80,9 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             }
         }
 
-        private void ValidateLabCommandAgainstStorageLabCommand(LabCommand labCommand, LabCommand storageLabCommand)
+        private static void ValidateLabCommandAgainstStorageLabCommand(
+            LabCommand labCommand,
+            LabCommand storageLabCommand)
         {
             ValidateLabCommandExists(storageLabCommand, labCommand.Id);
 
@@ -166,7 +168,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             DateTimeOffset secondDate,
             string nameOfSecondDate) => new
             {
-                Condition = DateTimeOffset.Compare(firstDate, secondDate) < 0,
+                Condition = firstDate < secondDate,
                 Message = $"Date can not be before {nameOfSecondDate}"
             };
 
