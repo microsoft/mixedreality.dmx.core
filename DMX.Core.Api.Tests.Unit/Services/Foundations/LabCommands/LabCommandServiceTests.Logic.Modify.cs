@@ -21,10 +21,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
             LabCommand randomLabCommand = CreateRandomLabCommand(randomDateTimeOffset);
             LabCommand storageLabCommand = randomLabCommand;
+            int randomNegativeNumber = GetRandomNegativeNumber();
+            storageLabCommand.CreatedDate = storageLabCommand.CreatedDate.AddSeconds(seconds: randomNegativeNumber);
             LabCommand inputLabCommand = storageLabCommand.DeepClone();
-            int randomNumber = GetRandomNumber();
-            inputLabCommand.UpdatedDate = storageLabCommand.CreatedDate.AddSeconds(seconds: randomNumber);
-            LabCommand updatedLabCommand = inputLabCommand.DeepClone();
+            LabCommand updatedLabCommand = inputLabCommand;
             LabCommand expectedLabCommand = updatedLabCommand.DeepClone();
             Guid labCommandId = inputLabCommand.Id;
 
