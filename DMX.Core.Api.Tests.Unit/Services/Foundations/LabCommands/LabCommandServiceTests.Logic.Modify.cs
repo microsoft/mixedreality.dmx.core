@@ -18,23 +18,19 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         public async Task ShouldModifyLabCommandAsync()
         {
             // given
-            LabCommand randomLabCommand = CreateRandomLabCommand();
-            LabCommand inputLabCommand = randomLabCommand;
-            LabCommand storageLabCommand = inputLabCommand;
-
-            DateTimeOffset randomDate = GetValidDateTimeOffset(
-                inputLabCommand.CreatedDate,
-                new TimeSpan(0, 1, 0));
-
-            DateTimeOffset currentDate = randomDate;
-            inputLabCommand.UpdatedDate = currentDate;
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            LabCommand randomLabCommand = CreateRandomLabCommand(randomDateTimeOffset);
+            LabCommand storageLabCommand = randomLabCommand;
+            LabCommand inputLabCommand = storageLabCommand.DeepClone();
+            int randomNumber = GetRandomNumber();
+            inputLabCommand.UpdatedDate = storageLabCommand.CreatedDate.AddSeconds(seconds: randomNumber);
             LabCommand updatedLabCommand = inputLabCommand.DeepClone();
             LabCommand expectedLabCommand = updatedLabCommand.DeepClone();
             Guid labCommandId = inputLabCommand.Id;
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
-                    .Returns(currentDate);
+                    .Returns(randomDateTimeOffset);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectLabCommandByIdAsync(labCommandId))
