@@ -99,7 +99,7 @@ namespace DMX.Core.Api.Controllers
             }
         }
 
-        [HttpPut("{labCommand}")]
+        [HttpPut]
 #if RELEASE
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:PutLabCommand")]
 #endif
