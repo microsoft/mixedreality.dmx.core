@@ -178,9 +178,8 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 this.dateTimeBroker.GetCurrentDateTime();
 
             TimeSpan timeDifference = currentDateTime.Subtract(date);
-            TimeSpan oneMinute = TimeSpan.FromMinutes(1);
 
-            return timeDifference.Duration() > oneMinute;
+            return timeDifference.TotalSeconds is > 60 or < 0;
         }
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
