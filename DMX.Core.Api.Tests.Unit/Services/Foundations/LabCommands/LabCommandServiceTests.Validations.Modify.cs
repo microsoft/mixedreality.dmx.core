@@ -316,18 +316,12 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         public async Task ShouldThrowValidationExceptionOnModifyIfStorageCreatedDateNotSameAsCreatedDateAndLogItAsync()
         {
             // given
-            LabCommand randomLabCommand = CreateRandomLabCommand();
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            int minutesInPast = GetRandomNegativeNumber();
+            LabCommand randomLabCommand = CreateRandomLabCommand(randomDateTimeOffset);
             LabCommand storageLabCommand = randomLabCommand;
             LabCommand invalidLabCommand = randomLabCommand.DeepClone();
             invalidLabCommand.CreatedDate = GetRandomDateTimeOffset();
-
-            DateTimeOffset randomDate =
-                GetValidDateTimeOffset(
-                    invalidLabCommand.CreatedDate,
-                    new TimeSpan(0, 1, 0));
-
-            DateTimeOffset currentDate = randomDate;
-            invalidLabCommand.UpdatedDate = currentDate;
             Guid labCommandId = invalidLabCommand.Id;
             var invalidLabCommandException = new InvalidLabCommandException();
 
@@ -340,7 +334,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
-                    .Returns(currentDate);
+                    .Returns(randomDateTimeOffset);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectLabCommandByIdAsync(labCommandId))
