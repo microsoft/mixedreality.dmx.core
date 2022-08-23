@@ -119,7 +119,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
                     .ThrowsAsync(exception);
 
             // when
-            ValueTask<LabCommand> addLabCommandTask = 
+            ValueTask<LabCommand> addLabCommandTask =
                 this.labCommandOrchestrationService.AddLabCommandAsync(randomLabCommand);
 
             LabCommandOrchestrationServiceException

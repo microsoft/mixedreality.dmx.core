@@ -7,7 +7,6 @@ using System.Linq.Expressions;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
-using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using DMX.Core.Api.Services.Foundations.LabCommands;
 using DMX.Core.Api.Services.Orchestrations.LabCommands;
 using Moq;
