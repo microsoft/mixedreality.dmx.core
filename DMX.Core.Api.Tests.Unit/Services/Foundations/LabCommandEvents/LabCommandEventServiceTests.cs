@@ -18,6 +18,7 @@ using Microsoft.Azure.ServiceBus;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
+using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
 {
@@ -66,6 +67,21 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
             return actualMessage =>
                 this.compareLogic.Compare(
                     expectedMessage, actualMessage).AreEqual;
+        }
+
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
+
+        public static TheoryData MessageQueueExceptions()
+        {
+            string message = GetRandomString();
+
+            return new TheoryData<Exception>
+            {
+                new MessagingEntityNotFoundException(message),
+                new MessagingEntityDisabledException(message),
+                new UnauthorizedAccessException()
+            };
         }
     }
 }
