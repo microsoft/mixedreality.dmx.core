@@ -17,6 +17,7 @@ using KellermanSoftware.CompareNetObjects;
 using Microsoft.Azure.ServiceBus;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
 {
@@ -39,6 +40,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
                 loggingBroker: this.loggingBrokerMock.Object
             );
         }
+
+        private Expression<Func<Exception, bool>> SameExceptionAs(Xeption exception) =>
+            actualException => actualException.SameExceptionAs(exception);
 
         private static LabCommand CreateRandomLabCommand() =>
             CreateLabCommandFiller().Create();
@@ -63,6 +67,5 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
                 this.compareLogic.Compare(
                     expectedMessage, actualMessage).AreEqual;
         }
-
     }
 }

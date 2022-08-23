@@ -1,0 +1,57 @@
+﻿// ---------------------------------------------------------------
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// ---------------------------------------------------------------
+
+using DMX.Core.Api.Models.Foundations.LabCommandEvents.Exceptions;
+using DMX.Core.Api.Models.Foundations.LabCommands;
+using FluentAssertions;
+using Microsoft.Azure.ServiceBus;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
+{
+    public partial class LabCommandEventServiceTests
+    {
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnAddIfLabCommandEventIsNullAndLogItAsync()
+        {
+            // given
+            LabCommand nullLabCommand = null;
+            var nullLabCommandEventException = new NullLabCommandEventException();
+
+            var expectedLabCommandEventValidationException =
+                new LabCommandEventValidationException(nullLabCommandEventException);
+
+            // when
+            ValueTask<LabCommand> addLabCommandEventTask =
+                this.labCommandEventService.AddLabCommandEventAsync(nullLabCommand);
+
+            LabCommandEventValidationException actualLabCommandEventValidationException =
+                await Assert.ThrowsAsync<LabCommandEventValidationException>(
+                    addLabCommandEventTask.AsTask);
+
+            // then
+            actualLabCommandEventValidationException.Should().BeEquivalentTo(
+                expectedLabCommandEventValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabCommandEventValidationException))),
+                        Times.Once);
+
+            this.queueBrokerMock.Verify(broker =>
+                broker.EnqueueLabCommandEventMessageAsync(It.IsAny<Message>()),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.queueBrokerMock.VerifyNoOtherCalls();
+        }
+    }
+}
