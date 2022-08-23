@@ -4,6 +4,7 @@
 
 using DMX.Core.Api.Models.Foundations.LabCommandEvents.Exceptions;
 using DMX.Core.Api.Models.Foundations.LabCommands;
+using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using FluentAssertions;
 using Microsoft.Azure.ServiceBus;
 using Moq;
@@ -24,10 +25,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
         {
             // given
             LabCommand nullLabCommand = null;
-            var nullLabCommandEventException = new NullLabCommandEventException();
+            var nullLabCommandException = new NullLabCommandException();
 
             var expectedLabCommandEventValidationException =
-                new LabCommandEventValidationException(nullLabCommandEventException);
+                new LabCommandEventValidationException(nullLabCommandException);
 
             // when
             ValueTask<LabCommand> addLabCommandEventTask =

@@ -27,14 +27,15 @@ namespace DMX.Core.Api.Services.Foundations.LabCommandEvents
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<LabCommand> AddLabCommandEventAsync(
-            LabCommand labCommand)
+        public ValueTask<LabCommand> AddLabCommandEventAsync(LabCommand labCommand) =>
+        TryCatch(async () =>
         {
+            ValidateLabCommandIsNotNull(labCommand);
             Message labCommandMessage = MapToMessage(labCommand);
             await this.queueBroker.EnqueueLabCommandEventMessageAsync(labCommandMessage);
 
             return labCommand;
-        }
+        });
 
         private Message MapToMessage(LabCommand labCommand)
         {
