@@ -162,7 +162,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
                 new FailedLabCommandEventServiceException(exception);
 
             var expectedLabCommandServiceException =
-                new LabCommandServiceException(failedLabCommandEventServiceException);
+                new LabCommandEventServiceException(failedLabCommandEventServiceException);
 
             this.queueBrokerMock.Setup(broker =>
                 broker.EnqueueLabCommandEventMessageAsync(It.IsAny<Message>()))
@@ -172,8 +172,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
             ValueTask<LabCommand> addLabCommandTask =
                 this.labCommandEventService.AddLabCommandEventAsync(someLabCommand);
 
-            LabCommandServiceException actualLabCommandServiceException =
-                await Assert.ThrowsAsync<LabCommandServiceException>(
+            LabCommandEventServiceException actualLabCommandServiceException =
+                await Assert.ThrowsAsync<LabCommandEventServiceException>(
                     addLabCommandTask.AsTask);
 
             // then
