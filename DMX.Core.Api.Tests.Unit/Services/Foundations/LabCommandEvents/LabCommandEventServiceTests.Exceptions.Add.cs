@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommandEvents.Exceptions;
 using DMX.Core.Api.Models.Foundations.LabCommands;
+using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using FluentAssertions;
 using Microsoft.Azure.ServiceBus;
 using Moq;
@@ -144,6 +145,48 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLabCommandEventDependencyValidationException))),
+                        Times.Once);
+
+            this.queueBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccursAndLogItAsync()
+        {
+            // given
+            LabCommand someLabCommand = CreateRandomLabCommand();
+            var exception = new Exception();
+
+            var failedLabCommandEventServiceException =
+                new FailedLabCommandEventServiceException(exception);
+
+            var expectedLabCommandServiceException =
+                new LabCommandServiceException(failedLabCommandEventServiceException);
+
+            this.queueBrokerMock.Setup(broker =>
+                broker.EnqueueLabCommandEventMessageAsync(It.IsAny<Message>()))
+                    .Throws(exception);
+
+            // when
+            ValueTask<LabCommand> addLabCommandTask =
+                this.labCommandEventService.AddLabCommandEventAsync(someLabCommand);
+
+            LabCommandServiceException actualLabCommandServiceException =
+                await Assert.ThrowsAsync<LabCommandServiceException>(
+                    addLabCommandTask.AsTask);
+
+            // then
+            actualLabCommandServiceException.Should().BeEquivalentTo(
+                expectedLabCommandServiceException);
+
+            this.queueBrokerMock.Verify(broker =>
+                broker.EnqueueLabCommandEventMessageAsync(It.IsAny<Message>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabCommandServiceException))),
                         Times.Once);
 
             this.queueBrokerMock.VerifyNoOtherCalls();
