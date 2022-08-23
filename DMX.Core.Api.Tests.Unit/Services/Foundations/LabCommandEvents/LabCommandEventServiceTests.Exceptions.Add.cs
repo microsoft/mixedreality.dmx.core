@@ -3,17 +3,12 @@
 // ---------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommandEvents.Exceptions;
 using DMX.Core.Api.Models.Foundations.LabCommands;
-using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using FluentAssertions;
 using Microsoft.Azure.ServiceBus;
 using Moq;
-using Xeptions;
 using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
@@ -68,14 +63,14 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
         [MemberData(nameof(MessageQueueDependencyExceptions))]
         public async Task ShouldThrowDependencyExceptionOnAddIfDependencyErrorOccursAndLogItAsync(
             Exception messageQueueDependencyException)
-        { 
+        {
             // given
             LabCommand someLabCommand = CreateRandomLabCommand();
 
             var failedLabCommandEventDependencyException =
                 new FailedLabCommandEventDependencyException(messageQueueDependencyException);
 
-            var expectedLabCommandEventDepdendencyException = 
+            var expectedLabCommandEventDepdendencyException =
                 new LabCommandEventDependencyException(failedLabCommandEventDependencyException);
 
             this.queueBrokerMock.Setup(broker =>
@@ -129,7 +124,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
             ValueTask<LabCommand> addLabCommandTask =
                 this.labCommandEventService.AddLabCommandEventAsync(someLabCommand);
 
-            LabCommandEventDependencyValidationException 
+            LabCommandEventDependencyValidationException
                 actualLabCommandEventDependencyValidationException =
                     await Assert.ThrowsAsync<LabCommandEventDependencyValidationException>(
                         addLabCommandTask.AsTask);

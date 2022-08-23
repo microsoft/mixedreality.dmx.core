@@ -3,14 +3,9 @@
 // ---------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Queues;
-using DMX.Core.Api.Models.Foundations.LabCommandEvents;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Services.Foundations.LabCommandEvents;
 using KellermanSoftware.CompareNetObjects;

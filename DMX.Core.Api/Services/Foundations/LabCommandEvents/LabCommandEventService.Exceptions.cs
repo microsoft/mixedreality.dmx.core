@@ -43,7 +43,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommandEvents
                 throw CreateAndLogCriticalDependencyException(failedLabCommandEventDependencyException);
             }
             catch (UnauthorizedAccessException unauthorizedAccessException)
-            { 
+            {
                 var failedLabCommandEventDependencyException =
                     new FailedLabCommandEventDependencyException(unauthorizedAccessException);
 
