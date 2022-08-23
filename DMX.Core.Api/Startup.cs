@@ -11,6 +11,7 @@ using DMX.Core.Api.Services.Foundations.ExternalLabs;
 using DMX.Core.Api.Services.Foundations.LabCommands;
 using DMX.Core.Api.Services.Foundations.Labs;
 using DMX.Core.Api.Services.Orchestrations;
+using DMX.Core.Api.Services.Orchestrations.LabCommands;
 using DMX.Core.Api.Services.Orchestrations.Labs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -91,8 +92,11 @@ namespace DMX.Core.Api
             services.AddTransient<ILabCommandService, LabCommandService>();
         }
 
-        private static void AddOrchestrationServices(IServiceCollection services) =>
+        private static void AddOrchestrationServices(IServiceCollection services)
+        {
             services.AddTransient<ILabOrchestrationService, LabOrchestrationService>();
+            services.AddTransient<ILabCommandOrchestrationService, LabCommandOrchestrationService>();
+        }
 
         private void AddAuthentication(IServiceCollection services)
         {
