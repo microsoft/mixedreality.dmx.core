@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommandEvents.Exceptions;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
+using Microsoft.Azure.ServiceBus;
 using Xeptions;
 
 namespace DMX.Core.Api.Services.Foundations.LabCommandEvents
@@ -25,6 +26,28 @@ namespace DMX.Core.Api.Services.Foundations.LabCommandEvents
             {
                 throw CreateAndLogValidationException(nullLabCommandException);
             }
+            catch (MessagingEntityNotFoundException messagingEntityNotFoundException)
+            {
+                var failedLabCommandEventDependencyException =
+                    new FailedLabCommandEventDependencyException(messagingEntityNotFoundException);
+
+                throw CreateAndLogCriticalDependencyException(failedLabCommandEventDependencyException);
+
+            }
+            catch (MessagingEntityDisabledException messagingEntityDisabledException)
+            {
+                var failedLabCommandEventDependencyException =
+                    new FailedLabCommandEventDependencyException(messagingEntityDisabledException);
+
+                throw CreateAndLogCriticalDependencyException(failedLabCommandEventDependencyException);
+            }
+            catch (UnauthorizedAccessException unauthorizedAccessException)
+            { 
+                var failedLabCommandEventDependencyException =
+                    new FailedLabCommandEventDependencyException(unauthorizedAccessException);
+
+                throw CreateAndLogCriticalDependencyException(failedLabCommandEventDependencyException);
+            }
         }
 
         private LabCommandEventValidationException CreateAndLogValidationException(
@@ -36,6 +59,17 @@ namespace DMX.Core.Api.Services.Foundations.LabCommandEvents
             loggingBroker.LogError(labCommandEventValidationException);
 
             return labCommandEventValidationException;
+        }
+
+        private LabCommandEventDepdendencyException CreateAndLogCriticalDependencyException(Xeption exception)
+        {
+
+            var labCommandEventDepdendencyException =
+                new LabCommandEventDepdendencyException(exception);
+
+            loggingBroker.LogCritical(labCommandEventDepdendencyException);
+
+            return labCommandEventDepdendencyException;
         }
     }
 }
