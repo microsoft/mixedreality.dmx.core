@@ -2,10 +2,15 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Queues;
 using DMX.Core.Api.Models.Foundations.LabCommandEvents;
+using DMX.Core.Api.Models.Foundations.LabCommands;
+using Microsoft.Azure.ServiceBus;
 
 namespace DMX.Core.Api.Services.Foundations.LabCommandEvents
 {
@@ -22,10 +27,24 @@ namespace DMX.Core.Api.Services.Foundations.LabCommandEvents
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<LabCommandEvent> AddLabCommandEventAsync(
-            LabCommandEvent labCommandEvent)
+        public async ValueTask<LabCommand> AddLabCommandEventAsync(
+            LabCommand labCommand)
         {
-            throw new System.NotImplementedException();
+            Message labCommandMessage = MapToMessage(labCommand);
+            await this.queueBroker.EnqueueLabCommandEventMessageAsync(labCommandMessage);
+
+            return labCommand;
+        }
+
+        private Message MapToMessage(LabCommand labCommand)
+        {
+            string serializedLabCommandEvent =
+                JsonSerializer.Serialize(labCommand);
+
+            return new Message
+            {
+                Body = Encoding.UTF8.GetBytes(serializedLabCommandEvent),
+            };
         }
     }
 }

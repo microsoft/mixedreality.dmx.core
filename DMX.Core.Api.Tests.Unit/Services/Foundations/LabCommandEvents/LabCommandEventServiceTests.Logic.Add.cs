@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Foundations.LabCommandEvents;
+using DMX.Core.Api.Models.Foundations.LabCommands;
 using FluentAssertions;
 using Force.DeepCloner;
 using Microsoft.Azure.ServiceBus;
@@ -25,29 +25,29 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
         public async Task ShouldAddLabCommandEventAsync()
         {
             // given
-            LabCommandEvent randomLabCommandEvent = CreateRandomLabCommandEvent();
-            LabCommandEvent inputLabCommandEvent = randomLabCommandEvent;
-            LabCommandEvent expectedLabCommandEvent = inputLabCommandEvent.DeepClone() ;
+            LabCommand randomLabCommand = CreateRandomLabCommand();
+            LabCommand inputLabCommand = randomLabCommand;
+            LabCommand expectedLabCommand = inputLabCommand.DeepClone() ;
 
-            string serializedLabCommandEvent =
-                JsonSerializer.Serialize(expectedLabCommandEvent);
+            string serializedLabCommand =
+                JsonSerializer.Serialize(expectedLabCommand);
             
-            var expectedLabCommandEventMessage = new Message
+            var expectedLabCommandMessage = new Message
             {
-                Body = Encoding.UTF8.GetBytes(serializedLabCommandEvent)
+                Body = Encoding.UTF8.GetBytes(serializedLabCommand)
             };
             
             // when
-            LabCommandEvent actualLabCommandEvent =
+            LabCommand actualLabCommand =
                 await this.labCommandEventService.AddLabCommandEventAsync(
-                    inputLabCommandEvent);
+                    inputLabCommand);
 
             // then
-            actualLabCommandEvent.Should().BeEquivalentTo(expectedLabCommandEvent);
+            actualLabCommand.Should().BeEquivalentTo(expectedLabCommand);
 
             this.queueBrokerMock.Verify(broker =>
                 broker.EnqueueLabCommandEventMessageAsync(It.Is(
-                    SameMessageAs(expectedLabCommandEventMessage))),
+                    SameMessageAs(expectedLabCommandMessage))),
                         Times.Once);
 
             this.queueBrokerMock.VerifyNoOtherCalls();

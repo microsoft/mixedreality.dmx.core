@@ -40,12 +40,12 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
             );
         }
 
-        private static LabCommandEvent CreateRandomLabCommandEvent() =>
-            CreateLabCommandEventFiller().Create();
+        private static LabCommand CreateRandomLabCommand() =>
+            CreateLabCommandFiller().Create();
 
-        private static Filler<LabCommandEvent> CreateLabCommandEventFiller()
+        private static Filler<LabCommand> CreateLabCommandFiller()
         {
-            var filler = new Filler<LabCommandEvent>();
+            var filler = new Filler<LabCommand>();
 
             filler.Setup()
                 .OnType<DateTimeOffset>()
