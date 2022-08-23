@@ -61,11 +61,11 @@ namespace DMX.Core.Api.Services.Foundations.LabCommandEvents
             return labCommandEventValidationException;
         }
 
-        private LabCommandEventDepdendencyException CreateAndLogCriticalDependencyException(Xeption exception)
+        private LabCommandEventDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
 
             var labCommandEventDepdendencyException =
-                new LabCommandEventDepdendencyException(exception);
+                new LabCommandEventDependencyException(exception);
 
             loggingBroker.LogCritical(labCommandEventDepdendencyException);
 

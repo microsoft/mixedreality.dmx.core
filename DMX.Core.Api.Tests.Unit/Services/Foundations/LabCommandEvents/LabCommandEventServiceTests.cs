@@ -19,6 +19,7 @@ using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
 using Xunit;
+using AzureMessagingCommunicationException = Microsoft.ServiceBus.Messaging.MessagingCommunicationException;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
 {
@@ -40,6 +41,30 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
                 queueBroker: this.queueBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object
             );
+        }
+
+        public static TheoryData MessageQueueExceptions()
+        {
+            string message = GetRandomString();
+
+            return new TheoryData<Exception>
+            {
+                new MessagingEntityNotFoundException(message),
+                new MessagingEntityDisabledException(message),
+                new UnauthorizedAccessException()
+            };
+        }
+
+        public static TheoryData MessageQueueDependencyExceptions()
+        {
+            string message = GetRandomString();
+
+            return new TheoryData<Exception>
+            {
+                new InvalidOperationException(),
+                new AzureMessagingCommunicationException(communicationPath: message),
+                new ServerBusyException(message),
+            };
         }
 
         private Expression<Func<Exception, bool>> SameExceptionAs(Xeption exception) =>
@@ -71,17 +96,5 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
 
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
-
-        public static TheoryData MessageQueueExceptions()
-        {
-            string message = GetRandomString();
-
-            return new TheoryData<Exception>
-            {
-                new MessagingEntityNotFoundException(message),
-                new MessagingEntityDisabledException(message),
-                new UnauthorizedAccessException()
-            };
-        }
     }
 }

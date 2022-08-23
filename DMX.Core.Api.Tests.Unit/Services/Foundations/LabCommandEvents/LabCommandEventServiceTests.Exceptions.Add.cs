@@ -12,6 +12,7 @@ using DMX.Core.Api.Models.Foundations.LabCommands;
 using FluentAssertions;
 using Microsoft.Azure.ServiceBus;
 using Moq;
+using Xeptions;
 using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
@@ -26,11 +27,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
             // given
             LabCommand someLabCommand = CreateRandomLabCommand();
 
-            var failedLabCommandEventDependencyException = 
+            var failedLabCommandEventDependencyException =
                 new FailedLabCommandEventDependencyException(messageQueueException);
 
             var expectedLabCommandEventDependencyException =
-                new LabCommandEventDepdendencyException(
+                new LabCommandEventDependencyException(
                     failedLabCommandEventDependencyException);
 
             this.queueBrokerMock.Setup(broker =>
@@ -41,8 +42,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
             ValueTask<LabCommand> addLabCommandTask =
                 this.labCommandEventService.AddLabCommandEventAsync(someLabCommand);
 
-            LabCommandEventDepdendencyException actualLabCommandEventDependencyException =
-                await Assert.ThrowsAsync<LabCommandEventDepdendencyException>(
+            LabCommandEventDependencyException actualLabCommandEventDependencyException =
+                await Assert.ThrowsAsync<LabCommandEventDependencyException>(
                     addLabCommandTask.AsTask);
 
             // then
@@ -56,6 +57,49 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(
                     expectedLabCommandEventDependencyException))),
+                        Times.Once);
+
+            this.queueBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Theory]
+        [MemberData(nameof(MessageQueueDependencyExceptions))]
+        public async Task ShouldThrowDependencyExceptionOnAddIfDependencyErrorOccursAndLogItAsync(
+            Exception messageQueueDependencyException)
+        { 
+            // given
+            LabCommand someLabCommand = CreateRandomLabCommand();
+
+            var failedLabCommandEventDependencyException =
+                new FailedLabCommandEventDependencyException(messageQueueDependencyException);
+
+            var expectedLabCommandEventDepdendencyException = 
+                new LabCommandEventDependencyException(failedLabCommandEventDependencyException);
+
+            this.queueBrokerMock.Setup(broker =>
+                broker.EnqueueLabCommandEventMessageAsync(It.IsAny<Message>()))
+                    .Throws(messageQueueDependencyException);
+
+            // when
+            ValueTask<LabCommand> addLabCommandTask =
+                this.labCommandEventService.AddLabCommandEventAsync(someLabCommand);
+
+            LabCommandEventDependencyException actualLabCommandEventDepdendencyException =
+                await Assert.ThrowsAsync<LabCommandEventDependencyException>(
+                    addLabCommandTask.AsTask);
+
+            // then
+            actualLabCommandEventDepdendencyException.Should().BeEquivalentTo(
+                expectedLabCommandEventDepdendencyException);
+
+            this.queueBrokerMock.Verify(broker =>
+                broker.EnqueueLabCommandEventMessageAsync(It.IsAny<Message>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabCommandEventDepdendencyException))),
                         Times.Once);
 
             this.queueBrokerMock.VerifyNoOtherCalls();

@@ -6,9 +6,9 @@ using Xeptions;
 
 namespace DMX.Core.Api.Models.Foundations.LabCommandEvents.Exceptions
 {
-    public class LabCommandEventDepdendencyException : Xeption
+    public class LabCommandEventDependencyException : Xeption
     {
-        public LabCommandEventDepdendencyException(Xeption innerException)
+        public LabCommandEventDependencyException(Xeption innerException)
             : base(message: "Lab command event dependency error occurred, please contact support.",
                   innerException)
         { }
