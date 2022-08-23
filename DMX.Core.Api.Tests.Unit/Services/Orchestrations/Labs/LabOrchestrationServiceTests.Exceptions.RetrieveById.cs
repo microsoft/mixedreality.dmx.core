@@ -11,13 +11,13 @@ using Moq;
 using Xeptions;
 using Xunit;
 
-namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
+namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.Labs
 {
     public partial class LabOrchestrationServiceTests
     {
         [Theory]
         [MemberData(nameof(LabDependencyValidationExceptions))]
-        public async Task ShouldThrowOrchestrationDependencyValidationExceptionOnRemoveIfDependencyValidationErrorOccursAndLogItAsync(
+        public async Task ShouldThrowDependencyValidationOnRetrieveByIdIfDependencyValidationErrorOccurrsAndLogItAsync(
             Xeption validationException)
         {
             // given
@@ -28,24 +28,24 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                     validationException.InnerException as Xeption);
 
             this.labServiceMock.Setup(service =>
-                service.RemoveLabByIdAsync(It.IsAny<Guid>()))
+                service.RetrieveLabByIdAsync(It.IsAny<Guid>()))
                     .ThrowsAsync(validationException);
 
             // when
-            ValueTask<Lab> actualLabTask =
-                this.labOrchestrationService.RemoveLabByIdAsync(someLabId);
+            ValueTask<Lab> retrieveLabByIdTask =
+                this.labOrchestrationService.RetrieveLabByIdAsync(someLabId);
 
             LabOrchestrationDependencyValidationException
                 actualLabOrchestrationDependencyValidationException =
                     await Assert.ThrowsAsync<LabOrchestrationDependencyValidationException>(
-                        actualLabTask.AsTask);
+                        retrieveLabByIdTask.AsTask);
 
             // then
             actualLabOrchestrationDependencyValidationException.Should()
                 .BeEquivalentTo(expectedLabOrchestrationDependencyValidationException);
 
             this.labServiceMock.Verify(service =>
-                service.RemoveLabByIdAsync(It.IsAny<Guid>()),
+                service.RetrieveLabByIdAsync(It.IsAny<Guid>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -60,7 +60,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
 
         [Theory]
         [MemberData(nameof(LabDependencyExceptions))]
-        public async Task ShouldThrowOrchestrationDependencyExceptionOnRemoveIfDependencyErrorOccursAndLogItAsync(
+        public async Task ShouldThrowDependencyExceptionOnRetrieveByIdDependencyErrorOccursAndLogItAsync(
             Xeption dependencyException)
         {
             // given
@@ -71,23 +71,23 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                     dependencyException.InnerException as Xeption);
 
             this.labServiceMock.Setup(service =>
-                service.RemoveLabByIdAsync(It.IsAny<Guid>()))
+                service.RetrieveLabByIdAsync(It.IsAny<Guid>()))
                     .ThrowsAsync(dependencyException);
 
             // when
-            ValueTask<Lab> removeLabTask =
-                this.labOrchestrationService.RemoveLabByIdAsync(someLabId);
+            ValueTask<Lab> retrieveLabByIdTask =
+                this.labOrchestrationService.RetrieveLabByIdAsync(someLabId);
 
             LabOrchestrationDependencyException actualLabOrchestrationDependencyException =
                 await Assert.ThrowsAsync<LabOrchestrationDependencyException>(
-                    removeLabTask.AsTask);
+                    retrieveLabByIdTask.AsTask);
 
             // then
             actualLabOrchestrationDependencyException.Should()
                 .BeEquivalentTo(expectedLabOrchestrationDependencyException);
 
             this.labServiceMock.Verify(service =>
-                service.RemoveLabByIdAsync(It.IsAny<Guid>()),
+                service.RetrieveLabByIdAsync(someLabId),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -101,7 +101,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
         }
 
         [Fact]
-        public async Task ShouldThrowOrchestrationServiceExceptionOnRemoveIfErrorOccursAndLogItAsync()
+        public async Task ShouldThrowServiceExceptionOnRetrieveByIdIfServiceErrorOccursAndLogItAsync()
         {
             // given
             Guid someLabId = Guid.NewGuid();
@@ -115,23 +115,23 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
                 new LabOrchestrationServiceException(failedLabOrchestrationServiceException);
 
             this.labServiceMock.Setup(service =>
-                service.RemoveLabByIdAsync(It.IsAny<Guid>()))
+                service.RetrieveLabByIdAsync(someLabId))
                     .ThrowsAsync(exception);
 
             // when
-            ValueTask<Lab> actualLabTask =
-                this.labOrchestrationService.RemoveLabByIdAsync(someLabId);
+            ValueTask<Lab> retrieveLabByIdTask =
+                this.labOrchestrationService.RetrieveLabByIdAsync(someLabId);
 
             LabOrchestrationServiceException actualLabOrchestrationServiceException =
                 await Assert.ThrowsAsync<LabOrchestrationServiceException>(
-                    actualLabTask.AsTask);
+                    retrieveLabByIdTask.AsTask);
 
             // then
             actualLabOrchestrationServiceException.Should()
                 .BeEquivalentTo(expectedLabOrchestrationServiceException);
 
             this.labServiceMock.Verify(service =>
-                service.RemoveLabByIdAsync(It.IsAny<Guid>()),
+                service.RetrieveLabByIdAsync(someLabId),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>

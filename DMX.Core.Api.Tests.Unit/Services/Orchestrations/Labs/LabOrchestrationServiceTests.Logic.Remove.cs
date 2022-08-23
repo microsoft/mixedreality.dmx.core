@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.Labs;
 using FluentAssertions;
@@ -9,32 +10,32 @@ using Force.DeepCloner;
 using Moq;
 using Xunit;
 
-namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
+namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.Labs
 {
     public partial class LabOrchestrationServiceTests
     {
         [Fact]
-        public async Task ShouldAddLabAsync()
+        public async Task ShouldRemoveLabByIdAsync()
         {
             // given
+            Guid inputId = Guid.NewGuid();
             Lab randomLab = CreateRandomLab();
-            Lab inputLab = randomLab;
-            Lab returnedLab = inputLab.DeepClone();
-            Lab exptectedLab = returnedLab.DeepClone();
+            Lab returnedLab = randomLab.DeepClone();
+            Lab expectedLab = randomLab.DeepClone();
 
             this.labServiceMock.Setup(service =>
-                service.AddLabAsync(inputLab))
+                service.RemoveLabByIdAsync(inputId))
                     .ReturnsAsync(returnedLab);
 
             // when
             Lab actualLab =
-                await this.labOrchestrationService.AddLabAsync(inputLab);
+                await this.labOrchestrationService.RemoveLabByIdAsync(inputId);
 
             // then
-            actualLab.Should().BeEquivalentTo(exptectedLab);
+            actualLab.Should().BeEquivalentTo(expectedLab);
 
             this.labServiceMock.Verify(service =>
-                service.AddLabAsync(It.IsAny<Lab>()),
+                service.RemoveLabByIdAsync(inputId),
                     Times.Once);
 
             this.labServiceMock.VerifyNoOtherCalls();
