@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
@@ -34,11 +35,18 @@ namespace DMX.Core.Api.Services.Orchestrations.LabCommands
             }
             catch (LabCommandDependencyException labCommandDependencyException)
             {
-                throw CreateAndLogOrchestrationDependencyException(labCommandDependencyException);
+                throw CreateAndLogDependencyException(labCommandDependencyException);
             }
             catch (LabCommandServiceException labCommandServiceException)
             {
-                throw CreateAndLogOrchestrationDependencyException(labCommandServiceException);
+                throw CreateAndLogDependencyException(labCommandServiceException);
+            }
+            catch (Exception exception)
+            {
+                var failedLabCommandOrchestrationServiceException =
+                    new FailedLabCommandOrchestrationServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLabCommandOrchestrationServiceException);
             }
         }
 
@@ -65,7 +73,7 @@ namespace DMX.Core.Api.Services.Orchestrations.LabCommands
             return labCommandOrchestrationDependencyValidationException;
         }
 
-        private LabCommandOrchestrationDependencyException CreateAndLogOrchestrationDependencyException(
+        private LabCommandOrchestrationDependencyException CreateAndLogDependencyException(
             Xeption exception)
         {
             var labCommandOrchestrationDependencyException =
@@ -75,6 +83,17 @@ namespace DMX.Core.Api.Services.Orchestrations.LabCommands
             this.loggingBroker.LogError(labCommandOrchestrationDependencyException);
 
             return labCommandOrchestrationDependencyException;
+        }
+
+        private LabCommandOrchestrationServiceException CreateAndLogServiceException(
+            Xeption exception)
+        {
+            var labCommandOrchestrationServiceException =
+                new LabCommandOrchestrationServiceException(exception);
+
+            this.loggingBroker.LogError(labCommandOrchestrationServiceException);
+
+            return labCommandOrchestrationServiceException;
         }
     }
 }
