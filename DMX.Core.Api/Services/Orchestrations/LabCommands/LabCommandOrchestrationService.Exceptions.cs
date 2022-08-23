@@ -32,6 +32,14 @@ namespace DMX.Core.Api.Services.Orchestrations.LabCommands
             {
                 throw CreateAndLogDependencyValidationException(labCommandDependencyValidationException);
             }
+            catch (LabCommandDependencyException labCommandDependencyException)
+            {
+                throw CreateAndLogOrchestrationDependencyException(labCommandDependencyException);
+            }
+            catch (LabCommandServiceException labCommandServiceException)
+            {
+                throw CreateAndLogOrchestrationDependencyException(labCommandServiceException);
+            }
         }
 
         private LabCommandOrchestrationValidationException CreateAndLogValidationException(
@@ -55,6 +63,18 @@ namespace DMX.Core.Api.Services.Orchestrations.LabCommands
             this.loggingBroker.LogError(labCommandOrchestrationDependencyValidationException);
 
             return labCommandOrchestrationDependencyValidationException;
+        }
+
+        private LabCommandOrchestrationDependencyException CreateAndLogOrchestrationDependencyException(
+            Xeption exception)
+        {
+            var labCommandOrchestrationDependencyException =
+                new LabCommandOrchestrationDependencyException(
+                    exception.InnerException as Xeption);
+
+            this.loggingBroker.LogError(labCommandOrchestrationDependencyException);
+
+            return labCommandOrchestrationDependencyException;
         }
     }
 }
