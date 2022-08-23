@@ -70,6 +70,13 @@ namespace DMX.Core.Api.Services.Foundations.LabCommandEvents
 
                 throw CreateAndLogDependencyException(failedLabCommandEventDependencyException);
             }
+            catch (ArgumentException argumentException)
+            {
+                var invalidLabCommandEventArgumentException =
+                    new InvalidLabCommandEventArgumentException(argumentException);
+
+                throw CreateAndLogDependencyValidationException(invalidLabCommandEventArgumentException);
+            }
         }
 
         private LabCommandEventValidationException CreateAndLogValidationException(
@@ -103,5 +110,16 @@ namespace DMX.Core.Api.Services.Foundations.LabCommandEvents
 
             return labCommandEventDependencyException;
         }
+
+        private Exception CreateAndLogDependencyValidationException(Xeption exception)
+        {
+            var labCommandEventDependencyValidationException =
+                new LabCommandEventDependencyValidationException(exception);
+
+            loggingBroker.LogError(labCommandEventDependencyValidationException);
+
+            return labCommandEventDependencyValidationException;
+        }
     }
 }
+

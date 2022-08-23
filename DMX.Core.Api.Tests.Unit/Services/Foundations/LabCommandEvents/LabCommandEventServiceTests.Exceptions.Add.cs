@@ -122,7 +122,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
 
             this.queueBrokerMock.Setup(broker =>
                 broker.EnqueueLabCommandEventMessageAsync(It.IsAny<Message>()))
-                    .Throws(invalidLabCommandEventArgumentException);
+                    .Throws(argumentException);
 
             // when
             ValueTask<LabCommand> addLabCommandTask =
