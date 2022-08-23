@@ -105,5 +105,49 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommandEvents
             this.queueBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfArgumentExceptionOccursAndLogItAsync()
+        {
+            // given
+            LabCommand someLabCommand = CreateRandomLabCommand();
+            var argumentException = new ArgumentException();
+
+            var invalidLabCommandEventArgumentException =
+                new InvalidLabCommandEventArgumentException(argumentException);
+
+            var expectedLabCommandEventDependencyValidationException =
+                new LabCommandEventDependencyValidationException(
+                    invalidLabCommandEventArgumentException);
+
+            this.queueBrokerMock.Setup(broker =>
+                broker.EnqueueLabCommandEventMessageAsync(It.IsAny<Message>()))
+                    .Throws(invalidLabCommandEventArgumentException);
+
+            // when
+            ValueTask<LabCommand> addLabCommandTask =
+                this.labCommandEventService.AddLabCommandEventAsync(someLabCommand);
+
+            LabCommandEventDependencyValidationException 
+                actualLabCommandEventDependencyValidationException =
+                    await Assert.ThrowsAsync<LabCommandEventDependencyValidationException>(
+                        addLabCommandTask.AsTask);
+
+            // then
+            actualLabCommandEventDependencyValidationException.Should().BeEquivalentTo(
+                expectedLabCommandEventDependencyValidationException);
+
+            this.queueBrokerMock.Verify(broker =>
+                broker.EnqueueLabCommandEventMessageAsync(It.IsAny<Message>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabCommandEventDependencyValidationException))),
+                        Times.Once);
+
+            this.queueBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
