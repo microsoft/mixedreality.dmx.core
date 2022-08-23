@@ -56,5 +56,47 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
             this.labCommandServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [MemberData(nameof(LabCommandDependencyExceptions))]
+        public async Task ShouldThrowOrchestrationDependencyExceptionOnAddIfDependencyErrorOccursAndLogItAsync(
+            Xeption dependencyException)
+        {
+            // given
+            LabCommand randomLabCommand = CreateRandomLabCommand();
+            LabCommand someLabCommand = randomLabCommand;
+
+            var expectedLabCommandOrchestrationDependencyException =
+                new LabCommandOrchestrationDependencyException(
+                    dependencyException.InnerException as Xeption);
+
+            this.labCommandServiceMock.Setup(service =>
+                service.AddLabCommandAsync(It.IsAny<LabCommand>()))
+                    .ThrowsAsync(dependencyException);
+
+            // when
+            ValueTask<LabCommand> addLabCommandTask =
+                this.labCommandOrchestrationService.AddLabCommandAsync(someLabCommand);
+
+            LabCommandOrchestrationDependencyException actualLabCommandOrchestrationDependencyException =
+                await Assert.ThrowsAsync<LabCommandOrchestrationDependencyException>(
+                    addLabCommandTask.AsTask);
+
+            // then
+            actualLabCommandOrchestrationDependencyException.Should().BeEquivalentTo(
+                expectedLabCommandOrchestrationDependencyException);
+
+            this.labCommandServiceMock.Verify(service =>
+                service.AddLabCommandAsync(It.IsAny<LabCommand>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabCommandOrchestrationDependencyException))),
+                        Times.Once);
+
+            this.labCommandServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }

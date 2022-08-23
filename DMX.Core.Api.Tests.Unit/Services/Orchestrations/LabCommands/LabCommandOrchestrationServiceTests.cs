@@ -45,6 +45,18 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
             };
         }
 
+        public static TheoryData<Xeption> LabCommandDependencyExceptions()
+        {
+            string randomMessage = GetRandomString();
+            var innerException = new Xeption(randomMessage);
+
+            return new TheoryData<Xeption>
+            {
+                new LabCommandDependencyException(innerException),
+                new LabCommandServiceException(innerException)
+            };
+        }
+
         private static string GetRandomString() =>
             new MnemonicString().GetValue();
 
