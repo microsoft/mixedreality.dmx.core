@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using DMX.Core.Api.Brokers.DateTimes;
 using DMX.Core.Api.Brokers.LabApis;
 using DMX.Core.Api.Brokers.Loggings;
+using DMX.Core.Api.Brokers.Queues;
 using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Services.Foundations.ExternalLabs;
 using DMX.Core.Api.Services.Foundations.LabCommands;
@@ -82,6 +83,7 @@ namespace DMX.Core.Api
             services.AddTransient<IExternalLabApiBroker, ExternalLabApiBroker>();
             services.AddTransient<IStorageBroker, StorageBroker>();
             services.AddTransient<IDateTimeBroker, DateTimeBroker>();
+            services.AddTransient<IQueueBroker, QueueBroker>();
         }
 
         private static void AddFoundationServices(IServiceCollection services)
