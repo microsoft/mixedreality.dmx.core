@@ -86,11 +86,6 @@ namespace DMX.Core.Api.Controllers
                 return BadRequest(labCommandValidationException.InnerException);
             }
             catch (LabCommandDependencyValidationException labCommandDependencyValidationException)
-                when (labCommandDependencyValidationException.InnerException is LockedLabCommandException)
-            {
-                return Locked(labCommandDependencyValidationException.InnerException);
-            }
-            catch (LabCommandDependencyValidationException labCommandDependencyValidationException)
             {
                 return BadRequest(labCommandDependencyValidationException.InnerException);
             }
@@ -125,6 +120,11 @@ namespace DMX.Core.Api.Controllers
             catch (LabCommandValidationException labCommandValidationException)
             {
                 return BadRequest(labCommandValidationException.InnerException);
+            }
+            catch (LabCommandDependencyValidationException labCommandDependencyValidationException)
+                when (labCommandDependencyValidationException.InnerException is LockedLabCommandException)
+            {
+                return Locked(labCommandDependencyValidationException.InnerException);
             }
             catch (LabCommandDependencyValidationException labCommandDependencyValidationException)
             {
