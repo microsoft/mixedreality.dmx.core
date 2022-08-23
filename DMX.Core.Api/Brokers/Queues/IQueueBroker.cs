@@ -4,7 +4,7 @@
 
 namespace DMX.Core.Api.Brokers.Queues
 {
-    public interface IQueueBroker
+    public partial interface IQueueBroker
     {
     }
 }
