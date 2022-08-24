@@ -33,7 +33,6 @@ namespace DMX.Core.Api.Services.Foundations.LabCommandEvents
                     new FailedLabCommandEventDependencyException(messagingEntityNotFoundException);
 
                 throw CreateAndLogCriticalDependencyException(failedLabCommandEventDependencyException);
-
             }
             catch (MessagingEntityDisabledException messagingEntityDisabledException)
             {
