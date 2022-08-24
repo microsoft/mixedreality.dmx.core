@@ -42,7 +42,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
             this.labCommandEventServiceMock.Verify(broker =>
                 broker.AddLabCommandEventAsync(inputLabCommand),
                     Times.Once());
-            
+
             this.labCommandServiceMock.Verify(broker =>
                 broker.AddLabCommandAsync(inputLabCommand),
                     Times.Once());
