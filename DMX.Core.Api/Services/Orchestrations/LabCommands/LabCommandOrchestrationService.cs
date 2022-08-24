@@ -30,6 +30,7 @@ namespace DMX.Core.Api.Services.Orchestrations.LabCommands
         TryCatch(async () =>
         {
             ValidateLabCommand(labCommand);
+            await this.labCommandEventService.AddLabCommandEventAsync(labCommand);
 
             return await this.labCommandService.AddLabCommandAsync(labCommand);
         });
