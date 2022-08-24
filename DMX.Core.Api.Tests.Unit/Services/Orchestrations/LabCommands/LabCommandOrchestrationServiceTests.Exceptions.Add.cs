@@ -29,8 +29,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
                 new LabCommandOrchestrationDependencyValidationException(
                     validationException.InnerException as Xeption);
 
-            this.labCommandEventServiceMock.Setup(service =>
-                service.AddLabCommandEventAsync(It.IsAny<LabCommand>()))
+            this.labCommandServiceMock.Setup(service =>
+                service.AddLabCommandAsync(It.IsAny<LabCommand>()))
                     .ThrowsAsync(validationException);
 
             // when
@@ -46,8 +46,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
             actualLabCommandOrchestrationDependencyValidationException.Should()
                 .BeEquivalentTo(expectedLabCommandOrchestrationDependencyValidationException);
 
-            this.labCommandEventServiceMock.Verify(service =>
-                service.AddLabCommandEventAsync(It.IsAny<LabCommand>()),
+            this.labCommandServiceMock.Verify(service =>
+                service.AddLabCommandAsync(It.IsAny<LabCommand>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -55,13 +55,13 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
                     expectedLabCommandOrchestrationDependencyValidationException))),
                         Times.Once);
 
-            this.labCommandServiceMock.Verify(service =>
-                service.AddLabCommandAsync(It.IsAny<LabCommand>()),
+            this.labCommandEventServiceMock.Verify(service =>
+                service.AddLabCommandEventAsync(It.IsAny<LabCommand>()),
                     Times.Never);
 
-            this.labCommandEventServiceMock.VerifyNoOtherCalls();
-            this.loggingBrokerMock.VerifyNoOtherCalls();
             this.labCommandServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.labCommandEventServiceMock.VerifyNoOtherCalls();
         }
 
         [Theory]
