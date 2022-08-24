@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
+using DMX.Core.Api.Services.Foundations.LabCommandEvents;
 using DMX.Core.Api.Services.Foundations.LabCommands;
 using DMX.Core.Api.Services.Orchestrations.LabCommands;
 using Moq;
@@ -19,16 +20,19 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
     public partial class LabCommandOrchestrationServiceTests
     {
         private readonly Mock<ILabCommandService> labCommandServiceMock;
+        private readonly Mock<ILabCommandEventService> labCommandEventServiceMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private ILabCommandOrchestrationService labCommandOrchestrationService;
 
         public LabCommandOrchestrationServiceTests()
         {
             this.labCommandServiceMock = new Mock<ILabCommandService>();
+            this.labCommandEventServiceMock = new Mock<ILabCommandEventService>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
             this.labCommandOrchestrationService = new LabCommandOrchestrationService(
                 labCommandService: this.labCommandServiceMock.Object,
+                labCommandEventService: this.labCommandEventServiceMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 

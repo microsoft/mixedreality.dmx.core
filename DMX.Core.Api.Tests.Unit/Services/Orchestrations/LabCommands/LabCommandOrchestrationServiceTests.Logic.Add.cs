@@ -19,8 +19,13 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
             // given
             LabCommand randomLabCommand = CreateRandomLabCommand();
             LabCommand inputLabCommand = randomLabCommand;
+            LabCommand eventLabCommand = inputLabCommand;
             LabCommand returnedLabCommand = inputLabCommand;
             LabCommand expectedLabCommand = returnedLabCommand.DeepClone();
+
+            this.labCommandEventServiceMock.Setup(broker =>
+                broker.AddLabCommandEventAsync(inputLabCommand))
+                    .ReturnsAsync(eventLabCommand);
 
             this.labCommandServiceMock.Setup(broker =>
                 broker.AddLabCommandAsync(inputLabCommand))
@@ -34,10 +39,15 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
             // then
             actualLabCommand.Should().BeEquivalentTo(expectedLabCommand);
 
+            this.labCommandEventServiceMock.Verify(broker =>
+                broker.AddLabCommandEventAsync(inputLabCommand),
+                    Times.Once());
+            
             this.labCommandServiceMock.Verify(broker =>
                 broker.AddLabCommandAsync(inputLabCommand),
                     Times.Once());
 
+            this.labCommandEventServiceMock.VerifyNoOtherCalls();
             this.labCommandServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
