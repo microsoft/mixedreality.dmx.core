@@ -9,6 +9,7 @@ using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Queues;
 using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Services.Foundations.ExternalLabs;
+using DMX.Core.Api.Services.Foundations.LabCommandEvents;
 using DMX.Core.Api.Services.Foundations.LabCommands;
 using DMX.Core.Api.Services.Foundations.Labs;
 using DMX.Core.Api.Services.Orchestrations.LabCommands;
@@ -91,6 +92,7 @@ namespace DMX.Core.Api
             services.AddTransient<IExternalLabService, ExternalLabService>();
             services.AddTransient<ILabService, LabService>();
             services.AddTransient<ILabCommandService, LabCommandService>();
+            services.AddTransient<ILabCommandEventService, LabCommandEventService>();
         }
 
         private static void AddOrchestrationServices(IServiceCollection services)
