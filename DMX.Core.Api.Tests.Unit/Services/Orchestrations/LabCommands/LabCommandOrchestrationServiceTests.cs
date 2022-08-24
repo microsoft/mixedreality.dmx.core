@@ -47,7 +47,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
                 new LabCommandValidationException(innerException),
                 new LabCommandDependencyValidationException(innerException),
                 new LabCommandEventValidationException(innerException),
-                new LabCommandEventDependencyValidationException(innerException),
+                new LabCommandEventDependencyValidationException(innerException)
             };
         }
 
@@ -59,7 +59,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
             return new TheoryData<Xeption>
             {
                 new LabCommandDependencyException(innerException),
-                new LabCommandServiceException(innerException)
+                new LabCommandServiceException(innerException),
+                new LabCommandEventDependencyException(innerException),
+                new LabCommandEventServiceException(innerException)
             };
         }
 

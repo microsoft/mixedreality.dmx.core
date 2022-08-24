@@ -50,18 +50,18 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
                 service.AddLabCommandEventAsync(It.IsAny<LabCommand>()),
                     Times.Once);
 
-            this.labCommandServiceMock.Verify(service =>
-                service.AddLabCommandAsync(It.IsAny<LabCommand>()),
-                    Times.Never);
-
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLabCommandOrchestrationDependencyValidationException))),
                         Times.Once);
 
+            this.labCommandServiceMock.Verify(service =>
+                service.AddLabCommandAsync(It.IsAny<LabCommand>()),
+                    Times.Never);
+
             this.labCommandEventServiceMock.VerifyNoOtherCalls();
-            this.labCommandServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.labCommandServiceMock.VerifyNoOtherCalls();
         }
 
         [Theory]
@@ -77,8 +77,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
                 new LabCommandOrchestrationDependencyException(
                     dependencyException.InnerException as Xeption);
 
-            this.labCommandServiceMock.Setup(service =>
-                service.AddLabCommandAsync(It.IsAny<LabCommand>()))
+            this.labCommandEventServiceMock.Setup(service =>
+                service.AddLabCommandEventAsync(It.IsAny<LabCommand>()))
                     .ThrowsAsync(dependencyException);
 
             // when
@@ -93,8 +93,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
             actualLabCommandOrchestrationDependencyException.Should().BeEquivalentTo(
                 expectedLabCommandOrchestrationDependencyException);
 
-            this.labCommandServiceMock.Verify(service =>
-                service.AddLabCommandAsync(It.IsAny<LabCommand>()),
+            this.labCommandEventServiceMock.Verify(service =>
+                service.AddLabCommandEventAsync(It.IsAny<LabCommand>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -102,8 +102,13 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
                     expectedLabCommandOrchestrationDependencyException))),
                         Times.Once);
 
-            this.labCommandServiceMock.VerifyNoOtherCalls();
+            this.labCommandServiceMock.Verify(service =>
+                service.AddLabCommandAsync(It.IsAny<LabCommand>()),
+                    Times.Never);
+
+            this.labCommandEventServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.labCommandServiceMock.VerifyNoOtherCalls();
         }
 
         [Fact]
