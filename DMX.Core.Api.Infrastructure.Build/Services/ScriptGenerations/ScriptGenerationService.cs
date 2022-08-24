@@ -120,27 +120,31 @@ namespace DMX.Core.Api.Infrastructure.Build.Services.ScriptGenerations
                             { "AzureAdAppDmxCoreCallbackPath", "${{ secrets.AZURE_ADAPP_DMXCORE_CALLBACKPATH }}" },
 
                             { "AzureAdAppDmxCoreScopesGetAllLabs",
-                                "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_GETALLLABS }}" },
+                            "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_GETALLLABS }}" },
 
-                            { "AzureAdAppDmxCoreScopesPostLab", "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_POSTLAB }}" },
+                            { "AzureAdAppDmxCoreScopesPostLab",
+                            "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_POSTLAB }}" },
 
                             { "AzureAdAppDmxCoreScopesDeleteLab",
-                                "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_DELETELAB }}" },
+                            "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_DELETELAB }}" },
 
                             { "AzureAdAppDmxCoreScopesPostLabCommand", 
-                                "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_POSTLABCOMMAND }}" },
+                            "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_POSTLABCOMMAND }}" },
                           
                             { "AzureAdAppDmxCoreScopesGetLabCommand", 
-                                "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_GETLABCOMMAND }}" },
+                            "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_GETLABCOMMAND }}" },
 
                             { "AzureSqlServerAdminName", "${{ secrets.AZURE_SQLSERVER_ADMINNAME }}" },
                             { "AzureSqlServerAdminAccess", "${{ secrets.AZURE_SQLSERVER_ADMINACCESS }}" },
 
                             { "AzureAppServiceExternalLabApiUrl",
-                                "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_URL }}" },
+                            "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_URL }}" },
 
-                            { "AzureAppServiceExternalLabApiGetAllDevicesAccessKey", "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_GETALLDEVICES_ACCESSKEY }}" },
-                            { "AzureAppServiceExternalLabApiGetAvailableDevicesAccessKey", "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_GETAVAILABLEDEVICES_ACCESSKEY }}" }
+                            { "AzureAppServiceExternalLabApiGetAllDevicesAccessKey",
+                            "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_GETALLDEVICES_ACCESSKEY }}" },
+
+                            { "AzureAppServiceExternalLabApiGetAvailableDevicesAccessKey",
+                            "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_GETAVAILABLEDEVICES_ACCESSKEY }}" }
                         },
 
                         Steps = new List<GithubTask>
