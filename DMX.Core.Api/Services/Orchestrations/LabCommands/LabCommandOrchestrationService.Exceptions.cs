@@ -46,9 +46,17 @@ namespace DMX.Core.Api.Services.Orchestrations.LabCommands
             {
                 throw CreateAndLogDependencyException(labCommandDependencyException);
             }
+            catch (LabCommandEventDependencyException labCommandEventDependencyException)
+            {
+                throw CreateAndLogDependencyException(labCommandEventDependencyException);
+            }
             catch (LabCommandServiceException labCommandServiceException)
             {
                 throw CreateAndLogDependencyException(labCommandServiceException);
+            }
+            catch (LabCommandEventServiceException labCommandEventServiceException)
+            {
+                throw CreateAndLogDependencyException(labCommandEventServiceException);
             }
             catch (Exception exception)
             {
