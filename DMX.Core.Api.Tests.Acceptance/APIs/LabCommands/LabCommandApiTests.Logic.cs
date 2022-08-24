@@ -51,18 +51,17 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.LabCommands
         public async Task ShouldPutLabCommandAsync()
         {
             // given
-            LabCommand randomLabCommand = CreateRandomLabCommand();
-            var inputLabCommand = randomLabCommand;
-            var expectedLabCommand = randomLabCommand.DeepClone();
+            LabCommand randomLabCommand = await PostRandomLabCommandAsync();
+            var modifiedLabCommand = UpdateRandomLabCommand(randomLabCommand);
 
             // when
-            await this.dmxCoreApiBroker.PutLabCommandAsync(inputLabCommand);
+            await this.dmxCoreApiBroker.PutLabCommandAsync(modifiedLabCommand);
 
             LabCommand actualLabCommand =
-                await this.dmxCoreApiBroker.PutLabCommandAsync(inputLabCommand);
+                await this.dmxCoreApiBroker.GetLabCommandByIdAsync(randomLabCommand.Id);
 
             // then
-            actualLabCommand.Should().BeEquivalentTo(expectedLabCommand);
+            actualLabCommand.Should().BeEquivalentTo(modifiedLabCommand);
         }
     }
 }

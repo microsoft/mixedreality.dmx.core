@@ -27,7 +27,7 @@ namespace DMX.Core.Api.Tests.Acceptance.Brokers
 
         public async ValueTask<LabCommand> PutLabCommandAsync(LabCommand labCommand)
         {
-            return await this.apiFactoryClient.PutContentAsync<LabCommand>(
+            return await this.apiFactoryClient.PutContentAsync(
                 relativeUrl: $"{LabCommandApiRelativeUrl}",
                 content: labCommand);
         }
