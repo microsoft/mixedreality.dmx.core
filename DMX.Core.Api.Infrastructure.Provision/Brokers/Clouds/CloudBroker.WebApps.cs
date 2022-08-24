@@ -34,6 +34,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
                     { "AzureAd:Scopes:DeleteLab", this.dmxCoreScopesDeleteLab },
                     { "AzureAd:Scopes:PostLabCommand", this.dmxCoreScopesPostLabCommand },
                     { "AzureAd:Scopes:GetLabCommand", this.dmxCoreScopesGetLabCommand},
+                    { "AzureAd:Scopes:PutLabCommand", this.dmxCoreScopesPutLabCommand},
                 };
 
             IWithWindowsRuntimeStack webAppWithPlanAndResouceGroup =

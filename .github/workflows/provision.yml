@@ -21,6 +21,9 @@ jobs:
       AzureAdAppDmxCoreScopesGetAllLabs: ${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_GETALLLABS }}
       AzureAdAppDmxCoreScopesPostLab: ${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_POSTLAB }}
       AzureAdAppDmxCoreScopesDeleteLab: ${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_DELETELAB }}
+      AzureAdAppDmxCoreScopesPostLabCommand: ${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_POSTLABCOMMAND }}
+      AzureAdAppDmxCoreScopesGetLabCommand: ${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_GETLABCOMMAND }}
+      AzureAdAppDmxCoreScopesPutLabCommand: ${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_PUTLABCOMMAND }}
       AzureSqlServerAdminName: ${{ secrets.AZURE_SQLSERVER_ADMINNAME }}
       AzureSqlServerAdminAccess: ${{ secrets.AZURE_SQLSERVER_ADMINACCESS }}
       AzureAppServiceExternalLabApiUrl: ${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_URL }}
