@@ -151,8 +151,13 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
                     expectedLabCommandOrchestrationServiceException))),
                         Times.Once);
 
+            this.labCommandEventServiceMock.Verify(service =>
+                service.AddLabCommandEventAsync(It.IsAny<LabCommand>()),
+                    Times.Never);
+
             this.labCommandServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.labCommandEventServiceMock.VerifyNoOtherCalls();
         }
     }
 }
