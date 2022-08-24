@@ -4,6 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
+using DMX.Core.Api.Models.Foundations.LabCommandEvents.Exceptions;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using DMX.Core.Api.Models.Orchestrations.LabCommands.Exceptions;
@@ -29,9 +30,17 @@ namespace DMX.Core.Api.Services.Orchestrations.LabCommands
             {
                 throw CreateAndLogDependencyValidationException(labCommandValidationException);
             }
+            catch (LabCommandEventValidationException labCommandEventValidationException)
+            {
+                throw CreateAndLogDependencyValidationException(labCommandEventValidationException);
+            }
             catch (LabCommandDependencyValidationException labCommandDependencyValidationException)
             {
                 throw CreateAndLogDependencyValidationException(labCommandDependencyValidationException);
+            }
+            catch (LabCommandEventDependencyValidationException labCommandEventDependencyValidationException)
+            {
+                throw CreateAndLogDependencyValidationException(labCommandEventDependencyValidationException);
             }
             catch (LabCommandDependencyException labCommandDependencyException)
             {
