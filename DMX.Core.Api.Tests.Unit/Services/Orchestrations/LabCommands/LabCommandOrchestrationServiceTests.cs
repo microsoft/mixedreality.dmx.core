@@ -5,6 +5,7 @@
 using System;
 using System.Linq.Expressions;
 using DMX.Core.Api.Brokers.Loggings;
+using DMX.Core.Api.Models.Foundations.LabCommandEvents.Exceptions;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using DMX.Core.Api.Services.Foundations.LabCommandEvents;
@@ -45,6 +46,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
             {
                 new LabCommandValidationException(innerException),
                 new LabCommandDependencyValidationException(innerException),
+                new LabCommandEventValidationException(innerException),
+                new LabCommandEventDependencyValidationException(innerException),
             };
         }
 
