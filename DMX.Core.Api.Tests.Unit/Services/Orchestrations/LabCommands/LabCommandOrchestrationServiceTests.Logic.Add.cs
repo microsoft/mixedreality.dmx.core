@@ -19,8 +19,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
             // given
             LabCommand randomLabCommand = CreateRandomLabCommand();
             LabCommand inputLabCommand = randomLabCommand;
-            LabCommand returnedLabCommand = inputLabCommand.DeepClone();
-            LabCommand expectedLabCommand = inputLabCommand.DeepClone();
+            LabCommand returnedLabCommand = inputLabCommand;
+            LabCommand expectedLabCommand = returnedLabCommand.DeepClone();
 
             this.labCommandServiceMock.Setup(broker =>
                 broker.AddLabCommandAsync(inputLabCommand))

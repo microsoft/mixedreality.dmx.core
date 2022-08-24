@@ -34,8 +34,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
 
         public static TheoryData<Xeption> LabCommandDependencyValidationExceptions()
         {
-            string randomErrorMessage = GetRandomString();
-            var innerException = new Xeption(randomErrorMessage);
+            string randomMessage = GetRandomString();
+            var innerException = new Xeption(randomMessage);
 
             return new TheoryData<Xeption>
             {
@@ -62,11 +62,14 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
         private static LabCommand CreateRandomLabCommand() =>
             CreateLabCommandFiller(GetRandomDateTimeOffset()).Create();
 
+        private static LabCommand CreateRandomLabCommand(DateTimeOffset date) =>
+            CreateLabCommandFiller(date).Create();
+
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
 
-        private static LabCommand CreateRandomLabCommand(DateTimeOffset date) =>
-            CreateLabCommandFiller(date).Create();
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private static Filler<LabCommand> CreateLabCommandFiller(DateTimeOffset dateTimeOffset)
         {
@@ -78,8 +81,5 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
 
             return filler;
         }
-
-        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
-            actualException => actualException.SameExceptionAs(expectedException);
     }
 }
