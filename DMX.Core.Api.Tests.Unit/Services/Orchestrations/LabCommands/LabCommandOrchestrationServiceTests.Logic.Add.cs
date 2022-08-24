@@ -22,14 +22,15 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
             LabCommand eventLabCommand = inputLabCommand;
             LabCommand returnedLabCommand = inputLabCommand;
             LabCommand expectedLabCommand = returnedLabCommand.DeepClone();
+            var mockSequence = new MockSequence();
 
-            this.labCommandEventServiceMock.Setup(broker =>
-                broker.AddLabCommandEventAsync(inputLabCommand))
-                    .ReturnsAsync(eventLabCommand);
-
-            this.labCommandServiceMock.Setup(broker =>
+            this.labCommandServiceMock.InSequence(mockSequence).Setup(broker =>
                 broker.AddLabCommandAsync(inputLabCommand))
                     .ReturnsAsync(returnedLabCommand);
+
+            this.labCommandEventServiceMock.InSequence(mockSequence).Setup(broker =>
+                broker.AddLabCommandEventAsync(inputLabCommand))
+                    .ReturnsAsync(eventLabCommand);
 
             // when
             LabCommand actualLabCommand =
@@ -39,16 +40,16 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
             // then
             actualLabCommand.Should().BeEquivalentTo(expectedLabCommand);
 
-            this.labCommandEventServiceMock.Verify(broker =>
-                broker.AddLabCommandEventAsync(inputLabCommand),
-                    Times.Once());
-
             this.labCommandServiceMock.Verify(broker =>
                 broker.AddLabCommandAsync(inputLabCommand),
                     Times.Once());
 
-            this.labCommandEventServiceMock.VerifyNoOtherCalls();
+            this.labCommandEventServiceMock.Verify(broker =>
+                broker.AddLabCommandEventAsync(inputLabCommand),
+                    Times.Once());
+
             this.labCommandServiceMock.VerifyNoOtherCalls();
+            this.labCommandEventServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }

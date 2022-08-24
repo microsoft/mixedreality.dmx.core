@@ -27,8 +27,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabCommands
 
         public LabCommandOrchestrationServiceTests()
         {
-            this.labCommandServiceMock = new Mock<ILabCommandService>();
-            this.labCommandEventServiceMock = new Mock<ILabCommandEventService>();
+            this.labCommandServiceMock = new Mock<ILabCommandService>(MockBehavior.Strict);
+            this.labCommandEventServiceMock = new Mock<ILabCommandEventService>(MockBehavior.Strict);
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
             this.labCommandOrchestrationService = new LabCommandOrchestrationService(
