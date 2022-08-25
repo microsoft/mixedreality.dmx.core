@@ -23,7 +23,8 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
                 {
                     { "ASPNETCORE_ENVIRONMENT", DmxEnvironment },
                     { "ApiConfigurations:Url", this.configurationExternalLabApiUrl },
-                    { "ApiConfigurations:AccessKey", this.configurationExternalLabApiAccessKey },
+                    { "ApiConfigurations:AvailableDevicesAccessKey", this.configurationExternalLabApiGetAvailableDevicesAccessKey },
+                    { "ApiConfigurations:AllDevicesAccessKey", this.configurationExternalLabApiGetAllDevicesAccessKey },
                     { "AzureAd:TenantId", this.tenantId },
                     { "AzureAd:Instance", this.dmxCoreInstance },
                     { "AzureAd:Domain", this.dmxCoreDomain },

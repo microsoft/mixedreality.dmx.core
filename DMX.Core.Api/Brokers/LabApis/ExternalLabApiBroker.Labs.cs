@@ -15,14 +15,14 @@ namespace DMX.Core.Api.Brokers.LabApis
         public async ValueTask<ExternalLabCollection> GetAvailableLabsAsync()
         {
             return await this.PostAync<ExternalLabServiceInformation, ExternalLabCollection>(
-                relativeUrl: $"{AvailableExternalLabDevicesRelativeUrl}?code={this.getAvailableDevicesAccessKey}",
+                relativeUrl: $"{AvailableExternalLabDevicesRelativeUrl}?code={this.availableDevicesAccessKey}",
                 content: this.externalLabServiceInformation);
         }
 
         public async ValueTask<ExternalLabCollection> GetAllLabsAsync()
         {
             return await this.PostAync<ExternalLabServiceInformation, ExternalLabCollection>(
-                relativeUrl: $"{AllExternalLabDevicesRelativeUrl}?code={this.getAllDevicesAccessKey}",
+                relativeUrl: $"{AllExternalLabDevicesRelativeUrl}?code={this.allDevicesAccessKey}",
                 content: this.externalLabServiceInformation);
         }
     }

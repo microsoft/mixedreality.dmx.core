@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------------
+// ---------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
@@ -118,15 +118,33 @@ namespace DMX.Core.Api.Infrastructure.Build.Services.ScriptGenerations
                             { "AzureAdAppDmxCoreInstance", "${{ secrets.AZURE_ADAPP_DMXCORE_INSTANCE }}" },
                             { "AzureAdAppDmxCoreDomain", "${{ secrets.AZURE_ADAPP_DMXCORE_DOMAIN }}" },
                             { "AzureAdAppDmxCoreCallbackPath", "${{ secrets.AZURE_ADAPP_DMXCORE_CALLBACKPATH }}" },
-                            { "AzureAdAppDmxCoreScopesGetAllLabs", "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_GETALLLABS }}" },
-                            { "AzureAdAppDmxCoreScopesPostLab", "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_POSTLAB }}" },
-                            { "AzureAdAppDmxCoreScopesDeleteLab", "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_DELETELAB }}" },
-                            { "AzureAdAppDmxCoreScopesPostLabCommand", "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_POSTLABCOMMAND }}" },
-                            { "AzureAdAppDmxCoreScopesGetLabCommand", "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_GETLABCOMMAND }}" },
+
+                            { "AzureAdAppDmxCoreScopesGetAllLabs",
+                            "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_GETALLLABS }}" },
+
+                            { "AzureAdAppDmxCoreScopesPostLab",
+                            "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_POSTLAB }}" },
+
+                            { "AzureAdAppDmxCoreScopesDeleteLab",
+                            "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_DELETELAB }}" },
+
+                            { "AzureAdAppDmxCoreScopesPostLabCommand", 
+                            "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_POSTLABCOMMAND }}" },
+                          
+                            { "AzureAdAppDmxCoreScopesGetLabCommand", 
+                            "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_GETLABCOMMAND }}" },
+
                             { "AzureSqlServerAdminName", "${{ secrets.AZURE_SQLSERVER_ADMINNAME }}" },
                             { "AzureSqlServerAdminAccess", "${{ secrets.AZURE_SQLSERVER_ADMINACCESS }}" },
-                            { "AzureAppServiceExternalLabApiUrl", "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_URL }}" },
-                            { "AzureAppServiceExternalLabApiAccessKey", "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_ACCESSKEY }}" }
+
+                            { "AzureAppServiceExternalLabApiUrl",
+                            "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_URL }}" },
+
+                            { "AzureAppServiceExternalLabApiGetAllDevicesAccessKey",
+                            "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_GETALLDEVICES_ACCESSKEY }}" },
+
+                            { "AzureAppServiceExternalLabApiGetAvailableDevicesAccessKey",
+                            "${{ secrets.AZURE_APPSERVICE_EXTERNALLABAPI_GETAVAILABLEDEVICES_ACCESSKEY }}" }
                         },
 
                         Steps = new List<GithubTask>

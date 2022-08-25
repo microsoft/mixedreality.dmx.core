@@ -28,7 +28,8 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
         private readonly string provisionAdminName;
         private readonly string provisionAdminAccess;
         private readonly string configurationExternalLabApiUrl;
-        private readonly string configurationExternalLabApiAccessKey;
+        private readonly string configurationExternalLabApiGetAvailableDevicesAccessKey;
+        private readonly string configurationExternalLabApiGetAllDevicesAccessKey;
         private readonly IAzure azure;
 
         public CloudBroker()
@@ -48,7 +49,8 @@ namespace DMX.Core.Api.Infrastructure.Provision.Brokers.Clouds
             this.provisionAdminName = Environment.GetEnvironmentVariable("AzureSqlServerAdminName");
             this.provisionAdminAccess = Environment.GetEnvironmentVariable("AzureSqlServerAdminAccess");
             this.configurationExternalLabApiUrl = Environment.GetEnvironmentVariable("AzureAppServiceExternalLabApiUrl");
-            this.configurationExternalLabApiAccessKey = Environment.GetEnvironmentVariable("AzureAppServiceExternalLabApiAccessKey");
+            this.configurationExternalLabApiGetAvailableDevicesAccessKey = Environment.GetEnvironmentVariable("AzureAppServiceExternalLabApiGetAvailableDevicesAccessKey");
+            this.configurationExternalLabApiGetAllDevicesAccessKey = Environment.GetEnvironmentVariable("AzureAppServiceExternalLabApiGetAllDevicesAccessKey");
             this.azure = AuthenticateAzure();
         }
 
