@@ -27,8 +27,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             ValueTask<Lab> addLabTask = this.labService.AddLabAsync(nullLab);
 
             LabValidationException actualLabValidationException =
-                await Assert.ThrowsAsync<LabValidationException>(() =>
-                    addLabTask.AsTask());
+                await Assert.ThrowsAsync<LabValidationException>(
+                    addLabTask.AsTask);
 
             // then
             actualLabValidationException.Should().BeEquivalentTo(
