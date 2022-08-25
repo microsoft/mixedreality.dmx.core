@@ -31,7 +31,7 @@ namespace DMX.Core.Api.Services.Orchestrations.LabCommands
         {
             ValidateLabCommand(labCommand);
             LabCommand addedLabCommand = await this.labCommandService.AddLabCommandAsync(labCommand);
-            
+
             return await this.labCommandEventService.AddLabCommandEventAsync(addedLabCommand);
         });
     }

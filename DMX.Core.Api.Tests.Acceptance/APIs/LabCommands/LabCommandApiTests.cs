@@ -3,11 +3,9 @@
 // ---------------------------------------------------------------
 
 using System;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Tests.Acceptance.Brokers;
-using Microsoft.Extensions.Hosting;
 using Tynamix.ObjectFiller;
 using Xunit;
 
@@ -38,7 +36,7 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.LabCommands
                 .OnProperty(labCommand => labCommand.Id).Use(inputLabCommand.Id)
                 .OnProperty(labCommand => labCommand.CreatedDate).Use(inputLabCommand.CreatedDate)
                 .OnProperty(labCommand => labCommand.UpdatedDate).Use(now);
-                //.OnType<DateTimeOffset>().Use(GetRandomDateTime());
+            //.OnType<DateTimeOffset>().Use(GetRandomDateTime());
 
             return filler.Create();
         }
