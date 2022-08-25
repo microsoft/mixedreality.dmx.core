@@ -12,7 +12,7 @@ using Moq;
 using Xeptions;
 using Xunit;
 
-namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations
+namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.Labs
 {
     public partial class LabOrchestrationServiceTests
     {
