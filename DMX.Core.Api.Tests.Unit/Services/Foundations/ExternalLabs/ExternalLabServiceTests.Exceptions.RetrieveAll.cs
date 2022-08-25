@@ -39,8 +39,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
                 this.externalLabService.RetrieveAllExternalLabsAsync();
 
             ExternalLabDependencyException actualLabDependencyException =
-                await Assert.ThrowsAsync<ExternalLabDependencyException>(() =>
-                    retrieveAllLabsTask.AsTask());
+                await Assert.ThrowsAsync<ExternalLabDependencyException>(
+                    retrieveAllLabsTask.AsTask);
 
             // then
             actualLabDependencyException.Should().BeEquivalentTo(
@@ -82,8 +82,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
                 this.externalLabService.RetrieveAllExternalLabsAsync();
 
             ExternalLabDependencyException actualExternalLabDependencyException =
-                await Assert.ThrowsAsync<ExternalLabDependencyException>(() =>
-                    retrieveAllLabsTask.AsTask());
+                await Assert.ThrowsAsync<ExternalLabDependencyException>(
+                    retrieveAllLabsTask.AsTask);
 
             // then
             actualExternalLabDependencyException.Should().BeEquivalentTo(
@@ -123,8 +123,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.ExternalLabs
                 this.externalLabService.RetrieveAllExternalLabsAsync();
 
             ExternalLabServiceException actualLabServiceException =
-                await Assert.ThrowsAsync<ExternalLabServiceException>(() =>
-                    retrieveAllLabsTask.AsTask());
+                await Assert.ThrowsAsync<ExternalLabServiceException>(
+                    retrieveAllLabsTask.AsTask);
 
             // then
             actualLabServiceException.Should().BeEquivalentTo(
