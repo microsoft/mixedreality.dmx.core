@@ -36,7 +36,6 @@ namespace DMX.Core.Api.Tests.Acceptance.APIs.LabCommands
                 .OnProperty(labCommand => labCommand.Id).Use(inputLabCommand.Id)
                 .OnProperty(labCommand => labCommand.CreatedDate).Use(inputLabCommand.CreatedDate)
                 .OnProperty(labCommand => labCommand.UpdatedDate).Use(now);
-            //.OnType<DateTimeOffset>().Use(GetRandomDateTime());
 
             return filler.Create();
         }
