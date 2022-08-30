@@ -179,6 +179,12 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
 
             TimeSpan timeDifference = currentDateTime.Subtract(date);
 
+            // Alternatively: if (date == DateTimeOffset.MaxValue)
+            if (date > currentDateTime.AddSeconds(int.MaxValue))
+            {
+                return false;
+            }
+
             return timeDifference.TotalSeconds is > 60 or < 0;
         }
 
