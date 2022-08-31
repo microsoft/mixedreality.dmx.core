@@ -18,7 +18,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.Labs
     {
         [Theory]
         [MemberData(nameof(LabDependencyValidationExceptions))]
-        public async Task ShouldThrowOrchestrationDependencyValidationExceptionOnAdIfDependencyValidationErrorOccursAndLogItAsync(
+        public async Task ShouldThrowOrchestrationDependencyValidationExceptionOnAddIfDependencyValidationErrorOccursAndLogItAsync(
             Xeption validationException)
         {
             // given
@@ -137,7 +137,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.Labs
 
             this.labServiceMock.Verify(service =>
                 service.AddLabAsync(It.IsAny<Lab>()),
-                    Times.Once());
+                    Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
