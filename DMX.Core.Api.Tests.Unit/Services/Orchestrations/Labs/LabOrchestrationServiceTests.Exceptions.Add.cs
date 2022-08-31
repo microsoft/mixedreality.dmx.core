@@ -18,7 +18,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.Labs
     {
         [Theory]
         [MemberData(nameof(LabDependencyValidationExceptions))]
-        public async Task ShouldThrowOrchestrationDependencyValidationExceptionOnAdIfDependencyValidationErrorOccursAndLogItAsync(
+        public async Task ShouldThrowOrchestrationDependencyValidationExceptionOnAddIfDependencyValidationErrorOccursAndLogItAsync(
             Xeption validationException)
         {
             // given
