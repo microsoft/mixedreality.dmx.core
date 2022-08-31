@@ -128,10 +128,10 @@ namespace DMX.Core.Api.Infrastructure.Build.Services.ScriptGenerations
                             { "AzureAdAppDmxCoreScopesDeleteLab",
                             "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_DELETELAB }}" },
 
-                            { "AzureAdAppDmxCoreScopesPostLabCommand", 
+                            { "AzureAdAppDmxCoreScopesPostLabCommand",
                             "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_POSTLABCOMMAND }}" },
-                          
-                            { "AzureAdAppDmxCoreScopesGetLabCommand", 
+
+                            { "AzureAdAppDmxCoreScopesGetLabCommand",
                             "${{ secrets.AZURE_ADAPP_DMXCORE_SCOPES_GETLABCOMMAND }}" },
 
                             { "AzureSqlServerAdminName", "${{ secrets.AZURE_SQLSERVER_ADMINNAME }}" },
