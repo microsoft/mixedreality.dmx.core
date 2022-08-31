@@ -93,13 +93,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             CreateLabCommandFiller(date).Create();
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
-            new DateTimeRange(TimeZoneInfo.Utc).GetValue();
-
-        private static DateTimeOffset GetRandomDateTimeOffset(DateTimeOffset earliestDate) =>
-            new DateTimeRange(earliestDate: earliestDate.DateTime, TimeZoneInfo.Utc).GetValue();
-
-        private static DateTimeOffset GetRandomDateTimeOffset(DateTimeOffset earliestDate, DateTimeOffset latestDate) =>
-            new DateTimeRange(earliestDate: earliestDate.DateTime, latestDate: latestDate.DateTime, TimeZoneInfo.Utc).GetValue();
+            new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
         private static Filler<LabCommand> CreateLabCommandFiller(DateTimeOffset dateTimeOffset)
         {

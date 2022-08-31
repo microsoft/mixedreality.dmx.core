@@ -242,16 +242,15 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             int invalidSeconds)
         {
             // given
-            int randomMinutesInPast = GetRandomNegativeNumber();
             DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
             LabCommand randomLabCommand = CreateRandomLabCommand();
             LabCommand invalidLabCommand = randomLabCommand;
 
-            randomLabCommand.UpdatedDate =
+            randomLabCommand.CreatedDate =
                 randomDateTime.AddSeconds(invalidSeconds);
 
-            randomLabCommand.CreatedDate =
-                invalidLabCommand.UpdatedDate.AddMinutes(randomMinutesInPast);
+            randomLabCommand.UpdatedDate =
+                randomLabCommand.CreatedDate;
 
             var invalidLabCommandException =
                 new InvalidLabCommandException();
