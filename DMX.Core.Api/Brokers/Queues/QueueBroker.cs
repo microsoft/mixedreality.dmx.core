@@ -17,8 +17,11 @@ namespace DMX.Core.Api.Brokers.Queues
             InitializeClients();
         }
 
-        private void InitializeClients() =>
+        private void InitializeClients()
+        {
             this.LabCommandQueue = GetQueueClient(nameof(LabCommandQueue));
+            this.LabWorkflowQueue = GetQueueClient(nameof(LabWorkflowQueue));
+        }
 
         private IQueueClient GetQueueClient(string queueName)
         {
