@@ -30,7 +30,7 @@ namespace DMX.Core.Api.Brokers.Artifacts
         public async ValueTask UploadArtifactAsync(Artifact artifact)
         {
             BlobClient blobClient = this.blobContainerClient.GetBlobClient(artifact.Name);
-            await blobClient.UploadAsync(artifact.Content, false);
+            await blobClient.UploadAsync(artifact.Content);
         }
 
         private string GetStorageConnectionString(IConfiguration configuration)
