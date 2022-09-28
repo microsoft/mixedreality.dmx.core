@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using DMX.Core.Api.Services.Foundations.LabCommands;
+using DMX.Core.Api.Services.Orchestrations.LabCommands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
@@ -23,9 +24,15 @@ namespace DMX.Core.Api.Controllers
     public class LabCommandsController : RESTFulController
     {
         private readonly ILabCommandService labCommandService;
+        private readonly ILabCommandOrchestrationService labCommandOrchestrationService;
 
-        public LabCommandsController(ILabCommandService labCommandService) =>
+        public LabCommandsController(
+            ILabCommandService labCommandService,
+            ILabCommandOrchestrationService labCommandOrchestrationService)
+        {
             this.labCommandService = labCommandService;
+            this.labCommandOrchestrationService = labCommandOrchestrationService;
+        }
 
         [HttpPost]
 #if RELEASE
@@ -36,7 +43,7 @@ namespace DMX.Core.Api.Controllers
             try
             {
                 LabCommand addedLabCommand =
-                    await this.labCommandService.AddLabCommandAsync(labCommand);
+                    await this.labCommandOrchestrationService.AddLabCommandAsync(labCommand);
 
                 return Created(addedLabCommand);
             }
