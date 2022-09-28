@@ -2,13 +2,16 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.IO;
+using System.Linq.Expressions;
 using DMX.Core.Api.Brokers.Artifacts;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Models.Foundations.Artifacts;
 using DMX.Core.Api.Services.Foundations.Artifacts;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Artifacts
 {
@@ -27,6 +30,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Artifacts
                 artifactsBroker: this.artifactBroker.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private static Artifact CreateRandomArtifact() =>
             CreateArtifactFiller().Create();
