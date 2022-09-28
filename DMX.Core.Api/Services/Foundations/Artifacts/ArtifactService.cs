@@ -23,6 +23,11 @@ namespace DMX.Core.Api.Services.Foundations.Artifacts
         }
 
         public ValueTask AddArtifactAsync(Artifact artifact) =>
-            this.artifactsBroker.UploadArtifactAsync(artifact);
+        TryCatch(async () =>
+        {
+            ValidateArtifactOnAdd(artifact);
+
+            await this.artifactsBroker.UploadArtifactAsync(artifact);
+        });
     }
 }
