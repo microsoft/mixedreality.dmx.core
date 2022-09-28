@@ -2,11 +2,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using DMX.Core.Api.Models.Configurations;
 using DMX.Core.Api.Models.Foundations.Artifacts;
 using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
 
 namespace DMX.Core.Api.Brokers.Artifacts
 {
