@@ -22,9 +22,7 @@ namespace DMX.Core.Api.Services.Foundations.Artifacts
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<Artifact> AddArtifactAsync(Artifact artifact)
-        {
-            throw new System.NotImplementedException();
-        }
+        public ValueTask AddArtifactAsync(Artifact artifact) =>
+            this.artifactsBroker.UploadArtifactAsync(artifact);
     }
 }

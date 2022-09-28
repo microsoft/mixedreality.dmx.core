@@ -19,11 +19,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Artifacts
             Artifact randomArtifact = CreateRandomArtifact();
             Artifact inputArtifact = randomArtifact;
             Artifact uploadedArtifact = inputArtifact;
-            Artifact expectedArtifact = uploadedArtifact.DeepClone();
 
             // when
-            Artifact actualArtifact =
-                await this.artifactService.AddArtifactAsync(inputArtifact);
+            await this.artifactService.AddArtifactAsync(inputArtifact);
 
             // then
             this.artifactBroker.Verify(broker =>

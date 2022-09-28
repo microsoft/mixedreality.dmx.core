@@ -9,6 +9,6 @@ namespace DMX.Core.Api.Services.Foundations.Artifacts
 {
     public interface IArtifactService
     {
-        ValueTask<Artifact> AddArtifactAsync(Artifact artifact);
+        ValueTask AddArtifactAsync(Artifact artifact);
     }
 }
