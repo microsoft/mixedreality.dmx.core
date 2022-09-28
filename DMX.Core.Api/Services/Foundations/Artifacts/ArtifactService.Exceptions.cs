@@ -22,6 +22,10 @@ namespace DMX.Core.Api.Services.Foundations.Artifacts
             {
                 throw CreateAndLogValidationException(nullArtifactException);
             }
+            catch (InvalidArtifactException invalidArtifactException)
+            {
+                throw CreateAndLogValidationException(invalidArtifactException);
+            }
         }
 
         private ArtifactValidationException CreateAndLogValidationException(Xeption exception)
