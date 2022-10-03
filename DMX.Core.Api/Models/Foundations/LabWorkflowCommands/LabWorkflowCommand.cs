@@ -3,23 +3,28 @@
 // ---------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
+using DMX.Core.Api.Models.Foundations.LabCommands;
+using DMX.Core.Api.Models.Foundations.LabWorkflows;
+using Newtonsoft.Json;
 
-namespace DMX.Core.Api.Models.Foundations.LabWorkflows
+namespace DMX.Core.Api.Models.Foundations.LabWorkflowCommands
 {
-    public class LabWorkflow
+    public class LabWorkflowCommand
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Owner { get; set; }
-        public List<LabWorkflowCommand> Commands { get; set; }
-        public WorkflowStatus Status { get; set; }
+        public CommandType Type { get; set; }
+        public string Arguments { get; set; }
+        public Guid LabId { get; set; }
+        public Guid LabWorkflowId { get; set; }
+        public CommandStatus Status { get; set; }
         public string Notes { get; set; }
         public ulong CreatedBy { get; set; }
         public ulong UpdatedBy { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
         public DateTimeOffset UpdatedDate { get; set; }
         public string Results { get; set; }
+
+        [JsonIgnore]
+        public LabWorkflow LabWorkflow { get; set; }
     }
 }

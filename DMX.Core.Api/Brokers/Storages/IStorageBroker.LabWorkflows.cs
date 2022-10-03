@@ -2,7 +2,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using DMX.Core.Api.Models.Foundations.LabCommands;
 using System.Threading.Tasks;
 using System;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;

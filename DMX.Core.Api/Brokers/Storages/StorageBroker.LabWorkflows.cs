@@ -14,47 +14,16 @@ namespace DMX.Core.Api.Brokers.Storages
     {
         public DbSet<LabWorkflow> LabWorkflows { get; set; }
 
-        public async ValueTask<LabWorkflow> InsertLabWorkflowAsync(LabWorkflow workflow)
-        {
-            var broker = new StorageBroker(this.configuration);
+        public async ValueTask<LabWorkflow> InsertLabWorkflowAsync(LabWorkflow workflow) =>
+            await InsertAsync(workflow);
 
-            EntityEntry<LabWorkflow> labWorkflowEntityEntry =
-                await broker.LabWorkflows.AddAsync(workflow);
+        public async ValueTask<LabWorkflow> SelectLabWorkflowByIdAsync(Guid labWorkflowId) =>
+            await SelectAsync<LabWorkflow>(labWorkflowId);
 
-            await broker.SaveChangesAsync();
+        public async ValueTask<LabWorkflow> UpdateLabWorkflowAsync(LabWorkflow workflow) =>
+            await UpdateAsync(workflow);
 
-            return labWorkflowEntityEntry.Entity;
-        }
-
-        public async ValueTask<LabWorkflow> SelectLabWorkflowByIdAsync(Guid labWorkflowId)
-        {
-            var broker = new StorageBroker(this.configuration);
-
-            return await broker.LabWorkflows.FindAsync(labWorkflowId);
-        }
-
-        public async ValueTask<LabWorkflow> UpdateLabWorkflowAsync(LabWorkflow workflow)
-        {
-            var broker = new StorageBroker(this.configuration);
-
-            EntityEntry<LabWorkflow> labWorkflowEntityEntry =
-                broker.LabWorkflows.Update(workflow);
-
-            await broker.SaveChangesAsync();
-
-            return labWorkflowEntityEntry.Entity;
-        }
-
-        public async ValueTask<LabWorkflow> DeleteLabWorkflowAsync(LabWorkflow workflow)
-        {
-            var broker = new StorageBroker(this.configuration);
-
-            EntityEntry<LabWorkflow> labWorkflowEntityEntry =
-               broker.LabWorkflows.Remove(workflow);
-
-            await broker.SaveChangesAsync();
-
-            return labWorkflowEntityEntry.Entity;
-        }
+        public async ValueTask<LabWorkflow> DeleteLabWorkflowAsync(LabWorkflow workflow) =>
+            await DeleteAsync(workflow);
     }
 }
