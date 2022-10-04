@@ -7,36 +7,37 @@ using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
 using DMX.Core.Api.Services.Foundations.LabCommands;
+using DMX.Core.Api.Services.Orchestrations.LabCommands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
-#if RELEASE
-using Microsoft.Identity.Web.Resource;
-#endif
-
 namespace DMX.Core.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class LabCommandsController : RESTFulController
     {
         private readonly ILabCommandService labCommandService;
+        private readonly ILabCommandOrchestrationService labCommandOrchestrationService;
 
-        public LabCommandsController(ILabCommandService labCommandService) =>
+        public LabCommandsController(
+            ILabCommandService labCommandService,
+            ILabCommandOrchestrationService labCommandOrchestrationService)
+        {
             this.labCommandService = labCommandService;
+            this.labCommandOrchestrationService = labCommandOrchestrationService;
+        }
 
         [HttpPost]
-#if RELEASE
-        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:PostLabCommand")]
-#endif
+        //[Authorize(Roles = "DmxCore.FullAccess.All")]
         public async ValueTask<ActionResult<LabCommand>> PostLabCommandAsync(LabCommand labCommand)
         {
             try
             {
                 LabCommand addedLabCommand =
-                    await this.labCommandService.AddLabCommandAsync(labCommand);
+                    await this.labCommandOrchestrationService.AddLabCommandAsync(labCommand);
 
                 return Created(addedLabCommand);
             }
@@ -64,9 +65,7 @@ namespace DMX.Core.Api.Controllers
         }
 
         [HttpGet("{labCommandId}")]
-#if RELEASE
-        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:GetLabCommand")]
-#endif
+        //[Authorize(Roles = "DmxCore.FullAccess.All")]
         public async ValueTask<ActionResult<LabCommand>> GetLabCommandByIdAsync(Guid labCommandId)
         {
             try
@@ -100,9 +99,7 @@ namespace DMX.Core.Api.Controllers
         }
 
         [HttpPut]
-#if RELEASE
-        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:PutLabCommand")]
-#endif
+        //[Authorize(Roles = "DmxCore.FullAccess.All")]
         public async ValueTask<ActionResult<LabCommand>> PutLabCommandAsync(LabCommand labCommand)
         {
             try

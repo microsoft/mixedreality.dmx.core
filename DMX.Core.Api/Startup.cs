@@ -37,10 +37,13 @@ namespace DMX.Core.Api
             services.AddControllers().AddJsonOptions(options =>
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
+            services.AddMicrosoftIdentityWebApiAuthentication(
+                Configuration);
+            
             services.AddHttpClient();
             services.AddLogging();
             services.AddDbContext<StorageBroker>();
-            AddAuthentication(services);
+            //AddAuthentication(services);
             AddBrokers(services);
             AddFoundationServices(services);
             AddOrchestrationServices(services);
@@ -76,7 +79,7 @@ namespace DMX.Core.Api
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            MapControllersForEnvironments(app, env);
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
 
         private static void AddBrokers(IServiceCollection services)
@@ -103,29 +106,29 @@ namespace DMX.Core.Api
             services.AddTransient<ILabCommandOrchestrationService, LabCommandOrchestrationService>();
         }
 
-        private void AddAuthentication(IServiceCollection services)
-        {
-            services.AddAuthentication(
-                JwtBearerDefaults.AuthenticationScheme)
-                    .AddMicrosoftIdentityWebApi(
-                        Configuration.GetSection("AzureAd"));
-        }
+        //private void AddAuthentication(IServiceCollection services)
+        //{
+        //    services.AddAuthentication(
+        //        JwtBearerDefaults.AuthenticationScheme)
+        //            .AddMicrosoftIdentityWebApi(
+        //                Configuration.GetSection("AzureAd"));
+        //}
 
-        private static void MapControllersForEnvironments(
-            IApplicationBuilder app,
-            IWebHostEnvironment env)
-        {
-            app.UseEndpoints(endpoints =>
-            {
-                if (env.IsDevelopment())
-                {
-                    endpoints.MapControllers().AllowAnonymous();
-                }
-                else
-                {
-                    endpoints.MapControllers();
-                }
-            });
-        }
+        //private static void MapControllersForEnvironments(
+        //    IApplicationBuilder app,
+        //    IWebHostEnvironment env)
+        //{
+        //    app.UseEndpoints(endpoints =>
+        //    {
+        //        if (env.IsDevelopment())
+        //        {
+        //            endpoints.MapControllers().AllowAnonymous();
+        //        }
+        //        else
+        //        {
+        //            endpoints.MapControllers();
+        //        }
+        //    });
+        //}
     }
 }

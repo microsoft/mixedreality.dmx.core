@@ -13,13 +13,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
-#if RELEASE
-using Microsoft.Identity.Web.Resource;
-#endif
-
 namespace DMX.Core.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class LabsController : RESTFulController
@@ -30,9 +26,7 @@ namespace DMX.Core.Api.Controllers
             this.labOrchestrationService = labOrchestrationService;
 
         [HttpPost]
-#if RELEASE
-        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:PostLab")]
-#endif
+        //[Authorize(Roles = "DmxCore.FullAccess.All")]
         public async ValueTask<ActionResult<Lab>> PostLabAsync(Lab lab)
         {
             try
@@ -66,9 +60,7 @@ namespace DMX.Core.Api.Controllers
         }
 
         [HttpGet]
-#if RELEASE
-        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:GetAllLabs")]
-#endif
+        //[Authorize(Roles = "DmxCore.FullAccess.All")]
         public async ValueTask<ActionResult<List<Lab>>> GetAllLabsAsync()
         {
             try
@@ -89,9 +81,7 @@ namespace DMX.Core.Api.Controllers
         }
 
         [HttpGet("{labId}")]
-#if RELEASE
-        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:GetAllLabs")]
-#endif
+        //[Authorize(Roles = "DmxCore.FullAccess.All")]
         public async ValueTask<ActionResult<Lab>> GetLabByIdAsync(Guid labId)
         {
             try
@@ -125,9 +115,7 @@ namespace DMX.Core.Api.Controllers
         }
 
         [HttpDelete("{labId}")]
-#if RELEASE
-        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:DeleteLab")] 
-#endif
+        //[Authorize(Roles = "DmxCore.FullAccess.All")]
         public async ValueTask<ActionResult<Lab>> DeleteLabByIdAsync(Guid labId)
         {
             try

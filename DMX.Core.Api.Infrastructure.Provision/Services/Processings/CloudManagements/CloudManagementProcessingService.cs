@@ -29,7 +29,7 @@ namespace DMX.Core.Api.Infrastructure.Provision.Services.Processings.CloudManage
         {
             CloudManagementConfiguration configuration = this.configurationBroker.GetConfiguration();
             await ProvisionResourcesAsync(configuration);
-            await DeprovisionResourcesAsync(configuration);
+            //await DeprovisionResourcesAsync(configuration);
         }
 
         private async Task ProvisionResourcesAsync(CloudManagementConfiguration configuration)
