@@ -21,7 +21,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 
 namespace DMX.Core.Api
@@ -37,13 +36,10 @@ namespace DMX.Core.Api
             services.AddControllers().AddJsonOptions(options =>
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-            services.AddMicrosoftIdentityWebApiAuthentication(
-                Configuration);
-            
             services.AddHttpClient();
             services.AddLogging();
             services.AddDbContext<StorageBroker>();
-            //AddAuthentication(services);
+            AddAuthentication(services);
             AddBrokers(services);
             AddFoundationServices(services);
             AddOrchestrationServices(services);
@@ -106,29 +102,23 @@ namespace DMX.Core.Api
             services.AddTransient<ILabCommandOrchestrationService, LabCommandOrchestrationService>();
         }
 
-        //private void AddAuthentication(IServiceCollection services)
-        //{
-        //    services.AddAuthentication(
-        //        JwtBearerDefaults.AuthenticationScheme)
-        //            .AddMicrosoftIdentityWebApi(
-        //                Configuration.GetSection("AzureAd"));
-        //}
+        private void AddAuthentication(IServiceCollection services)
+        {
+            IConfigurationSection azureAdConfigSection = this.Configuration.GetSection("AzureAd");
+            string instance = azureAdConfigSection.GetValue<string>("Instance");
+            string tenantId = azureAdConfigSection.GetValue<string>("TenantId");
+            string audience = azureAdConfigSection.GetValue<string>("Audience");
 
-        //private static void MapControllersForEnvironments(
-        //    IApplicationBuilder app,
-        //    IWebHostEnvironment env)
-        //{
-        //    app.UseEndpoints(endpoints =>
-        //    {
-        //        if (env.IsDevelopment())
-        //        {
-        //            endpoints.MapControllers().AllowAnonymous();
-        //        }
-        //        else
-        //        {
-        //            endpoints.MapControllers();
-        //        }
-        //    });
-        //}
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = $"{instance}{tenantId}";
+                options.RequireHttpsMetadata = false;
+                options.Audience = audience;
+            });
+        }
     }
 }
