@@ -3,6 +3,8 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.DateTimes;
 using DMX.Core.Api.Brokers.Loggings;
@@ -35,6 +37,9 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             return await this.storageBroker.InsertLabCommandAsync(labCommand);
         });
 
+        public List<LabCommand> RetrieveAllLabCommands() =>
+        TryCatch(() => this.storageBroker.SelectAllLabCommands().ToList());
+
         public ValueTask<LabCommand> RetrieveLabCommandByIdAsync(Guid labCommandId) =>
         TryCatch(async () =>
         {
@@ -51,7 +56,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
         public ValueTask<LabCommand> ModifyLabCommandAsync(LabCommand labCommand) =>
         TryCatch(async () =>
         {
-            ValidateLabCommandOnModify(labCommand);
+            //ValidateLabCommandOnModify(labCommand);
 
             var maybeLabCommand =
                 await this.storageBroker.SelectLabCommandByIdAsync(labCommand.Id);

@@ -3,9 +3,11 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
+using DMX.Core.Api.Models.Foundations.Labs.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
     public partial class LabCommandService : ILabCommandService
     {
         private delegate ValueTask<LabCommand> ReturningLabCommandFunction();
+        private delegate List<LabCommand> ReturningLabCommandsFunction();
 
         private async ValueTask<LabCommand> TryCatch(ReturningLabCommandFunction returningLabCommandFunction)
         {
@@ -67,6 +70,26 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
                 var failedLabCommandServiceException = new FailedLabCommandServiceException(exception);
 
                 throw CreateAndLogServiceException(failedLabCommandServiceException);
+            }
+        }
+
+        private List<LabCommand> TryCatch(ReturningLabCommandsFunction returningLabCommandsFunction)
+        {
+            try
+            {
+                return returningLabCommandsFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedLabCommandStorageException = new FailedLabCommandStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedLabCommandStorageException);
+            }
+            catch (Exception exception)
+            {
+                var failedLabServiceException = new FailedLabServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLabServiceException);
             }
         }
 
