@@ -7,13 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DMX.Core.Api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class HomeController : ControllerBase
     {
         [HttpGet]
-        //[Authorize(Roles = "DmxCore.FullAccess.All")]
         public ActionResult<string> Get() =>
             Ok("Hi, Zuko here...");
     }

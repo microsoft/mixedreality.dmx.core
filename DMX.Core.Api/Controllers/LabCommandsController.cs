@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using DMX.Core.Api.Models.Foundations.LabCommands.Exceptions;
@@ -14,7 +15,7 @@ using RESTFulSense.Controllers;
 
 namespace DMX.Core.Api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class LabCommandsController : RESTFulController
@@ -31,7 +32,6 @@ namespace DMX.Core.Api.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "DmxCore.FullAccess.All")]
         public async ValueTask<ActionResult<LabCommand>> PostLabCommandAsync(LabCommand labCommand)
         {
             try
@@ -64,8 +64,27 @@ namespace DMX.Core.Api.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult<List<LabCommand>> GetAllLabCommandsAsync()
+        {
+            try
+            {
+                List<LabCommand> labCommands =
+                    this.labCommandService.RetrieveAllLabCommands();
+
+                return Ok(labCommands);
+            }
+            catch (LabCommandDependencyException labCommandDependencyException)
+            {
+                return InternalServerError(labCommandDependencyException);
+            }
+            catch (LabCommandServiceException labCommandServiceException)
+            {
+                return InternalServerError(labCommandServiceException);
+            }
+        }
+
         [HttpGet("{labCommandId}")]
-        //[Authorize(Roles = "DmxCore.FullAccess.All")]
         public async ValueTask<ActionResult<LabCommand>> GetLabCommandByIdAsync(Guid labCommandId)
         {
             try
@@ -99,7 +118,6 @@ namespace DMX.Core.Api.Controllers
         }
 
         [HttpPut]
-        //[Authorize(Roles = "DmxCore.FullAccess.All")]
         public async ValueTask<ActionResult<LabCommand>> PutLabCommandAsync(LabCommand labCommand)
         {
             try
