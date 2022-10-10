@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabCommands;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,9 @@ namespace DMX.Core.Api.Brokers.Storages
 
         public async ValueTask<LabCommand> InsertLabCommandAsync(LabCommand labCommand) =>
             await InsertAsync(labCommand);
+
+        public IQueryable<LabCommand> SelectAllLabCommands() =>
+            SelectAll<LabCommand>();
 
         public async ValueTask<LabCommand> SelectLabCommandByIdAsync(Guid labCommandId) =>
             await FindAsync<LabCommand>(labCommandId);
