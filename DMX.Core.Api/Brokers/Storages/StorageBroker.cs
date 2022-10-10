@@ -63,6 +63,7 @@ namespace DMX.Core.Api.Brokers.Storages
         {
             ConfigureLab(modelBuilder);
             ConfigureLabDevice(modelBuilder);
+            ConfigureLabWorkflow(modelBuilder);
         }
     }
 }
