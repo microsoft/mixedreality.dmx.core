@@ -17,7 +17,7 @@ namespace DMX.Core.Api.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.6")
+                .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -120,6 +120,90 @@ namespace DMX.Core.Api.Migrations
                     b.ToTable("LabDevices");
                 });
 
+            modelBuilder.Entity("DMX.Core.Api.Models.Foundations.LabWorkflowCommands.LabWorkflowCommand", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Arguments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("CreatedBy")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("LabId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Results")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UpdatedBy")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.Property<DateTimeOffset>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("WorkflowId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkflowId");
+
+                    b.ToTable("LabWorkflowCommands");
+                });
+
+            modelBuilder.Entity("DMX.Core.Api.Models.Foundations.LabWorkflows.LabWorkflow", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("CreatedBy")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Owner")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Results")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UpdatedBy")
+                        .HasColumnType("decimal(20,0)");
+
+                    b.Property<DateTimeOffset>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LabWorkflows");
+                });
+
             modelBuilder.Entity("DMX.Core.Api.Models.Foundations.Labs.LabDevice", b =>
                 {
                     b.HasOne("DMX.Core.Api.Models.Foundations.Labs.Lab", "Lab")
@@ -131,9 +215,25 @@ namespace DMX.Core.Api.Migrations
                     b.Navigation("Lab");
                 });
 
+            modelBuilder.Entity("DMX.Core.Api.Models.Foundations.LabWorkflowCommands.LabWorkflowCommand", b =>
+                {
+                    b.HasOne("DMX.Core.Api.Models.Foundations.LabWorkflows.LabWorkflow", "Workflow")
+                        .WithMany("Commands")
+                        .HasForeignKey("WorkflowId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Workflow");
+                });
+
             modelBuilder.Entity("DMX.Core.Api.Models.Foundations.Labs.Lab", b =>
                 {
                     b.Navigation("Devices");
+                });
+
+            modelBuilder.Entity("DMX.Core.Api.Models.Foundations.LabWorkflows.LabWorkflow", b =>
+                {
+                    b.Navigation("Commands");
                 });
 #pragma warning restore 612, 618
         }
