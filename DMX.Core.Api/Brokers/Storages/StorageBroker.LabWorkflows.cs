@@ -21,5 +21,8 @@ namespace DMX.Core.Api.Brokers.Storages
 
         public async ValueTask<LabWorkflow> UpdateLabWorkflowAsync(LabWorkflow labWorkflow) =>
             await UpdateAsync(labWorkflow);
+
+        public async ValueTask<LabWorkflow> DeleteLabWorkflowAsync(LabWorkflow labWorkflow) =>
+            await DeleteAsync(labWorkflow);
     }
 }
