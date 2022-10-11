@@ -18,5 +18,8 @@ namespace DMX.Core.Api.Brokers.Storages
 
         public async ValueTask<LabWorkflow> SelectLabWorkflowByIdAsync(Guid Id) =>
             await SelectAsync<LabWorkflow>(Id);
+
+        public async ValueTask<LabWorkflow> UpdateLabWorkflowAsync(LabWorkflow labWorkflow) =>
+            await UpdateAsync(labWorkflow);
     }
 }
