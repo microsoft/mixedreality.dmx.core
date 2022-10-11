@@ -14,5 +14,8 @@ namespace DMX.Core.Api.Brokers.Storages
 
         public async ValueTask<LabWorkflowCommand> InsertLabWorkflowCommandAsync(LabWorkflowCommand labWorkflowCommand) =>
             await InsertAsync(labWorkflowCommand);
+
+        public async ValueTask<LabWorkflowCommand> SelectLabWorkflowCommandByIdAsync(LabWorkflowCommand labWorkflowCommand) =>
+            await FindAsync<LabWorkflowCommand>(labWorkflowCommand);
     }
 }
