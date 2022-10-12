@@ -5,6 +5,7 @@
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using FluentAssertions;
+using Microsoft.Extensions.Azure;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -53,6 +54,84 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.datetimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task
+            ShouldThrowLabWorkflowCommandValidationExceptionOnModifyIfLabWorkflowCommandIsInvalidAndLogItAsync(string invalidData)
+        {
+            // given
+            LabWorkflowCommand invalidLabWorkflowCommand = new LabWorkflowCommand
+            {
+                Arguments = invalidData,
+                Notes = invalidData,
+                Results = invalidData,
+            };
+
+            var invalidLabWorkflowCommandException = new InvalidLabWorkflowCommandException();
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.Id),
+                values: "Id is required");
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.LabId),
+                values: "Id is required");
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.WorkflowId),
+                values: "Id is required");
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.Arguments),
+                values: "Text is required");
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.CreatedDate),
+                values: "Date is required");
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.UpdatedDate),
+                values: "Date is required");
+
+            var expectedabWorkflowCommandValidationException =
+                new LabWorkflowCommandValidationException(invalidLabWorkflowCommandException);
+
+            // when
+
+            ValueTask<LabWorkflowCommand> modifyLabWorkflowCommandTask =
+                this.labWorkflowCommandService.ModifyLabWorkflowCommand(invalidLabWorkflowCommand);
+
+            LabWorkflowCommandValidationException actualLabWorkflowCommandValidationException =
+                await Assert.ThrowsAsync<LabWorkflowCommandValidationException>(
+                    modifyLabWorkflowCommandTask.AsTask);
+
+            // then
+            actualLabWorkflowCommandValidationException.Should().BeEquivalentTo(
+                expectedabWorkflowCommandValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(expectedabWorkflowCommandValidationException),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLabWorkflowCommandByIdAsync(It.IsAny<Guid>()),
+                    Times.Never);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateLabWorkflowCommandAsync(It.IsAny<LabWorkflowCommand>()),
+                    Times.Never);
+
+            this.datetimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Never);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
             this.datetimeBrokerMock.VerifyNoOtherCalls();
         }
     }
