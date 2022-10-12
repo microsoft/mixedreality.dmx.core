@@ -11,5 +11,6 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflows
     public interface ILabWorkflowService
     {
         ValueTask<LabWorkflow> RetrieveLabWorkflowByIdAsync(Guid labWorkflowId);
+        ValueTask<LabWorkflow> AddLabWorkflowAsync(LabWorkflow labWorkflow);
     }
 }
