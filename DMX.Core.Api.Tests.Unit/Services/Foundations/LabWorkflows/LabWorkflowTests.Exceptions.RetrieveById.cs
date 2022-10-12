@@ -88,7 +88,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
                 expectedLabWorkflowServiceException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLabCommandByIdAsync(It.IsAny<Guid>()),
+                broker.SelectLabWorkflowByIdAsync(It.IsAny<Guid>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
