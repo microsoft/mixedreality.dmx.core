@@ -48,11 +48,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
 
             this.datetimeBroker.Verify(broker =>
                 broker.GetCurrentDateTime(),
-                    Times.Once());
+                    Times.Never);
 
             this.storageBroker.Verify(broker =>
                 broker.SelectLabWorkflowCommandByIdAsync(inputLabCommandWorkflowId),
-                    Times.Once);
+                    Times.Never);
 
             this.storageBroker.Verify(broker =>
                 broker.UpdateLabWorkflowCommandAsync(inputLabWorkflowCommand),
