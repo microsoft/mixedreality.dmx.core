@@ -27,15 +27,15 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             LabWorkflowCommand updatedLabWorkflowCommand = inputLabWorkflowCommand.DeepClone();
             LabWorkflowCommand expectedLabWorkflowCommand = updatedLabWorkflowCommand.DeepClone();
 
-            this.datetimeBroker.Setup(broker =>
+            this.datetimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
                     .Returns(randomDateTimeOffset);
 
-            this.storageBroker.Setup(broker =>
+            this.storageBrokerMock.Setup(broker =>
                 broker.SelectLabWorkflowCommandByIdAsync(inputLabWorkflowCommand.Id))
                     .ReturnsAsync(storageLabWorkflowCommand);
 
-            this.storageBroker.Setup(broker =>
+            this.storageBrokerMock.Setup(broker =>
                 broker.UpdateLabWorkflowCommandAsync(inputLabWorkflowCommand))
                     .ReturnsAsync(updatedLabWorkflowCommand);
 
@@ -46,21 +46,21 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             // then
             actualLabWorkflowCommand.Should().BeEquivalentTo(expectedLabWorkflowCommand);
 
-            this.datetimeBroker.Verify(broker =>
+            this.datetimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTime(),
                     Times.Never);
 
-            this.storageBroker.Verify(broker =>
+            this.storageBrokerMock.Verify(broker =>
                 broker.SelectLabWorkflowCommandByIdAsync(inputLabCommandWorkflowId),
                     Times.Never);
 
-            this.storageBroker.Verify(broker =>
+            this.storageBrokerMock.Verify(broker =>
                 broker.UpdateLabWorkflowCommandAsync(inputLabWorkflowCommand),
                     Times.Once);
 
-            this.datetimeBroker.VerifyNoOtherCalls();
-            this.storageBroker.VerifyNoOtherCalls();
-            this.loggingBroker.VerifyNoOtherCalls();
+            this.datetimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }

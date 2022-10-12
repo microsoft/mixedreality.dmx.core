@@ -24,7 +24,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             var nullLabCommandException =
                 new NullLabCommandException();
 
-            var exptectedLabCommandValidationException =
+            var expectedLabCommandValidationException =
                 new LabCommandValidationException(nullLabCommandException);
 
             // when
@@ -37,11 +37,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             // then
             actualLabCommandValidationException.Should().BeEquivalentTo(
-                exptectedLabCommandValidationException);
+                expectedLabCommandValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
-                    exptectedLabCommandValidationException))),
+                    expectedLabCommandValidationException))),
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
