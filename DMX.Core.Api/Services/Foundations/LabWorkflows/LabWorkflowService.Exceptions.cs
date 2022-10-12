@@ -67,7 +67,7 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflows
 
         private LabWorkflowServiceException CreateAndLogServiceException(Xeption exception)
         {
-            var labWorkflowServiceException = 
+            var labWorkflowServiceException =
                 new LabWorkflowServiceException(exception);
 
             this.loggingBroker.LogError(labWorkflowServiceException);

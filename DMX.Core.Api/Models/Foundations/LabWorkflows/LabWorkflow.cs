@@ -2,8 +2,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 
 namespace DMX.Core.Api.Models.Foundations.LabWorkflows

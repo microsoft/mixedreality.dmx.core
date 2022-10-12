@@ -9,7 +9,6 @@ using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
-using RESTFulSense.Models;
 using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows

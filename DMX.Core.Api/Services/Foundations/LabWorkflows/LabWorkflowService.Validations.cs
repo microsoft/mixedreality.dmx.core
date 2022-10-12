@@ -14,7 +14,7 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflows
             Validate((Rule: IsInvalid(labWorkflowId), Parameter: nameof(LabWorkflow.Id)));
 
         private static void ValidateLabWorkflowExists(
-            LabWorkflow maybeLabWorkflow, 
+            LabWorkflow maybeLabWorkflow,
             Guid labworkflowId)
         {
             if (maybeLabWorkflow is null)
