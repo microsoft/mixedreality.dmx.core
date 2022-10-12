@@ -27,9 +27,12 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             this.dateTimeBroker = dateTimeBroker;
         }
 
-        public async ValueTask<LabWorkflowCommand> ModifyLabWorkflowCommand(LabWorkflowCommand labWorkflowCommand)
+        public ValueTask<LabWorkflowCommand> ModifyLabWorkflowCommand(LabWorkflowCommand labWorkflowCommand) =>
+        TryCatch(async () =>
         {
+            ValidateLabWorkflowCommandIsNull(labWorkflowCommand);
+
             return await this.storageBroker.UpdateLabWorkflowCommandAsync(labWorkflowCommand);
-        }
+        });
     }
 }
