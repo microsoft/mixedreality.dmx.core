@@ -23,6 +23,10 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflows
             {
                 throw CreateAndLogValidationException(invalidLabWorkflowException);
             }
+            catch (NotFoundLabWorkflowException notFoundLabWorkflowException)
+            {
+                throw CreateAndLogValidationException(notFoundLabWorkflowException);
+            }
         }
 
         private LabWorkflowValidationException CreateAndLogValidationException(Xeption exception)

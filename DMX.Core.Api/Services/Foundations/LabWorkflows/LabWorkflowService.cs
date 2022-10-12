@@ -28,10 +28,12 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflows
         {
             ValidateLabWorkflowId(labWorkflowId);
 
-            LabWorkflow labWorkflow =
+            LabWorkflow maybeLabWorkflow =
                 await this.storageBroker.SelectLabWorkflowByIdAsync(labWorkflowId);
 
-            return labWorkflow;
+            ValidateLabWorkflowExists(maybeLabWorkflow, labWorkflowId);
+
+            return maybeLabWorkflow;
         });
     }
 }
