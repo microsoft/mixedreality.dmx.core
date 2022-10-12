@@ -23,8 +23,13 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflows
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<LabWorkflow> AddLabWorkflowAsync(LabWorkflow labWorkflow) =>
-            await this.storageBroker.InsertLabWorkflowAsync(labWorkflow);
+        public ValueTask<LabWorkflow> AddLabWorkflowAsync(LabWorkflow labWorkflow) =>
+        TryCatch(async () =>
+        {
+            ValidateLabWorkflowIsNotNull(labWorkflow);
+
+            return await this.storageBroker.InsertLabWorkflowAsync(labWorkflow);
+        });
 
         public ValueTask<LabWorkflow> RetrieveLabWorkflowByIdAsync(Guid labWorkflowId) =>
         TryCatch(async () =>
