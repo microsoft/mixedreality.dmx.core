@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------
 
 using System;
-using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
@@ -11,7 +10,7 @@ using DMX.Core.Api.Models.Foundations.LabWorkflows;
 
 namespace DMX.Core.Api.Services.Foundations.LabWorkflows
 {
-    public class LabWorkflowService : ILabWorkflowService
+    public partial class LabWorkflowService : ILabWorkflowService
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
@@ -24,7 +23,15 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflows
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<LabWorkflow> RetrieveLabWorkflowByIdAsync(Guid labWorkflowId) =>
-            await this.storageBroker.SelectLabWorkflowByIdAsync(labWorkflowId);
+        public ValueTask<LabWorkflow> RetrieveLabWorkflowByIdAsync(Guid labWorkflowId) =>
+        TryCatch(async () =>
+        {
+            ValidateLabWorkflowId(labWorkflowId);
+
+            LabWorkflow labWorkflow =
+                await this.storageBroker.SelectLabWorkflowByIdAsync(labWorkflowId);
+
+            return labWorkflow;
+        });
     }
 }
