@@ -13,6 +13,7 @@ using DMX.Core.Api.Services.Foundations.ExternalLabs;
 using DMX.Core.Api.Services.Foundations.LabCommandEvents;
 using DMX.Core.Api.Services.Foundations.LabCommands;
 using DMX.Core.Api.Services.Foundations.Labs;
+using DMX.Core.Api.Services.Foundations.LabWorkflows;
 using DMX.Core.Api.Services.Orchestrations.LabCommands;
 using DMX.Core.Api.Services.Orchestrations.Labs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -95,6 +96,7 @@ namespace DMX.Core.Api
             services.AddTransient<ILabService, LabService>();
             services.AddTransient<ILabCommandService, LabCommandService>();
             services.AddTransient<ILabCommandEventService, LabCommandEventService>();
+            services.AddTransient<ILabWorkflowService, LabWorkflowService>();
         }
 
         private static void AddOrchestrationServices(IServiceCollection services)
