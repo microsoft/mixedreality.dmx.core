@@ -52,5 +52,49 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnRetrieveByIdIfLabWorkflowIsNotFoundAndLogItAsync()
+        {
+            // given
+            Guid randomId = Guid.NewGuid();
+            Guid notFoundLabWorkflowId = randomId;
+            LabWorkflow notFoundLabWorkflow = null;
+
+            var notFoundLabWorkflowException =
+                new NotFoundLabWorkflowException(notFoundLabWorkflowId);
+
+            var expectedLabWorkflowValidationException =
+                new LabWorkflowValidationException(notFoundLabWorkflowException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLabWorkflowByIdAsync(notFoundLabWorkflowId))
+                    .ReturnsAsync(notFoundLabWorkflow);
+
+            // when
+            ValueTask<LabWorkflow> retrieveLabWorkflowByIdTask =
+                this.labWorkflowService.RetrieveLabWorkflowByIdAsync(
+                    notFoundLabWorkflowId);
+
+            LabWorkflowValidationException actualLabWorkflowValidationException =
+                await Assert.ThrowsAsync<LabWorkflowValidationException>(
+                    retrieveLabWorkflowByIdTask.AsTask);
+
+            // then
+            actualLabWorkflowValidationException.Should().BeEquivalentTo(
+                expectedLabWorkflowValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLabWorkflowByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabWorkflowValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
