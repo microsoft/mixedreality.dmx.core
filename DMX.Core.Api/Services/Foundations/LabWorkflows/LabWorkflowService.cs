@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
@@ -23,9 +24,7 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflows
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<LabWorkflow> RetrieveLabWorkflowByIdAsync(Guid labWorkflowId)
-        {
-            throw new NotImplementedException();
-        }
+        public async ValueTask<LabWorkflow> RetrieveLabWorkflowByIdAsync(Guid labWorkflowId) =>
+            await this.storageBroker.SelectLabWorkflowByIdAsync(labWorkflowId);
     }
 }
