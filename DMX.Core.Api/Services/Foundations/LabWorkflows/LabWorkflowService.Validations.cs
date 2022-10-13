@@ -10,8 +10,19 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflows
 {
     public partial class LabWorkflowService
     {
-        private static void ValidateLabWorkflowId(Guid labWorkflowId) =>
-            Validate((Rule: IsInvalid(labWorkflowId), Parameter: nameof(LabWorkflow.Id)));
+        private static void ValidateLabWorkflowOnAdd(LabWorkflow labWorkflow)
+        {
+            ValidateLabWorkflowIsNotNull(labWorkflow);
+
+            Validate(
+                (Rule: IsInvalid(labWorkflow.Id), Parameter: nameof(LabWorkflow.Id)),
+                (Rule: IsInvalid(labWorkflow.Name), Parameter: nameof(LabWorkflow.Name)),
+                (Rule: IsInvalid(labWorkflow.Owner), Parameter: nameof(LabWorkflow.Owner)),
+                (Rule: IsInvalid(labWorkflow.CreatedBy), Parameter: nameof(LabWorkflow.CreatedBy)),
+                (Rule: IsInvalid(labWorkflow.UpdatedBy), Parameter: nameof(LabWorkflow.UpdatedBy)),
+                (Rule: IsInvalid(labWorkflow.CreatedDate), Parameter: nameof(LabWorkflow.CreatedDate)),
+                (Rule: IsInvalid(labWorkflow.UpdatedDate), Parameter: nameof(LabWorkflow.UpdatedDate)));
+        }
 
         private static void ValidateLabWorkflowIsNotNull(LabWorkflow labWorkflow)
         {
@@ -31,10 +42,31 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflows
             }
         }
 
+        private static void ValidateLabWorkflowId(Guid labWorkflowId) =>
+            Validate((Rule: IsInvalid(labWorkflowId), Parameter: nameof(LabWorkflow.Id)));
+
         private static dynamic IsInvalid(Guid id) => new
         {
             Condition = id == Guid.Empty,
             Message = "Id is required"
+        };
+
+        private static dynamic IsInvalid(string text) => new
+        {
+            Condition = String.IsNullOrWhiteSpace(text),
+            Message = "Text is required"
+        };
+
+        private static dynamic IsInvalid(ulong userId) => new
+        {
+            Condition = userId == default,
+            Message = "User is required"
+        };
+
+        private static dynamic IsInvalid(DateTimeOffset date) => new
+        {
+            Condition = date == default,
+            Message = "Date is required"
         };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
