@@ -79,10 +79,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
                 values: "Text is required");
 
             invalidLabWorkflowException.AddData(
-                key: nameof(LabWorkflow.Results),
-                values: "Text is required");
-
-            invalidLabWorkflowException.AddData(
                 key: nameof(LabWorkflow.CreatedBy),
                 values: "Data is required");
 
