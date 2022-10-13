@@ -68,7 +68,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
 
             invalidLabWorkflowException.AddData(
                 key: nameof(LabWorkflow.Id),
-                values: "Text is required");
+                values: "Id is required");
 
             invalidLabWorkflowException.AddData(
                 key: nameof(LabWorkflow.Name),
@@ -80,11 +80,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
 
             invalidLabWorkflowException.AddData(
                 key: nameof(LabWorkflow.CreatedBy),
-                values: "Data is required");
+                values: "User is required");
 
             invalidLabWorkflowException.AddData(
                 key: nameof(LabWorkflow.UpdatedBy),
-                values: "Data is required");
+                values: "User is required");
 
             invalidLabWorkflowException.AddData(
                 key: nameof(LabWorkflow.CreatedDate),
