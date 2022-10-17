@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Xeptions;
 
@@ -40,6 +41,13 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflows
 
                 throw CreateAndLogCriticalDependencyException(failedLabWorkflowStorageException);
             }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsLabException =
+                    new AlreadyExistsLabWorkflowException(duplicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistsLabException);
+            }
             catch (Exception exception)
             {
                 var failedLabWorkflowServiceException =
@@ -67,6 +75,16 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflows
             this.loggingBroker.LogCritical(labWorkflowDependencyException);
 
             return labWorkflowDependencyException;
+        }
+
+        private LabWorkflowDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
+        {
+            var labWorkflowDependencyValidationException =
+                new LabWorkflowDependencyValidationException(exception);
+
+            this.loggingBroker.LogError(labWorkflowDependencyValidationException);
+
+            return labWorkflowDependencyValidationException;
         }
 
         private LabWorkflowServiceException CreateAndLogServiceException(Xeption exception)
