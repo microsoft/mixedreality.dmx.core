@@ -102,7 +102,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                 new LabWorkflowCommandValidationException(invalidLabWorkflowCommandException);
 
             // when
-
             ValueTask<LabWorkflowCommand> modifyLabWorkflowCommandTask =
                 this.labWorkflowCommandService.ModifyLabWorkflowCommand(invalidLabWorkflowCommand);
 
@@ -115,8 +114,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                 expectedabWorkflowCommandValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(expectedabWorkflowCommandValidationException),
-                    Times.Once);
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedabWorkflowCommandValidationException))),
+                        Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLabWorkflowCommandByIdAsync(It.IsAny<Guid>()),
