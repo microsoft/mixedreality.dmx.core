@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------
 
 using System;
-using System.Reflection.Metadata;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 

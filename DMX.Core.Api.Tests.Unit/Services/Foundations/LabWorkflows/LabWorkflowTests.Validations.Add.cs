@@ -161,7 +161,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLabWorkflowValidationException))),
                     Times.Once);
-            
+
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTime(),
                     Times.Once);
@@ -183,7 +183,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
             int randomNumber = GetRandomNumber();
             LabWorkflow randomLabWorkflow = CreateRandomLabWorkflow(randomDateTime);
             LabWorkflow invalidLabWorkflow = randomLabWorkflow;
-            
+
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
                     .Returns(randomDateTime);
@@ -216,7 +216,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLabWorkflowValidationException))),
                     Times.Once);
-            
+
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTime(),
                     Times.Once);

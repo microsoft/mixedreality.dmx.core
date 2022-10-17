@@ -23,7 +23,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
             LabWorkflow inputLabWorkflow = randomLabWorkflow;
             LabWorkflow insertedLabWorkflow = inputLabWorkflow;
             LabWorkflow expectedLabWorkflow = inputLabWorkflow.DeepClone();
-            
+
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
                     .Returns(dateTime);
@@ -38,7 +38,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
 
             // then
             actualLabWorkflow.Should().BeEquivalentTo(expectedLabWorkflow);
-            
+
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTime(),
                     Times.Once);
