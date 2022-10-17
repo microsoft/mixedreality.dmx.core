@@ -5,6 +5,7 @@
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using FluentAssertions;
+using Force.DeepCloner;
 using Microsoft.Extensions.Azure;
 using Moq;
 using System;
@@ -309,6 +310,66 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.datetimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnModifyIfStorageCreatedDateIsNotSameAsCreatedDateAndLogItAsync()
+        {
+            // given
+            DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
+            DateTimeOffset currentDateTime = randomDateTime;
+            int randomNegativeNumber = GetRandomNegativeNumber();
+            DateTimeOffset labWorkflowCommandCreatedDate = randomDateTime.AddMinutes(randomNegativeNumber);
+
+            LabWorkflowCommand storageLabWorkflowCommand = CreateRandomLabWorkflowCommand(labWorkflowCommandCreatedDate);
+            LabWorkflowCommand invalidLabWorkflowCommand = CreateRandomLabWorkflowCommand(currentDateTime);
+            invalidLabWorkflowCommand.CreatedDate = currentDateTime.AddSeconds(randomNegativeNumber);
+
+            var invalidLabWorkflowCommandException =
+                new InvalidLabWorkflowCommandException();
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.CreatedDate),
+                values: $"Date is not the same as stored {nameof(LabWorkflowCommand.CreatedDate)}");
+
+            var expectedLabWorkflowCommandValidationException =
+                new LabWorkflowCommandValidationException(invalidLabWorkflowCommandException);
+
+            this.datetimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(currentDateTime);
+
+            // when
+            ValueTask<LabWorkflowCommand> modifyLabWorkflowCommandTask =
+                this.labWorkflowCommandService.ModifyLabWorkflowCommand(invalidLabWorkflowCommand);
+
+            LabWorkflowCommandValidationException actualLabWorkflowCommandValidationException =
+                await Assert.ThrowsAsync<LabWorkflowCommandValidationException>(modifyLabWorkflowCommandTask.AsTask);
+
+            // then
+            actualLabWorkflowCommandValidationException.Should().BeEquivalentTo(
+                expectedLabWorkflowCommandValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabWorkflowCommandValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLabWorkflowCommandByIdAsync(It.IsAny<Guid>()),
+                    Times.Never);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateLabWorkflowCommandAsync(It.IsAny<LabWorkflowCommand>()),
+                    Times.Never);
+
+            this.datetimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Never);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.datetimeBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
