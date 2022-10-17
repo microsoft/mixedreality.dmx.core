@@ -21,7 +21,8 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflows
                 (Rule: IsInvalid(labWorkflow.CreatedBy), Parameter: nameof(LabWorkflow.CreatedBy)),
                 (Rule: IsInvalid(labWorkflow.UpdatedBy), Parameter: nameof(LabWorkflow.UpdatedBy)),
                 (Rule: IsInvalid(labWorkflow.CreatedDate), Parameter: nameof(LabWorkflow.CreatedDate)),
-                (Rule: IsInvalid(labWorkflow.UpdatedDate), Parameter: nameof(LabWorkflow.UpdatedDate)));
+                (Rule: IsInvalid(labWorkflow.UpdatedDate), Parameter: nameof(LabWorkflow.UpdatedDate)),
+                (Rule: IsInvalid(labWorkflow.Status), Parameter: nameof(LabWorkflow.Status)));
         }
 
         private static void ValidateLabWorkflowIsNotNull(LabWorkflow labWorkflow)
@@ -67,6 +68,12 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflows
         {
             Condition = date == default,
             Message = "Date is required"
+        };
+
+        private static dynamic IsInvalid(LabWorkflowStatus status) => new
+        {
+            Condition = Enum.IsDefined(status) is false,
+            Message = "Value is not recognized"
         };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
