@@ -19,18 +19,22 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
         {
             // given
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
-            LabCommand randomLabCommand = CreateRandomLabCommand(randomDateTimeOffset);
-            LabCommand storageLabCommand = randomLabCommand;
+            DateTimeOffset currentDateTimeOffset = randomDateTimeOffset;
             int randomNegativeNumber = GetRandomNegativeNumber();
-            storageLabCommand.CreatedDate = storageLabCommand.CreatedDate.AddSeconds(seconds: randomNegativeNumber);
-            LabCommand inputLabCommand = storageLabCommand.DeepClone();
+
+            DateTimeOffset labCommandCreatedDateTimeOffset =
+                currentDateTimeOffset.AddMinutes(randomNegativeNumber);
+
+            LabCommand storageLabCommand = CreateRandomLabCommand(labCommandCreatedDateTimeOffset);
+            LabCommand inputLabCommand = CreateRandomLabCommand(labCommandCreatedDateTimeOffset);
+            inputLabCommand.UpdatedDate = currentDateTimeOffset;
             LabCommand updatedLabCommand = inputLabCommand;
             LabCommand expectedLabCommand = updatedLabCommand.DeepClone();
             Guid labCommandId = inputLabCommand.Id;
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
-                    .Returns(randomDateTimeOffset);
+                    .Returns(currentDateTimeOffset);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectLabCommandByIdAsync(labCommandId))
