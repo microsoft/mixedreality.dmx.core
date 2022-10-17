@@ -179,14 +179,14 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             actualLabWorkflowCommandValidationException.Should().BeEquivalentTo(
                 expectedLabWorkflowCommandValidationException);
 
-            this.datetimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTime(),
-                    Times.Once);
-
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLabWorkflowCommandValidationException))),
                         Times.Once);
+
+            this.datetimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Never);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLabWorkflowCommandByIdAsync(It.IsAny<Guid>()),
