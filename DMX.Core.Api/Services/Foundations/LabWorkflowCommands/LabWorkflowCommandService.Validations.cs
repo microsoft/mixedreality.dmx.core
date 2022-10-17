@@ -5,6 +5,7 @@
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using System;
+using System.Reflection.Metadata;
 
 namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
 {
@@ -22,7 +23,13 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
                 (Rule: IsInvalid(labWorkflowCommand.Status), Parameter: nameof(LabWorkflowCommand.Status)),
                 (Rule: IsInvalid(labWorkflowCommand.Arguments), Parameter: nameof(LabWorkflowCommand.Arguments)),
                 (Rule: IsInvalid(labWorkflowCommand.CreatedDate), Parameter: nameof(LabWorkflowCommand.CreatedDate)),
-                (Rule: IsInvalid(labWorkflowCommand.UpdatedDate), Parameter: nameof(LabWorkflowCommand.UpdatedDate)));
+                (Rule: IsInvalid(labWorkflowCommand.UpdatedDate), Parameter: nameof(LabWorkflowCommand.UpdatedDate)),
+
+                (Rule: IsSame(
+                    labWorkflowCommand.UpdatedDate,
+                    labWorkflowCommand.CreatedDate,
+                    nameof(LabWorkflowCommand.CreatedDate)),
+                Parameter: nameof(LabWorkflowCommand.UpdatedDate)));
         }
 
         private static dynamic IsInvalid(Guid id) => new
@@ -53,6 +60,15 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
         {
             Condition = Enum.IsDefined(status) is false,
             Message = "Value is not recognized"
+        };
+
+        private static dynamic IsSame(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string nameofSecondDate) => new
+        {
+            Condition = firstDate != default && firstDate == secondDate,
+            Message = $"Date is the same as {nameofSecondDate}"
         };
 
         public void ValidateLabWorkflowCommandIsNotNull(LabWorkflowCommand LabWorkflowCommand)

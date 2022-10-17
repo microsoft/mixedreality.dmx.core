@@ -212,7 +212,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
 
             invalidLabWorkflowCommandException.AddData(
                 key: nameof(LabWorkflowCommand.UpdatedDate),
-                values: $"Date is same as {nameof(LabWorkflowCommand.CreatedDate)}");
+                values: $"Date is the same as {nameof(LabWorkflowCommand.CreatedDate)}");
 
             this.datetimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())

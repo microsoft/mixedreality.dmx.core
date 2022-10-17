@@ -19,13 +19,22 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
         {
             // given
             DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
-            LabWorkflowCommand inputLabWorkflowCommand = CreateRandomLabWorkflowCommand();
-            Guid inputLabCommandWorkflowId = inputLabWorkflowCommand.Id;
-            LabWorkflowCommand storageLabWorkflowCommand = CreateRandomLabWorkflowCommand();
-            storageLabWorkflowCommand.Id = inputLabWorkflowCommand.Id;
-            storageLabWorkflowCommand.CreatedDate = inputLabWorkflowCommand.CreatedDate;
-            LabWorkflowCommand updatedLabWorkflowCommand = inputLabWorkflowCommand.DeepClone();
+            DateTimeOffset currentDateTimeOffset = randomDateTimeOffset;
+            int randomNegativeNumber = GetRandomNegativeNumber();
+
+            DateTimeOffset labWorkflowCommandCreatedDateTimeOffset =
+                currentDateTimeOffset.AddMinutes(randomNegativeNumber);
+
+            LabWorkflowCommand storageLabWorkflowCommand =
+                CreateRandomLabWorkflowCommand(labWorkflowCommandCreatedDateTimeOffset);
+
+            LabWorkflowCommand inputLabWorkflowCommand =
+                CreateRandomLabWorkflowCommand(labWorkflowCommandCreatedDateTimeOffset);
+
+            inputLabWorkflowCommand.UpdatedDate = currentDateTimeOffset;
+            LabWorkflowCommand updatedLabWorkflowCommand = inputLabWorkflowCommand;
             LabWorkflowCommand expectedLabWorkflowCommand = updatedLabWorkflowCommand.DeepClone();
+            Guid inputLabCommandWorkflowId = inputLabWorkflowCommand.Id;
 
             this.datetimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
