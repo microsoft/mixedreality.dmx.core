@@ -6,6 +6,8 @@ using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
+using EFxceptions.Models.Exceptions;
+using FluentAssertions;
 using Moq;
 using Xunit;
 
@@ -60,6 +62,62 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfLabWorkflowAlreadyExistsAndLogItAsync()
+        {
+            // given
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            LabWorkflow someLabWorkflow = CreateRandomLabWorkflow(randomDateTimeOffset);
+            string someMessage = GetRandomString();
+
+            var duplicateKeyException =
+                new DuplicateKeyException(someMessage);
+
+            var alreadyExistsLabWorkflowException =
+                new AlreadyExistsLabWorkflowException(duplicateKeyException);
+
+            var expectedLabWorkflowDependencyValidationException =
+                new LabWorkflowDependencyValidationException(alreadyExistsLabWorkflowException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(randomDateTimeOffset);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertLabWorkflowAsync(It.IsAny<LabWorkflow>()))
+                    .ThrowsAsync(duplicateKeyException);
+
+            // when
+            ValueTask<LabWorkflow> addLabWorkflowTask =
+                this.labWorkflowService.AddLabWorkflowAsync(someLabWorkflow);
+
+            LabWorkflowDependencyValidationException actualLabWorkflowDependencyValidationException =
+                await Assert.ThrowsAsync<LabWorkflowDependencyValidationException>(
+                    addLabWorkflowTask.AsTask);
+
+            // then
+            actualLabWorkflowDependencyValidationException.Should().BeEquivalentTo(
+                expectedLabWorkflowDependencyValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabWorkflowAsync(
+                    It.IsAny<LabWorkflow>()),
+                        Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabWorkflowDependencyValidationException))),
+                        Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
