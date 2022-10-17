@@ -209,7 +209,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
             
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTime(),
-                    Times.Once);
+                    Times.Never);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLabWorkflowAsync(It.IsAny<LabWorkflow>()),
