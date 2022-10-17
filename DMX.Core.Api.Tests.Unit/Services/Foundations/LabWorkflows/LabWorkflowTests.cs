@@ -14,6 +14,7 @@ using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
+using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
 {
@@ -68,6 +69,28 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
 
         private static SqlException GetSqlException() =>
            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
+
+        public static TheoryData InvalidSeconds()
+        {
+            int secondsInPast =
+                GetRandomNumberInRange(
+                    minValue: 60,
+                    maxValue: int.MaxValue) * -1;
+
+            int secondsInFuture =
+                GetRandomNumberInRange(
+                    minValue: 0,
+                    maxValue: int.MaxValue);
+
+            return new TheoryData<int>
+            {
+                secondsInPast,
+                secondsInFuture
+            };
+
+            static int GetRandomNumberInRange(int minValue, int maxValue) =>
+                new IntRange(minValue, maxValue).GetValue();
+        }
 
         private static Filler<LabWorkflow> CreateLabWorkflowFiller(DateTimeOffset dateTimeOffset)
         {

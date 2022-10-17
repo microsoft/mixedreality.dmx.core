@@ -219,5 +219,65 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [MemberData(nameof(InvalidSeconds))]
+        public async Task ShouldThrowValidationExceptionOnAddIfCreatedDateIsNotRecentAndLogItAsync(
+            int invalidSeconds)
+        {
+            // given
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            LabWorkflow randomLabWorkflow = CreateRandomLabWorkflow();
+            LabWorkflow invalidLabWorkflow = randomLabWorkflow;
+
+            randomLabWorkflow.CreatedDate =
+                randomDateTimeOffset.AddSeconds(invalidSeconds);
+
+            randomLabWorkflow.UpdatedDate =
+                randomLabWorkflow.CreatedDate;
+
+            var invalidLabWorkflowException = new InvalidLabWorkflowException();
+
+            invalidLabWorkflowException.AddData(
+                key: nameof(LabWorkflow.CreatedDate),
+                values: "Date is not recent");
+
+            var expectedLabWorkflowValidationException =
+                new LabWorkflowValidationException(invalidLabWorkflowException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(randomDateTimeOffset);
+
+            // when
+            ValueTask<LabWorkflow> addLabWorkflowTask =
+                this.labWorkflowService.AddLabWorkflowAsync(invalidLabWorkflow);
+
+            LabWorkflowValidationException actualLabWorkflowValidationException =
+                await Assert.ThrowsAsync<LabWorkflowValidationException>(
+                    addLabWorkflowTask.AsTask);
+
+            // then
+            actualLabWorkflowValidationException.Should().BeEquivalentTo(
+                expectedLabWorkflowValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabWorkflowValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabWorkflowAsync(
+                    It.IsAny<LabWorkflow>()),
+                        Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
