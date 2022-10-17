@@ -175,5 +175,58 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccursAndLogItAsync()
+        {
+            // given
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            LabWorkflow someLabWorkflow = CreateRandomLabWorkflow(randomDateTimeOffset);
+            var exception = new Exception();
+
+            var failedLabWorkflowServiceException =
+                new FailedLabWorkflowServiceException(exception);
+
+            var expectedLabWorkflowServiceException =
+                new LabWorkflowServiceException(failedLabWorkflowServiceException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(randomDateTimeOffset);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertLabWorkflowAsync(It.IsAny<LabWorkflow>()))
+                    .ThrowsAsync(exception);
+
+            // when
+            ValueTask<LabWorkflow> addLabWorkflowTask =
+                this.labWorkflowService.AddLabWorkflowAsync(someLabWorkflow);
+
+            LabWorkflowServiceException actualLabWorkflowServiceException =
+                await Assert.ThrowsAsync<LabWorkflowServiceException>(
+                    addLabWorkflowTask.AsTask);
+
+            // then
+            actualLabWorkflowServiceException.Should().BeEquivalentTo(
+                expectedLabWorkflowServiceException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabWorkflowAsync(
+                    It.IsAny<LabWorkflow>()),
+                        Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabWorkflowServiceException))),
+                        Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
