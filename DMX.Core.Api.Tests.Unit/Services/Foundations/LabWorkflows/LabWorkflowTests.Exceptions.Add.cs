@@ -131,11 +131,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
             var dbUpdateException =
                 new DbUpdateException();
 
-            var alreadyExistsLabWorkflowException =
-                new AlreadyExistsLabWorkflowException(dbUpdateException);
+            var failedLabWorkflowStorageException =
+                new FailedLabWorkflowStorageException(dbUpdateException);
 
             var expectedLabWorkflowDependencyException =
-                new LabWorkflowDependencyException(alreadyExistsLabWorkflowException);
+                new LabWorkflowDependencyException(failedLabWorkflowStorageException);
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
