@@ -33,12 +33,15 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
 
             this.labWorkflowService = new LabWorkflowService(
                 storageBroker: this.storageBrokerMock.Object,
-                datetimeBroker: this.dateTimeBrokerMock.Object,
+                dateTimeBroker: this.dateTimeBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
         private static LabWorkflow CreateRandomLabWorkflow() =>
             CreateLabWorkflowFiller(GetRandomDateTimeOffset()).Create();
+
+        private static LabWorkflow CreateRandomLabWorkflow(DateTimeOffset date) =>
+            CreateLabWorkflowFiller(date).Create();
 
         private static T GetInvalidEnum<T>()
         {

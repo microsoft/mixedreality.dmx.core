@@ -19,7 +19,7 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflows
 
         public LabWorkflowService(
             IStorageBroker storageBroker,
-            IDateTimeBroker datetimeBroker,
+            IDateTimeBroker dateTimeBroker,
             ILoggingBroker loggingBroker)
         {
             this.storageBroker = storageBroker;

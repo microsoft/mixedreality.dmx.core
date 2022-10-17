@@ -127,9 +127,14 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
         public async Task ShouldThrowValidationExceptionOnAddIfLabWorkflowStatusIsInvalidAndLogItAsync()
         {
             // given
-            LabWorkflow randomLabWorkflow = CreateRandomLabWorkflow();
+            DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
+            LabWorkflow randomLabWorkflow = CreateRandomLabWorkflow(randomDateTime);
             LabWorkflow invalidLabWorkflow = randomLabWorkflow;
             invalidLabWorkflow.Status = GetInvalidEnum<LabWorkflowStatus>();
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(randomDateTime);
 
             var invalidLabWorkflowException = new InvalidLabWorkflowException();
 
@@ -156,12 +161,17 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLabWorkflowValidationException))),
                     Times.Once);
+            
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLabWorkflowAsync(It.IsAny<LabWorkflow>()),
                     Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
 
@@ -171,7 +181,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
             // given
             DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
             int randomNumber = GetRandomNumber();
-            LabWorkflow randomLabWorkflow = CreateRandomLabWorkflow();
+            LabWorkflow randomLabWorkflow = CreateRandomLabWorkflow(randomDateTime);
             LabWorkflow invalidLabWorkflow = randomLabWorkflow;
             
             this.dateTimeBrokerMock.Setup(broker =>
@@ -209,7 +219,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
             
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTime(),
-                    Times.Never);
+                    Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLabWorkflowAsync(It.IsAny<LabWorkflow>()),

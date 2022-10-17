@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;
 using FluentAssertions;
@@ -17,10 +18,15 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
         public async Task ShouldAddLabWorkflowAsync()
         {
             // given
-            LabWorkflow randomLabWorkflow = CreateRandomLabWorkflow();
+            DateTimeOffset dateTime = GetRandomDateTimeOffset();
+            LabWorkflow randomLabWorkflow = CreateRandomLabWorkflow(dateTime);
             LabWorkflow inputLabWorkflow = randomLabWorkflow;
             LabWorkflow insertedLabWorkflow = inputLabWorkflow;
             LabWorkflow expectedLabWorkflow = inputLabWorkflow.DeepClone();
+            
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(expectedLabWorkflow.CreatedDate);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertLabWorkflowAsync(inputLabWorkflow))
@@ -32,13 +38,18 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflows
 
             // then
             actualLabWorkflow.Should().BeEquivalentTo(expectedLabWorkflow);
+            
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertLabWorkflowAsync(inputLabWorkflow),
                     Times.Once);
 
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
-            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
