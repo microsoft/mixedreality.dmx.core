@@ -29,6 +29,12 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
                     labWorkflowCommand.UpdatedDate,
                     labWorkflowCommand.CreatedDate,
                     nameof(LabWorkflowCommand.CreatedDate)),
+                Parameter: nameof(LabWorkflowCommand.UpdatedDate)),
+
+            (Rule: IsBefore(
+                    labWorkflowCommand.UpdatedDate,
+                    labWorkflowCommand.CreatedDate,
+                    nameof(LabWorkflowCommand.CreatedDate)),
                 Parameter: nameof(LabWorkflowCommand.UpdatedDate)));
         }
 
@@ -70,6 +76,15 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             Condition = firstDate != default && firstDate == secondDate,
             Message = $"Date is the same as {nameofSecondDate}"
         };
+
+        private static dynamic IsBefore(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string nameofSecondDate) => new
+            {
+                Condition = firstDate < secondDate,
+                Message = $"Date cannot be before {nameofSecondDate}"
+            };
 
         public void ValidateLabWorkflowCommandIsNotNull(LabWorkflowCommand LabWorkflowCommand)
         {
