@@ -146,9 +146,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             invalidLabCommand.CreatedDate =
                 invalidLabCommand.CreatedDate.AddMinutes(minutesInPast);
 
-            LabCommand updatedLabCommand = invalidLabCommand.DeepClone();
-            LabCommand expectedLabCommand = updatedLabCommand.DeepClone();
-
             var invalidLabCommandException = new InvalidLabCommandException();
 
             invalidLabCommandException.AddData(

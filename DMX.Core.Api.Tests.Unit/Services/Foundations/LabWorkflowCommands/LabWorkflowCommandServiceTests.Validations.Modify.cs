@@ -134,5 +134,71 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.datetimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnModifyIfLabWorkflowCommandStatusOrTypeIsInvalidAndLogItAsync()
+        {
+            // given
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            int minutesInPast = GetRandomNegativeNumber();
+            LabWorkflowCommand randomLabWorkflowCommand = CreateRandomLabWorkflowCommand(randomDateTimeOffset);
+            LabWorkflowCommand invalidLabWorkflowCommand = randomLabWorkflowCommand;
+            invalidLabWorkflowCommand.Status = GetInvalidEnum<CommandStatus>();
+            invalidLabWorkflowCommand.Type = GetInvalidEnum<CommandType>();
+
+            invalidLabWorkflowCommand.CreatedDate =
+                invalidLabWorkflowCommand.UpdatedDate.AddMinutes(minutesInPast);
+
+            var invalidLabWorkflowCommandException =
+                new InvalidLabWorkflowCommandException();
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.Status),
+                values: "Value is not recognized");
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.Type),
+                values: "Value is not recognized");
+
+            var expectedLabWorkflowCommandValidationException =
+                new LabWorkflowCommandValidationException(invalidLabWorkflowCommandException);
+
+            this.datetimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(randomDateTimeOffset);
+
+            // when
+            ValueTask<LabWorkflowCommand> labWorkflowCommandTask =
+                this.labWorkflowCommandService.ModifyLabWorkflowCommand(invalidLabWorkflowCommand);
+
+            LabWorkflowCommandValidationException actualLabWorkflowCommandValidationException =
+                await Assert.ThrowsAsync<LabWorkflowCommandValidationException>(
+                    labWorkflowCommandTask.AsTask);
+
+            // then
+            actualLabWorkflowCommandValidationException.Should().BeEquivalentTo(
+                expectedLabWorkflowCommandValidationException);
+
+            this.datetimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabWorkflowCommandValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLabWorkflowCommandByIdAsync(It.IsAny<Guid>()),
+                    Times.Never);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateLabWorkflowCommandAsync(It.IsAny<LabWorkflowCommand>()),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.datetimeBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
