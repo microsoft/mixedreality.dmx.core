@@ -45,6 +45,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                     expectedLabWorkflowCommandValidationException))),
                         Times.Once);
 
+            this.datetimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Never);
+
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLabWorkflowCommandByIdAsync(It.IsAny<Guid>()),
                     Times.Never);
@@ -119,16 +123,16 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                     expectedabWorkflowCommandValidationException))),
                         Times.Once);
 
+            this.datetimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLabWorkflowCommandByIdAsync(It.IsAny<Guid>()),
                     Times.Never);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.UpdateLabWorkflowCommandAsync(It.IsAny<LabWorkflowCommand>()),
-                    Times.Never);
-
-            this.datetimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTime(),
                     Times.Never);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
@@ -187,7 +191,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
 
             this.datetimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTime(),
-                    Times.Never);
+                    Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLabWorkflowCommandByIdAsync(It.IsAny<Guid>()),
@@ -240,7 +244,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
 
             this.datetimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTime(),
-                    Times.Never);
+                    Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLabWorkflowCommandByIdAsync(It.IsAny<Guid>()),
@@ -297,7 +301,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
 
             this.datetimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTime(),
-                    Times.Never);
+                    Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLabWorkflowCommandByIdAsync(It.IsAny<Guid>()),
@@ -363,12 +367,12 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                 broker.SelectLabWorkflowCommandByIdAsync(It.IsAny<Guid>()),
                     Times.Once);
 
-            this.storageBrokerMock.Verify(broker =>
-                broker.UpdateLabWorkflowCommandAsync(It.IsAny<LabWorkflowCommand>()),
-                    Times.Never);
-
             this.datetimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateLabWorkflowCommandAsync(It.IsAny<LabWorkflowCommand>()),
                     Times.Never);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
