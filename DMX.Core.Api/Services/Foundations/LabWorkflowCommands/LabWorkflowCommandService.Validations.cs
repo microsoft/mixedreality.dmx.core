@@ -23,7 +23,13 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
                 (Rule: IsInvalid(labWorkflowCommand.CreatedDate), Parameter: nameof(LabWorkflowCommand.CreatedDate)),
                 (Rule: IsInvalid(labWorkflowCommand.UpdatedDate), Parameter: nameof(LabWorkflowCommand.UpdatedDate)),
                 (Rule: IsInvalid(labWorkflowCommand.Type), Parameter: nameof(LabWorkflowCommand.Type)),
-                (Rule: IsInvalid(labWorkflowCommand.Status), Parameter: nameof(LabWorkflowCommand.Status)));
+                (Rule: IsInvalid(labWorkflowCommand.Status), Parameter: nameof(LabWorkflowCommand.Status)),
+
+                (Rule: IsSame(
+                    labWorkflowCommand.UpdatedDate,
+                    labWorkflowCommand.CreatedDate,
+                    nameof(LabWorkflowCommand.CreatedDate)),
+                Parameter: nameof(LabWorkflowCommand.UpdatedDate)));
         }
 
         private static void ValidateLabWorkflowCommandIsNotNull(LabWorkflowCommand labWorkflowCommand)
@@ -69,6 +75,15 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             Condition = Enum.IsDefined(status) is false,
             Message = "Value is not recognized"
         };
+
+        private static dynamic IsSame(
+            DateTimeOffset firstDate,
+            DateTimeOffset secondDate,
+            string nameOfSecondDate) => new
+            {
+                Condition = firstDate != secondDate,
+                Message = $"Date is not the same as {nameOfSecondDate}"
+            };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
