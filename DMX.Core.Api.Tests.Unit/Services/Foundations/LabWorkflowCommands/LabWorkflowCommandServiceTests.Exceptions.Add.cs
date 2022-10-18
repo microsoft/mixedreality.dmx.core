@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions;
+using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using EFxceptions.Models.Exceptions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -165,6 +166,60 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLabWorkflowCommandDependencyException))),
+                        Times.Once);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabWorkflowCommandAsync(
+                    It.IsAny<LabWorkflowCommand>()),
+                        Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnAddIfErrorOccursAndLogItAsync()
+        {
+            // given
+            DateTimeOffset dateTime = GetRandomDateTimeOffset();
+            LabWorkflowCommand randomLabWorkflowCommand = CreateRandomLabWorkflowCommand(dateTime);
+            var serviceException = new Exception();
+
+            var failedLabWorkflowCommandServiceException =
+                new FailedLabWorkflowCommandServiceException(serviceException);
+
+            var expectedLabWorkflowCommandServiceException =
+                new LabWorkflowCommandServiceException(failedLabWorkflowCommandServiceException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(dateTime);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertLabWorkflowCommandAsync(
+                    It.IsAny<LabWorkflowCommand>()))
+                        .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<LabWorkflowCommand> addLabWorkflowCommandTask =
+                this.labWorkflowCommandService.AddLabWorkflowCommandAsync(
+                    randomLabWorkflowCommand);
+
+            LabWorkflowCommandServiceException actualLabWorkflowCommandServiceException =
+                await Assert.ThrowsAsync<LabWorkflowCommandServiceException>(
+                    addLabWorkflowCommandTask.AsTask);
+            // then
+            actualLabWorkflowCommandServiceException.Should().BeEquivalentTo(
+                expectedLabWorkflowCommandServiceException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabWorkflowCommandServiceException))),
                         Times.Once);
 
             this.dateTimeBrokerMock.Verify(broker =>
