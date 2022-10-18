@@ -100,5 +100,49 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowEvents
             this.queueBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfArgumentExceptionOccursAndLogItAsync()
+        {
+            // given
+            LabWorkflow randomLabWorkflow = CreateRandomLabWorkflow();
+
+            var argumentException = new ArgumentException();
+
+            var invalidLabWorkflowEventException =
+                new InvalidLabWorkflowEventException(argumentException);
+
+            var expectedLabWorkflowEventDependencyValidationException =
+                new LabWorkflowEventDependencyValidationException(
+                    invalidLabWorkflowEventException);
+
+            this.queueBrokerMock.Setup(broker =>
+                broker.EnqueueLabWorkflowEventMessageAsync(It.IsAny<Message>()))
+                    .Throws(argumentException);
+
+            // when
+            ValueTask<LabWorkflow> addLabWorkflowEventTask =
+                this.labWorkflowEventService.AddLabWorkflowEventAsync(randomLabWorkflow);
+
+            LabWorkflowEventDependencyValidationException actualLabWorkflowEventDependencyValidationException =
+                await Assert.ThrowsAsync<LabWorkflowEventDependencyValidationException>(
+                    addLabWorkflowEventTask.AsTask);
+
+            // then
+            actualLabWorkflowEventDependencyValidationException.Should().BeEquivalentTo(
+                expectedLabWorkflowEventDependencyValidationException);
+
+            this.queueBrokerMock.Verify(broker =>
+                broker.EnqueueLabWorkflowEventMessageAsync(It.IsAny<Message>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabWorkflowEventDependencyValidationException))),
+                        Times.Once);
+
+            this.queueBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
