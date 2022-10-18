@@ -48,5 +48,57 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ShouldThrowValidationExceptionOnAddIfLabWorkflowCommandIsInvalidAndLogItAsync(
+            string invalidString)
+        {
+            // given
+            var invalidLabWorkflowCommand = new LabWorkflowCommand
+            {
+                Notes = invalidString,
+                Arguments = invalidString,
+            };
+
+            var invalidLabWorkflowCommandException = new InvalidLabWorkflowCommandException();
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.Notes),
+                values: "Id is required");
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.Arguments),
+                values: "Text is required");
+
+            var expectedLabWorkflowCommandValidationException =
+                new LabWorkflowCommandValidationException(invalidLabWorkflowCommandException);
+
+            // when
+            ValueTask<LabWorkflowCommand> addLabWorkflowTask =
+                this.labWorkflowCommandService.AddLabWorkflowCommandAsync(invalidLabWorkflowCommand);
+
+            LabWorkflowCommandValidationException actualLabWorkflowCommandValidationException =
+                await Assert.ThrowsAsync<LabWorkflowCommandValidationException>(
+                    addLabWorkflowTask.AsTask);
+
+            // then
+            actualLabWorkflowCommandValidationException.Should().BeEquivalentTo(
+                expectedLabWorkflowCommandValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabWorkflowCommandValidationException))),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabWorkflowCommandAsync(It.IsAny<LabWorkflowCommand>()),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
