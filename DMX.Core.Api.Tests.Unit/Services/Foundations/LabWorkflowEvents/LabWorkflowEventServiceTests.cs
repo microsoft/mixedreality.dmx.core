@@ -14,6 +14,8 @@ using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
 using Xunit;
+using AzureMessagingCommunicationException = Microsoft.ServiceBus.Messaging.MessagingCommunicationException;
+
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowEvents
 {
@@ -43,6 +45,18 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowEvents
                 new MessagingEntityNotFoundException(message),
                 new MessagingEntityDisabledException(message),
                 new UnauthorizedAccessException()
+            };
+        }
+
+        public static TheoryData MessageQueueDependencyExceptions()
+        {
+            string message = GetRandomString();
+
+            return new TheoryData<Exception>
+            {
+                new InvalidOperationException(),
+                new AzureMessagingCommunicationException(communicationPath: message),
+                new ServerBusyException(message),
             };
         }
 
