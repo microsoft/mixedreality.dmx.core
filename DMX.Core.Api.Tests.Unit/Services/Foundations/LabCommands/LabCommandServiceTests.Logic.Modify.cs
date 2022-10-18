@@ -25,8 +25,12 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             DateTimeOffset labCommandCreatedDateTimeOffset =
                 currentDateTimeOffset.AddMinutes(randomNegativeNumber);
 
-            LabCommand storageLabCommand = CreateRandomLabCommand(labCommandCreatedDateTimeOffset);
-            LabCommand inputLabCommand = CreateRandomLabCommand(labCommandCreatedDateTimeOffset);
+            LabCommand storageLabCommand =
+                CreateRandomLabCommand(labCommandCreatedDateTimeOffset);
+
+            LabCommand inputLabCommand =
+                CreateRandomLabCommand(labCommandCreatedDateTimeOffset);
+
             inputLabCommand.UpdatedDate = currentDateTimeOffset;
             LabCommand updatedLabCommand = inputLabCommand;
             LabCommand expectedLabCommand = updatedLabCommand.DeepClone();
