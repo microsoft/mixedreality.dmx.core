@@ -5,6 +5,7 @@
 using System;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
+using DMX.Core.Api.Brokers.DateTimes;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
@@ -20,16 +21,19 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
     public partial class LabWorkflowCommandServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
+        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly ILabWorkflowCommandService labWorkflowCommandService;
 
         public LabWorkflowCommandServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
+            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
             this.labWorkflowCommandService = new LabWorkflowCommandService(
                 storageBroker: this.storageBrokerMock.Object,
+                dateTimeBroker: this.dateTimeBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
         

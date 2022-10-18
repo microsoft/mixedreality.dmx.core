@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions;
@@ -165,6 +166,61 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                     Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnAddIfCreateAndUpdateIsNotSameAndLogItAsync()
+        {
+            // given
+            DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
+            int randomNumber = GetRandomNumber();
+            LabWorkflowCommand randomLabWorkflowCommand = CreateRandomLabWorkflowCommand(randomDateTime);
+            LabWorkflowCommand invalidLabWorkflowCommand = randomLabWorkflowCommand;
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(randomDateTime);
+
+            invalidLabWorkflowCommand.UpdatedDate =
+                invalidLabWorkflowCommand.UpdatedDate.AddDays(randomNumber);
+
+            var invalidLabWorkflowCommandException = new InvalidLabWorkflowCommandException();
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.UpdatedDate),
+                values: $"Date is not the same as {nameof(LabWorkflowCommand.CreatedDate)}");
+
+            var expectedLabWorkflowCommandValidationException =
+                new LabWorkflowCommandValidationException(invalidLabWorkflowCommandException);
+
+            // when
+            ValueTask<LabWorkflowCommand> addLabWorkflowTask =
+                this.labWorkflowCommandService.AddLabWorkflowCommandAsync(invalidLabWorkflowCommand);
+
+            LabWorkflowCommandValidationException actualLabWorkflowCommandValidationException =
+                await Assert.ThrowsAsync<LabWorkflowCommandValidationException>(
+                    addLabWorkflowTask.AsTask);
+
+            // then
+            actualLabWorkflowCommandValidationException.Should().BeEquivalentTo(
+                expectedLabWorkflowCommandValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabWorkflowCommandValidationException))),
+                    Times.Once);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabWorkflowCommandAsync(It.IsAny<LabWorkflowCommand>()),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
     }
