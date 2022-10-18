@@ -2,9 +2,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions;
+using Microsoft.Data.SqlClient;
 using Xeptions;
 
 namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
@@ -27,6 +29,13 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             {
                 throw CreateAndLogValidationException(invalidLabWorkflowCommandException);
             }
+            catch (SqlException sqlException)
+            {
+                var failedLabWorkflowCommandStorageException =
+                    new FailedLabWorkflowCommandStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedLabWorkflowCommandStorageException);
+            }
         }
 
         public LabWorkflowCommandValidationException CreateAndLogValidationException(Xeption exception)
@@ -37,6 +46,16 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             this.loggingBroker.LogError(labWorfklowCommandValidationException);
 
             return labWorfklowCommandValidationException;
+        }
+
+        private LabWorkflowCommandDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
+        {
+            var labWorkflowCommandDependencyException =
+                new LabWorkflowCommandDependencyException(exception);
+
+            this.loggingBroker.LogCritical(labWorkflowCommandDependencyException);
+
+            return labWorkflowCommandDependencyException;
         }
     }
 }
