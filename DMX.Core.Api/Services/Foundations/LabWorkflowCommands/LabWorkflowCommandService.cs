@@ -9,7 +9,7 @@ using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 
 namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
 {
-    public class LabWorkflowCommandService : ILabWorkflowCommandService
+    public partial class LabWorkflowCommandService : ILabWorkflowCommandService
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
@@ -22,7 +22,11 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<LabWorkflowCommand> AddLabWorkflowCommandAsync(LabWorkflowCommand labWorkflowCommand) =>
-            await this.storageBroker.InsertLabWorkflowCommandAsync(labWorkflowCommand);
+        public ValueTask<LabWorkflowCommand> AddLabWorkflowCommandAsync(LabWorkflowCommand labWorkflowCommand) =>
+        TryCatch(async () =>
+        {
+            ValidateLabWorkflowCommandIsNotNull(labWorkflowCommand);
+            return await this.storageBroker.InsertLabWorkflowCommandAsync(labWorkflowCommand);
+        });
     }
 }
