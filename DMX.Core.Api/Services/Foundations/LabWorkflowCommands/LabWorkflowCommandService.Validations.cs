@@ -48,6 +48,7 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             LabWorkflowCommand labWorkflowCommand,
             LabWorkflowCommand storageLabWorkflowCommand)
         {
+            ValidateLabWorkflowCommandExists(storageLabWorkflowCommand, labWorkflowCommand.Id);
 
             Validate(
                 (Rule: IsNotSameAsStorage(
@@ -55,6 +56,16 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
                     storageLabWorkflowCommand.CreatedDate,
                     nameof(LabWorkflowCommand.CreatedDate)),
                 Parameter: nameof(LabWorkflowCommand.CreatedDate)));
+        }
+
+        private void ValidateLabWorkflowCommandExists(
+            LabWorkflowCommand maybeLabWorkflowCommand,
+            Guid labWorkflowCommandId)
+        {
+            if (maybeLabWorkflowCommand is null)
+            {
+                throw new NotFoundLabWorkflowCommandException(labWorkflowCommandId);
+            }
         }
 
         private static dynamic IsInvalid(Guid id) => new
