@@ -106,7 +106,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowEvents
         {
             // given
             LabWorkflow randomLabWorkflow = CreateRandomLabWorkflow();
-
             var argumentException = new ArgumentException();
 
             var invalidLabWorkflowEventException =
