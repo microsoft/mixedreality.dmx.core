@@ -25,7 +25,8 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
         public ValueTask<LabWorkflowCommand> AddLabWorkflowCommandAsync(LabWorkflowCommand labWorkflowCommand) =>
         TryCatch(async () =>
         {
-            ValidateLabWorkflowCommandIsNotNull(labWorkflowCommand);
+            ValidateLabWorkflowCommandOnAdd(labWorkflowCommand);
+
             return await this.storageBroker.InsertLabWorkflowCommandAsync(labWorkflowCommand);
         });
     }

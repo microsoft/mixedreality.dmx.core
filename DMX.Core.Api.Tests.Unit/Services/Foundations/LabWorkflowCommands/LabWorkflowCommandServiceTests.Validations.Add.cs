@@ -66,12 +66,32 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             var invalidLabWorkflowCommandException = new InvalidLabWorkflowCommandException();
 
             invalidLabWorkflowCommandException.AddData(
-                key: nameof(LabWorkflowCommand.Notes),
+                key: nameof(LabWorkflowCommand.Id),
+                values: "Id is required");
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.WorkflowId),
                 values: "Id is required");
 
             invalidLabWorkflowCommandException.AddData(
                 key: nameof(LabWorkflowCommand.Arguments),
                 values: "Text is required");
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.CreatedBy),
+                values: "User is required");
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.UpdatedBy),
+                values: "User is required");
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.CreatedDate),
+                values: "Date is required");
+
+            invalidLabWorkflowCommandException.AddData(
+                key: nameof(LabWorkflowCommand.UpdatedDate),
+                values: "Date is required");
 
             var expectedLabWorkflowCommandValidationException =
                 new LabWorkflowCommandValidationException(invalidLabWorkflowCommandException);
