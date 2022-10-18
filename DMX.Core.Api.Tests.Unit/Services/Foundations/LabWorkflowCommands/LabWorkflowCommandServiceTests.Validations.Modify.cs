@@ -313,7 +313,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
         }
 
         [Fact]
-        public async Task ShouldThrowValidationExceptionOnModifyIfStorageCreatedDateIsNotSameAsCreatedDateAndLogItAsync()
+        public async Task ShouldThrowValidationExceptionOnModifyIfCreatedDateIsNotSameAsStorageCreatedDateAndLogItAsync()
         {
             // given
             DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
@@ -339,6 +339,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                 broker.GetCurrentDateTime())
                     .Returns(currentDateTime);
 
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLabWorkflowCommandByIdAsync(invalidLabWorkflowCommand.Id))
+                    .ReturnsAsync(storageLabWorkflowCommand);
+
             // when
             ValueTask<LabWorkflowCommand> modifyLabWorkflowCommandTask =
                 this.labWorkflowCommandService.ModifyLabWorkflowCommand(invalidLabWorkflowCommand);
@@ -357,7 +361,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLabWorkflowCommandByIdAsync(It.IsAny<Guid>()),
-                    Times.Never);
+                    Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.UpdateLabWorkflowCommandAsync(It.IsAny<LabWorkflowCommand>()),

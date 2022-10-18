@@ -5,7 +5,7 @@
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using System;
-using System.Reflection.Metadata;
+using CommandType = DMX.Core.Api.Models.Foundations.LabWorkflowCommands.CommandType;
 
 namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
 {
@@ -36,6 +36,19 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
                     labWorkflowCommand.CreatedDate,
                     nameof(LabWorkflowCommand.CreatedDate)),
                 Parameter: nameof(LabWorkflowCommand.UpdatedDate)));
+        }
+
+        private void ValidateLabWorkflowCommandAgainstStorageLabWorkflowCommand(
+            LabWorkflowCommand labWorkflowCommand,
+            LabWorkflowCommand storageLabWorkflowCommand)
+        {
+
+            Validate(
+                (Rule: IsNotSameAsStorage(
+                    labWorkflowCommand.CreatedDate,
+                    storageLabWorkflowCommand.CreatedDate,
+                    nameof(LabWorkflowCommand.CreatedDate)),
+                Parameter: nameof(LabWorkflowCommand.CreatedDate)));
         }
 
         private static dynamic IsInvalid(Guid id) => new
@@ -85,6 +98,15 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
                 Condition = firstDate < secondDate,
                 Message = $"Date cannot be before {nameofSecondDate}"
             };
+
+        private static dynamic IsNotSameAsStorage(
+            DateTimeOffset inputDate,
+            DateTimeOffset storageDate,
+            string nameOfStorageDate) => new
+        {
+            Condition = inputDate != storageDate,
+            Message = $"Date is not the same as stored {nameOfStorageDate}"
+        };
 
         public void ValidateLabWorkflowCommandIsNotNull(LabWorkflowCommand LabWorkflowCommand)
         {

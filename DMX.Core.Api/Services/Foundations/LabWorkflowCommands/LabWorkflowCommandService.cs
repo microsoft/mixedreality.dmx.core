@@ -32,6 +32,11 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
         {
             ValidateLabWorkflowCommandOnModify(labWorkflowCommand);
 
+            LabWorkflowCommand maybeLabWorkflowCommand = await this.storageBroker.SelectLabWorkflowCommandByIdAsync(labWorkflowCommand.Id);
+
+            ValidateLabWorkflowCommandAgainstStorageLabWorkflowCommand(
+                labWorkflowCommand, maybeLabWorkflowCommand);
+
             return await this.storageBroker.UpdateLabWorkflowCommandAsync(labWorkflowCommand);
         });
     }

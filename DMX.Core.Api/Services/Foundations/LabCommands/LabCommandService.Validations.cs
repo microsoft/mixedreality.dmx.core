@@ -169,7 +169,7 @@ namespace DMX.Core.Api.Services.Foundations.LabCommands
             string nameOfSecondDate) => new
             {
                 Condition = firstDate < secondDate,
-                Message = $"Date can not be before {nameOfSecondDate}"
+                Message = $"Date cannot be before {nameOfSecondDate}"
             };
 
         private bool IsDateNotRecent(DateTimeOffset date)
