@@ -34,7 +34,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowEvents
 
             // when
             LabWorkflow actualLabWorkflow =
-                await this.labWorkflowEventService.AddLabWorkflowEventAsync(inputLabWorkflow);
+                await this.labWorkflowEventService
+                    .AddLabWorkflowEventAsync(inputLabWorkflow);
 
             // then
             actualLabWorkflow.Should().BeEquivalentTo(expectedLabWorkfow);
