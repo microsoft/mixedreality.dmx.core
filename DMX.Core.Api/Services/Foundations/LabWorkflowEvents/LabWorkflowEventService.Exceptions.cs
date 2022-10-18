@@ -62,11 +62,18 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowEvents
 
                 throw CreateAndLogDependencyException(failedLabWorkflowEventDependencyException);
             }
-            catch  (ServerBusyException serverBusyException)
+            catch (ServerBusyException serverBusyException)
             {
                 var failedLabWorkflowEventDependencyException = new FailedLabWorkflowEventDependencyException(serverBusyException);
 
                 throw CreateAndLogDependencyException(failedLabWorkflowEventDependencyException);
+            }
+            catch (ArgumentException argumentException)
+            {
+                var invalidLabWorkflowEventException =
+                    new InvalidLabWorkflowEventException(argumentException);
+
+                throw CreateAndLogDependencyValidationException(invalidLabWorkflowEventException);
             }
         }
 
@@ -95,6 +102,18 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowEvents
             this.loggingBroker.LogCritical(labWorkflowEventDependencyException);
 
             return labWorkflowEventDependencyException;
+        }
+
+        private LabWorkflowEventDependencyValidationException CreateAndLogDependencyValidationException(
+            Xeption exception)
+        {
+            var labWorkflowEventDependencyValidationException =
+                new LabWorkflowEventDependencyValidationException(exception);
+
+            this.loggingBroker.LogError(labWorkflowEventDependencyValidationException);
+
+            return labWorkflowEventDependencyValidationException;
+
         }
     }
 }
