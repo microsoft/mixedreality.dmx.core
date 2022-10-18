@@ -36,7 +36,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             LabWorkflowCommand expectedLabWorkflowCommand = updatedLabWorkflowCommand.DeepClone();
             Guid inputLabCommandWorkflowId = inputLabWorkflowCommand.Id;
 
-            this.datetimeBrokerMock.Setup(broker =>
+            this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
                     .Returns(randomDateTimeOffset);
 
@@ -55,7 +55,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             // then
             actualLabWorkflowCommand.Should().BeEquivalentTo(expectedLabWorkflowCommand);
 
-            this.datetimeBrokerMock.Verify(broker =>
+            this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTime(),
                     Times.Once);
 
@@ -67,7 +67,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                 broker.UpdateLabWorkflowCommandAsync(inputLabWorkflowCommand),
                     Times.Once);
 
-            this.datetimeBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }

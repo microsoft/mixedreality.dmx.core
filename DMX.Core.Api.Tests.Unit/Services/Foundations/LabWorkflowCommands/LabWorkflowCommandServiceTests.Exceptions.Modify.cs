@@ -31,7 +31,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             var expectedLabWorkflowCommandDependencyException =
                 new LabWorkflowCommandDependencyException(failedLabWorkflowCommandStorageException);
 
-            this.datetimeBrokerMock.Setup(broker =>
+            this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
                     .Throws(sqlException);
 
@@ -52,7 +52,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                     expectedLabWorkflowCommandDependencyException))),
                         Times.Once);
 
-            this.datetimeBrokerMock.Verify(broker =>
+            this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTime(),
                     Times.Never);
 
@@ -66,7 +66,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
-            this.datetimeBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
     }
 }

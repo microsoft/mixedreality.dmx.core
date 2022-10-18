@@ -23,19 +23,19 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
-        private readonly Mock<IDateTimeBroker> datetimeBrokerMock;
+        private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
         private readonly LabWorkflowCommandService labWorkflowCommandService;
 
         public LabWorkflowCommandServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
-            this.datetimeBrokerMock = new Mock<IDateTimeBroker>();
+            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
 
             this.labWorkflowCommandService = new LabWorkflowCommandService(
                 this.storageBrokerMock.Object,
                 this.loggingBrokerMock.Object,
-                this.datetimeBrokerMock.Object);
+                this.dateTimeBrokerMock.Object);
         }
 
         public static TheoryData InvalidSeconds()
