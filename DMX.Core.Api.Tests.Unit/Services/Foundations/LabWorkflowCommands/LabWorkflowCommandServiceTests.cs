@@ -4,6 +4,7 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Numerics;
 using DMX.Core.Api.Brokers.DateTimes;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
@@ -12,6 +13,7 @@ using DMX.Core.Api.Services.Foundations.LabWorkflowCommands;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
+using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
 {
@@ -32,6 +34,28 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                 this.storageBrokerMock.Object,
                 this.loggingBrokerMock.Object,
                 this.datetimeBrokerMock.Object);
+        }
+
+        public static TheoryData InvalidSeconds()
+        {
+            int secondsInPast =
+                GetRandomNumberInRange(
+                    minValue: 60,
+                    maxValue: int.MaxValue) * -1;
+
+            int secondsInFuture =
+                GetRandomNumberInRange(
+                    minValue: 0,
+                    maxValue: int.MaxValue);
+
+            return new TheoryData<int>
+            {
+                secondsInPast,
+                secondsInFuture
+            };
+
+            static int GetRandomNumberInRange(int minValue, int maxValue) =>
+                new IntRange(minValue, maxValue).GetValue();
         }
 
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
