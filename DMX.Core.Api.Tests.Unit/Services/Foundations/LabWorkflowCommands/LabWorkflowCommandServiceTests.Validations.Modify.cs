@@ -5,8 +5,6 @@
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using FluentAssertions;
-using Force.DeepCloner;
-using Microsoft.Extensions.Azure;
 using Moq;
 using System;
 using System.Threading.Tasks;
