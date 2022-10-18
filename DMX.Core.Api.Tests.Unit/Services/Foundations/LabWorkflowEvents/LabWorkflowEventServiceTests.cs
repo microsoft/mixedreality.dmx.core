@@ -12,6 +12,7 @@ using KellermanSoftware.CompareNetObjects;
 using Microsoft.Azure.ServiceBus;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowEvents
 {
@@ -39,6 +40,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowEvents
                 this.compareLogic.Compare(
                     expectedMessage, actualMessage).AreEqual;
         }
+
+        private Expression<Func<Exception, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(TimeZoneInfo.Utc).GetValue();
