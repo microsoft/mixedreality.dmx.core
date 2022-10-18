@@ -178,13 +178,17 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
         public async Task ShouldThrowServiceExceptionOnModifyAndLogItAsync()
         {
             // given
-            LabWorkflowCommand someLabWorkflowCommand = CreateRandomLabWorkflowCommand();
+            LabWorkflowCommand someLabWorkflowCommand =
+                CreateRandomLabWorkflowCommand();
+
             Exception exception = new Exception();
 
-            var failedLabWorkflowCommandServiceException = new FailedLabWorkflowCommandServiceException(exception);
+            var failedLabWorkflowCommandServiceException =
+                new FailedLabWorkflowCommandServiceException(exception);
 
             var expectedLabWorkflowCommandServiceException =
-                new LabWorkflowCommandServiceException(failedLabWorkflowCommandServiceException);
+                new LabWorkflowCommandServiceException(
+                    failedLabWorkflowCommandServiceException);
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
@@ -192,7 +196,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
 
             // when
             ValueTask<LabWorkflowCommand> modifyLabWorkflowCommandTask =
-                this.labWorkflowCommandService.ModifyLabWorkflowCommand(someLabWorkflowCommand);
+                this.labWorkflowCommandService.ModifyLabWorkflowCommand(
+                    someLabWorkflowCommand);
 
             LabWorkflowCommandServiceException actualLabWorkflowCommandServiceException =
                 await Assert.ThrowsAsync<LabWorkflowCommandServiceException>(
