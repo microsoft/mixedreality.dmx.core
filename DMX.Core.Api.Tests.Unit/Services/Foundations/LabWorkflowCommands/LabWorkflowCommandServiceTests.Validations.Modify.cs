@@ -444,5 +444,65 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionIfLabWorkflowCommandNotFoundAndLogItAsync()
+        {
+            // given
+            DateTimeOffset randomDateTimeOffset = GetRandomDateTimeOffset();
+            int randomNegativeNumber = GetRandomNegativeNumber();
+            LabWorkflowCommand invalidLabWorkflowCommand = CreateRandomLabWorkflowCommand(randomDateTimeOffset);
+            invalidLabWorkflowCommand.CreatedDate = randomDateTimeOffset.AddMinutes(randomNegativeNumber);
+            Guid notFoundId = invalidLabWorkflowCommand.Id;
+            LabWorkflowCommand nullLabWorkflowCommand = null;
+
+            var notFoundLabWorkflowCommandException =
+                new NotFoundLabWorkflowCommandException(notFoundId);
+
+            var expectedLabWorkflowCommandValidationException =
+                new LabWorkflowCommandValidationException(notFoundLabWorkflowCommandException);
+
+            this.datetimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(randomDateTimeOffset);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLabWorkflowCommandByIdAsync(notFoundId))
+                    .ReturnsAsync(nullLabWorkflowCommand);
+
+            // when
+            ValueTask<LabWorkflowCommand> modifyLabWorkflowCommandTask =
+                this.labWorkflowCommandService.ModifyLabWorkflowCommand(
+                    invalidLabWorkflowCommand);
+
+            LabWorkflowCommandValidationException actualLabWorkflowCommandValidationException =
+                await Assert.ThrowsAsync<LabWorkflowCommandValidationException>(
+                    modifyLabWorkflowCommandTask.AsTask);
+
+            // then
+            actualLabWorkflowCommandValidationException.Should().BeEquivalentTo(
+                expectedLabWorkflowCommandValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLabWorkflowCommandByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabWorkflowCommandValidationException))),
+                        Times.Once);
+
+            this.datetimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateLabWorkflowCommandAsync(It.IsAny<LabWorkflowCommand>()),
+                    Times.Never);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.datetimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
