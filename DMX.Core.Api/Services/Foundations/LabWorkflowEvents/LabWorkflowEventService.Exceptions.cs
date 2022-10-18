@@ -75,6 +75,21 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowEvents
 
                 throw CreateAndLogDependencyValidationException(invalidLabWorkflowEventException);
             }
+            catch (Exception exception)
+            {
+                var failedLabWorkflowEventServiceException =
+                    new FailedLabWorkflowEventServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLabWorkflowEventServiceException);
+            }
+        }
+
+        private LabWorkflowEventServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var labWorkflowEventServiceException = new LabWorkflowEventServiceException(exception);
+            this.loggingBroker.LogError(labWorkflowEventServiceException);
+
+            return labWorkflowEventServiceException;
         }
 
         private LabWorkflowEventDependencyException CreateAndLogDependencyException(Xeption exception)
