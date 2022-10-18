@@ -30,7 +30,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
 
             // when
             LabWorkflowCommand actualLabWorkflow =
-                await this.labWorkflowService.AddLabWorkflowCommandAsync(inputLabWorkflowCommand);
+                await this.labWorkflowCommandService.AddLabWorkflowCommandAsync(inputLabWorkflowCommand);
 
             // then
             actualLabWorkflow.Should().BeEquivalentTo(expectedLabWorkflowCommand);

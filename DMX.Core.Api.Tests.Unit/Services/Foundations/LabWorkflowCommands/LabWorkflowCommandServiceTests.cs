@@ -21,14 +21,14 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
-        private readonly ILabWorkflowCommandService labWorkflowService;
+        private readonly ILabWorkflowCommandService labWorkflowCommandService;
 
         public LabWorkflowCommandServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
 
-            this.labWorkflowService = new LabWorkflowCommandService(
+            this.labWorkflowCommandService = new LabWorkflowCommandService(
                 storageBroker: this.storageBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
