@@ -13,7 +13,7 @@ using Microsoft.Azure.ServiceBus;
 
 namespace DMX.Core.Api.Services.Foundations.LabWorkflowEvents
 {
-    public class LabWorkflowEventService : ILabWorkflowEventService
+    public partial class LabWorkflowEventService : ILabWorkflowEventService
     {
         private IQueueBroker queueBroker;
         private ILoggingBroker loggingBroker;
@@ -25,13 +25,15 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowEvents
             this.queueBroker = queueBroker;
             this.loggingBroker = loggingBroker;
         }
-        public async ValueTask<LabWorkflow> AddLabWorkflowEventAsync(LabWorkflow labWorkflow)
+        public ValueTask<LabWorkflow> AddLabWorkflowEventAsync(LabWorkflow labWorkflow) =>
+        TryCatch(async () =>
         {
+            ValidateIfNull(labWorkflow);
             Message labWorkflowMessage = MapToMessage(labWorkflow);
             await this.queueBroker.EnqueueLabWorkflowEventMessageAsync(labWorkflowMessage);
 
             return labWorkflow;
-        }
+        });
 
         private Message MapToMessage(LabWorkflow labWorkflow)
         {
