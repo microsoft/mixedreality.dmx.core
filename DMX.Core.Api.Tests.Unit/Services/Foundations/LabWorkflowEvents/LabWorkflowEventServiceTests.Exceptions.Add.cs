@@ -45,7 +45,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowEvents
                 expectedLabWorkflowEventDependencyException);
 
             this.queueBrokerMock.Verify(broker =>
-                broker.EnqueueLabCommandEventMessageAsync(It.IsAny<Message>()),
+                broker.EnqueueLabWorkflowEventMessageAsync(It.IsAny<Message>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
