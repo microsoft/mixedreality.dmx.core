@@ -36,7 +36,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                 dateTimeBroker: this.dateTimeBrokerMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
-        
+
         private static LabWorkflowCommand CreateRandomLabWorkflowCommand() =>
             CreateLabWorkflowCommandFiller(GetRandomDateTimeOffset()).Create();
 

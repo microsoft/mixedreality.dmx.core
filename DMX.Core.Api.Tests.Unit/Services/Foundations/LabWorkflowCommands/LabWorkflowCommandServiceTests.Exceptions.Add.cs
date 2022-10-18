@@ -6,7 +6,6 @@ using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions;
-using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using EFxceptions.Models.Exceptions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +45,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                 this.labWorkflowCommandService.AddLabWorkflowCommandAsync(
                     inputLabWorkflowCommand);
 
-            LabWorkflowCommandDependencyException actualLabWorkflowCommandDependencyException = 
+            LabWorkflowCommandDependencyException actualLabWorkflowCommandDependencyException =
                 await Assert.ThrowsAsync<LabWorkflowCommandDependencyException>(
                     addLabWorkflowCommandTask.AsTask);
             // then

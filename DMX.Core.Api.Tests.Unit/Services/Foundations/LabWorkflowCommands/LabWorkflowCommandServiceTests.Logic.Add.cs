@@ -24,7 +24,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             LabWorkflowCommand insertedLabWorkflowCommand = inputLabWorkflowCommand;
             LabWorkflowCommand expectedLabWorkflowCommand = inputLabWorkflowCommand.DeepClone();
 
-            this.dateTimeBrokerMock.Setup(broker => 
+            this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTime())
                     .Returns(dateTime);
 
