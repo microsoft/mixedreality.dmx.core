@@ -5,6 +5,9 @@
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using System;
+using System.Data;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using CommandType = DMX.Core.Api.Models.Foundations.LabWorkflowCommands.CommandType;
 
 namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
@@ -35,8 +38,11 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
                     labWorkflowCommand.UpdatedDate,
                     labWorkflowCommand.CreatedDate,
                     nameof(LabWorkflowCommand.CreatedDate)),
-                Parameter: nameof(LabWorkflowCommand.UpdatedDate)));
+                Parameter: nameof(LabWorkflowCommand.UpdatedDate)),
+
+            (Rule: IsNotRecent(labWorkflowCommand.UpdatedDate), nameof(LabWorkflowCommand.UpdatedDate)));
         }
+
 
         private void ValidateLabWorkflowCommandAgainstStorageLabWorkflowCommand(
             LabWorkflowCommand labWorkflowCommand,
@@ -85,10 +91,10 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             DateTimeOffset firstDate,
             DateTimeOffset secondDate,
             string nameofSecondDate) => new
-        {
-            Condition = firstDate != default && firstDate == secondDate,
-            Message = $"Date is the same as {nameofSecondDate}"
-        };
+            {
+                Condition = firstDate != default && firstDate == secondDate,
+                Message = $"Date is the same as {nameofSecondDate}"
+            };
 
         private static dynamic IsBefore(
             DateTimeOffset firstDate,
@@ -99,14 +105,29 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
                 Message = $"Date cannot be before {nameofSecondDate}"
             };
 
+        private dynamic IsNotRecent(DateTimeOffset updatedDate) => new
+        {
+            Condition = IsDateNotRecent(updatedDate),
+            Message = "Date is not recent"
+        };
+
+        private bool IsDateNotRecent(DateTimeOffset updatedDate)
+        {
+            DateTimeOffset currentTime = this.dateTimeBroker.GetCurrentDateTime();
+
+            TimeSpan timeDifference = currentTime.Subtract(updatedDate);
+
+            return timeDifference.TotalSeconds is > 60 or < 0;
+        }
+
         private static dynamic IsNotSameAsStorage(
             DateTimeOffset inputDate,
             DateTimeOffset storageDate,
             string nameOfStorageDate) => new
-        {
-            Condition = inputDate != storageDate,
-            Message = $"Date is not the same as stored {nameOfStorageDate}"
-        };
+            {
+                Condition = inputDate != storageDate,
+                Message = $"Date is not the same as stored {nameOfStorageDate}"
+            };
 
         public void ValidateLabWorkflowCommandIsNotNull(LabWorkflowCommand LabWorkflowCommand)
         {
@@ -118,7 +139,7 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
-            var invalidLabWorkflowCommandException = new InvalidLabWorkflowCommandException(); 
+            var invalidLabWorkflowCommandException = new InvalidLabWorkflowCommandException();
 
             foreach ((dynamic rule, string parameter) in validations)
             {
