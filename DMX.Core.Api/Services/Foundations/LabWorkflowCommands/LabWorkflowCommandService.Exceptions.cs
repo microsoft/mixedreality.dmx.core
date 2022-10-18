@@ -8,6 +8,7 @@ using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
@@ -38,17 +39,35 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             {
                 var failedLabWorkflowCommandStorageException = new FailedLabWorkflowCommandStorageException(sqlException);
 
-                throw CreateAndLogCriticalDepedencyException(failedLabWorkflowCommandStorageException);
+                throw CreateAndLogCriticalDependencyException(failedLabWorkflowCommandStorageException);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                var failedLabWorkflowCommandStorageException =
+                    new FailedLabWorkflowCommandStorageException(dbUpdateException);
+
+                throw CreateAndLogDependencyException(failedLabWorkflowCommandStorageException);
             }
         }
 
-        private LabWorkflowCommandDependencyException CreateAndLogCriticalDepedencyException(
+        private LabWorkflowCommandDependencyException CreateAndLogCriticalDependencyException(
             Xeption innerException)
         {
             var labWorkflowCommandDependencyException =
                 new LabWorkflowCommandDependencyException(innerException);
 
             this.loggingBroker.LogCritical(labWorkflowCommandDependencyException);
+
+            return labWorkflowCommandDependencyException;
+        }
+
+        private LabWorkflowCommandDependencyException CreateAndLogDependencyException(
+            Xeption innerException)
+        {
+            var labWorkflowCommandDependencyException =
+                new LabWorkflowCommandDependencyException(innerException);
+
+            this.loggingBroker.LogError(labWorkflowCommandDependencyException);
 
             return labWorkflowCommandDependencyException;
         }
