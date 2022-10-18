@@ -22,9 +22,7 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<LabWorkflowCommand> AddLabWorkflowCommandAsync(LabWorkflowCommand labWorkflowCommand)
-        {
-            throw new System.NotImplementedException();
-        }
+        public async ValueTask<LabWorkflowCommand> AddLabWorkflowCommandAsync(LabWorkflowCommand labWorkflowCommand) =>
+            await this.storageBroker.InsertLabWorkflowCommandAsync(labWorkflowCommand);
     }
 }
