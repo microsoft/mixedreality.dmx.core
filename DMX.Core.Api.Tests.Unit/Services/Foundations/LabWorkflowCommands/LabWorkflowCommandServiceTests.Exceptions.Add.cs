@@ -107,7 +107,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                 expectedLabWorkflowCommandDependencyValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogCritical(It.Is(SameExceptionAs(
+                broker.LogError(It.Is(SameExceptionAs(
                     expectedLabWorkflowCommandDependencyValidationException))),
                         Times.Once);
 
