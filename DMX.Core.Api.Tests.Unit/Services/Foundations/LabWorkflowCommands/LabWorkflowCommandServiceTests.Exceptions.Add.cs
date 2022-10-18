@@ -8,6 +8,7 @@ using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions;
 using EFxceptions.Models.Exceptions;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
@@ -109,6 +110,61 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLabWorkflowCommandDependencyValidationException))),
+                        Times.Once);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertLabWorkflowCommandAsync(
+                    It.IsAny<LabWorkflowCommand>()),
+                        Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyExceptionOnAddIfDbUpdateErrorOccursAndLogItAsync()
+        {
+            // given
+            DateTimeOffset dateTime = GetRandomDateTimeOffset();
+            LabWorkflowCommand randomLabWorkflowCommand = CreateRandomLabWorkflowCommand(dateTime);
+
+            var dbUpdateException =
+                new DbUpdateException();
+
+            var failedLabWorkflowCommandStorageException =
+                new FailedLabWorkflowCommandStorageException(dbUpdateException);
+
+            var expectedLabWorkflowCommandDependencyException =
+                new LabWorkflowCommandDependencyException(failedLabWorkflowCommandStorageException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Returns(dateTime);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertLabWorkflowCommandAsync(It.IsAny<LabWorkflowCommand>()))
+                    .ThrowsAsync(dbUpdateException);
+
+            // when
+            ValueTask<LabWorkflowCommand> addLabWorkflowCommandTask =
+                this.labWorkflowCommandService.AddLabWorkflowCommandAsync(
+                    randomLabWorkflowCommand);
+
+            LabWorkflowCommandDependencyException actualLabWorkflowCommandDependencyException =
+                await Assert.ThrowsAsync<LabWorkflowCommandDependencyException>(
+                    addLabWorkflowCommandTask.AsTask);
+            // then
+            actualLabWorkflowCommandDependencyException.Should().BeEquivalentTo(
+                expectedLabWorkflowCommandDependencyException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabWorkflowCommandDependencyException))),
                         Times.Once);
 
             this.dateTimeBrokerMock.Verify(broker =>
