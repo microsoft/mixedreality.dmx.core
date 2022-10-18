@@ -27,6 +27,42 @@ namespace DMX.Core.Api.Controllers
         public LabWorkflowsController(ILabWorkflowService labWorkflowService) =>
             this.labWorkflowService = labWorkflowService;
 
+        [HttpPost]
+#if RELEASE
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:PostLabWorkflow")]
+#endif
+        public async ValueTask<ActionResult<LabWorkflow>> PostLabWorkflowAsync(LabWorkflow labWorkflow)
+        {
+            try
+            {
+                LabWorkflow addedLabWorkflow =
+                    await this.labWorkflowService.AddLabWorkflowAsync(labWorkflow);
+
+                return Created(addedLabWorkflow);
+            }
+            catch (LabWorkflowValidationException labWorkflowValidationException)
+            {
+                return BadRequest(labWorkflowValidationException.InnerException);
+            }
+            catch (LabWorkflowDependencyException labWorkflowDependencyException)
+            {
+                return InternalServerError(labWorkflowDependencyException);
+            }
+            catch (LabWorkflowDependencyValidationException labWorkflowDependencyValidationException)
+                when (labWorkflowDependencyValidationException.InnerException is AlreadyExistsLabWorkflowException)
+            {
+                return Conflict(labWorkflowDependencyValidationException.InnerException);
+            }
+            catch (LabWorkflowDependencyValidationException labWorkflowDependencyValidationException)
+            {
+                return BadRequest(labWorkflowDependencyValidationException.InnerException);
+            }
+            catch (LabWorkflowServiceException labWorkflowServiceException)
+            {
+                return InternalServerError(labWorkflowServiceException);
+            }
+        }
+
         [HttpGet("{labWorkflowId}")]
 #if RELEASE
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:GetLabWorkflow")]
