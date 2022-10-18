@@ -120,5 +120,58 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task 
+            ShouldThrowDependencyValidationExceptionOnModifyIfDbUpdateConcurrencyErrorOccursAndLogItAsync()
+        {
+            // given
+            LabWorkflowCommand randomLabWorkflowCommand = CreateRandomLabWorkflowCommand();
+            LabWorkflowCommand someLabWorkflowCommand = randomLabWorkflowCommand;
+            var dbUpdateConcurrencyException = new DbUpdateConcurrencyException();
+
+            var lockedLabWorkflowCommandException =
+                new LockedLabWorkflowCommandException(dbUpdateConcurrencyException);
+
+            var expectedLabWorkflowCommandDependencyValidationException = 
+                new LabWorkflowCommandDependencyValidationException(lockedLabWorkflowCommandException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTime())
+                    .Throws(dbUpdateConcurrencyException);
+
+            // when
+            ValueTask<LabWorkflowCommand> modifyLabWorkflowCommandTask =
+                this.labWorkflowCommandService.ModifyLabWorkflowCommand(someLabWorkflowCommand);
+
+            LabWorkflowCommandDependencyValidationException actualLabWorkflowCommandDependencyValidationException =
+                await Assert.ThrowsAsync<LabWorkflowCommandDependencyValidationException>(
+                    modifyLabWorkflowCommandTask.AsTask);
+
+            // then
+            actualLabWorkflowCommandDependencyValidationException.Should().BeEquivalentTo(
+                expectedLabWorkflowCommandDependencyValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTime(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabWorkflowCommandDependencyValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLabWorkflowCommandByIdAsync(It.IsAny<Guid>()),
+                    Times.Never);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateLabWorkflowCommandAsync(It.IsAny<LabWorkflowCommand>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
