@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions;
@@ -51,6 +52,13 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
 
                 throw CreateAndLogDependencyException(failedLabWorkflowCommandStorageException);
             }
+            catch (Exception exception)
+            {
+                var failedLabWorkflowCommandServiceException =
+                    new FailedLabWorkflowCommandServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLabWorkflowCommandServiceException);
+            }
         }
 
         public LabWorkflowCommandValidationException CreateAndLogValidationException(Xeption exception)
@@ -91,6 +99,16 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             this.loggingBroker.LogError(labWorkflowCommandDependencyException);
 
             return labWorkflowCommandDependencyException;
+        }
+
+        private LabWorkflowCommandServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var labWorkflowCommandServiceException =
+                new LabWorkflowCommandServiceException(exception);
+
+            this.loggingBroker.LogError(labWorkflowCommandServiceException);
+
+            return labWorkflowCommandServiceException;
         }
     }
 }
