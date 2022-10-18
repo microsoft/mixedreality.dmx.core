@@ -7,6 +7,7 @@ using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
@@ -43,6 +44,13 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsLabWorkflowCommandException);
             }
+            catch (DbUpdateException dbUpdateException)
+            {
+                var failedLabWorkflowCommandStorageException =
+                    new FailedLabWorkflowCommandStorageException(dbUpdateException);
+
+                throw CreateAndLogDependencyException(failedLabWorkflowCommandStorageException);
+            }
         }
 
         public LabWorkflowCommandValidationException CreateAndLogValidationException(Xeption exception)
@@ -73,6 +81,16 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             this.loggingBroker.LogError(labWorkflowCommandDependencyValidationException);
 
             return labWorkflowCommandDependencyValidationException;
+        }
+
+        private LabWorkflowCommandDependencyException CreateAndLogDependencyException(Xeption exception)
+        {
+            var labWorkflowCommandDependencyException =
+                new LabWorkflowCommandDependencyException(exception);
+
+            this.loggingBroker.LogError(labWorkflowCommandDependencyException);
+
+            return labWorkflowCommandDependencyException;
         }
     }
 }
