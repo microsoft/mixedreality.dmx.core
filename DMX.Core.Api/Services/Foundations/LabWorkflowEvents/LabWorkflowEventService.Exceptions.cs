@@ -9,6 +9,9 @@ using DMX.Core.Api.Models.Foundations.LabWorkflows;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using Microsoft.Azure.ServiceBus;
 using Xeptions;
+using AzureMessagingCommunicationException = Microsoft.ServiceBus.Messaging.MessagingCommunicationException;
+
+
 
 namespace DMX.Core.Api.Services.Foundations.LabWorkflowEvents
 {
@@ -22,31 +25,57 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowEvents
             {
                 return await returningLabWorkflowFunction();
             }
-            catch(NullLabWorkflowException nullLabWorkflowException)
+            catch (NullLabWorkflowException nullLabWorkflowException)
             {
                 throw CreateAndLogValidationException(nullLabWorkflowException);
             }
-            catch(MessagingEntityNotFoundException messagingEntityNotFoundException)
+            catch (MessagingEntityNotFoundException messagingEntityNotFoundException)
             {
                 var failedLabWorkflowEventDependencyException =
                     new FailedLabWorkflowEventDependencyException(messagingEntityNotFoundException);
 
                 throw CreateAndLogCriticalDependencyException(failedLabWorkflowEventDependencyException);
             }
-            catch(MessagingEntityDisabledException messagingEntityDisabledException)
+            catch (MessagingEntityDisabledException messagingEntityDisabledException)
             {
                 var failedLabWorkflowEventDependencyException =
                     new FailedLabWorkflowEventDependencyException(messagingEntityDisabledException);
 
                 throw CreateAndLogCriticalDependencyException(failedLabWorkflowEventDependencyException);
             }
-            catch(UnauthorizedAccessException unauthorizedAccessException)
+            catch (UnauthorizedAccessException unauthorizedAccessException)
             {
                 var failedLabWorkflowEventDependencyException =
                     new FailedLabWorkflowEventDependencyException(unauthorizedAccessException);
 
                 throw CreateAndLogCriticalDependencyException(failedLabWorkflowEventDependencyException);
             }
+            catch (InvalidOperationException invalidOperationException)
+            {
+                var failedLabWorkflowEventDependencyException = new FailedLabWorkflowEventDependencyException(invalidOperationException);
+
+                throw CreateAndLogDependencyException(failedLabWorkflowEventDependencyException);
+            }
+            catch (AzureMessagingCommunicationException azureMessagingCommunicationException)
+            {
+                var failedLabWorkflowEventDependencyException = new FailedLabWorkflowEventDependencyException(azureMessagingCommunicationException);
+
+                throw CreateAndLogDependencyException(failedLabWorkflowEventDependencyException);
+            }
+            catch  (ServerBusyException serverBusyException)
+            {
+                var failedLabWorkflowEventDependencyException = new FailedLabWorkflowEventDependencyException(serverBusyException);
+
+                throw CreateAndLogDependencyException(failedLabWorkflowEventDependencyException);
+            }
+        }
+
+        private LabWorkflowEventDependencyException CreateAndLogDependencyException(Xeption exception)
+        {
+            var labWorkflowEventDependencyException = new LabWorkflowEventDependencyException(exception);
+            this.loggingBroker.LogError(labWorkflowEventDependencyException);
+
+            return labWorkflowEventDependencyException;
         }
 
         private LabWorkflowEventValidationException CreateAndLogValidationException(NullLabWorkflowException nullLabWorkflowException)
