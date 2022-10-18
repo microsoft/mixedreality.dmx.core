@@ -10,7 +10,7 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
 {
     public partial class LabWorkflowCommandService
     {
-        private static void ValidateLabWorkflowCommandOnAdd(LabWorkflowCommand labWorkflowCommand)
+        private void ValidateLabWorkflowCommandOnAdd(LabWorkflowCommand labWorkflowCommand)
         {
             ValidateLabWorkflowCommandIsNotNull(labWorkflowCommand);
 
@@ -29,7 +29,9 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
                     labWorkflowCommand.UpdatedDate,
                     labWorkflowCommand.CreatedDate,
                     nameof(LabWorkflowCommand.CreatedDate)),
-                Parameter: nameof(LabWorkflowCommand.UpdatedDate)));
+                Parameter: nameof(LabWorkflowCommand.UpdatedDate)),
+
+                (Rule: IsNotRecent(labWorkflowCommand.CreatedDate), Parameter: nameof(LabWorkflowCommand.CreatedDate)));
         }
 
         private static void ValidateLabWorkflowCommandIsNotNull(LabWorkflowCommand labWorkflowCommand)
@@ -84,6 +86,22 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
                 Condition = firstDate != secondDate,
                 Message = $"Date is not the same as {nameOfSecondDate}"
             };
+
+        private dynamic IsNotRecent(DateTimeOffset date) => new
+        {
+            Condition = IsDateNotRecent(date),
+            Message = "Date is not recent"
+        };
+
+        private bool IsDateNotRecent(DateTimeOffset date)
+        {
+            DateTimeOffset currentDateTime =
+                this.dateTimeBroker.GetCurrentDateTime();
+
+            TimeSpan timeDifference = currentDateTime.Subtract(date);
+
+            return timeDifference.TotalSeconds is > 60 or < 0;
+        }
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
