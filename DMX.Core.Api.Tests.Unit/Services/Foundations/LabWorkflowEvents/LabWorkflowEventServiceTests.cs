@@ -13,6 +13,7 @@ using Microsoft.Azure.ServiceBus;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
+using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowEvents
 {
@@ -33,6 +34,20 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowEvents
                 this.queueBrokerMock.Object,
                 this.loggingBrokerMock.Object);
         }
+
+        public static TheoryData MessageQueueExceptions()
+        {
+            string message = GetRandomString();
+            return new TheoryData<Exception>
+            {
+                new MessagingEntityNotFoundException(message),
+                new MessagingEntityDisabledException(message),
+                new UnauthorizedAccessException()
+            };
+        }
+
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
 
         private Expression<Func<Message, bool>> SameMessageAs(Message expectedMessage)
         {
