@@ -46,15 +46,17 @@ namespace DMX.Core.Api
             AddFoundationServices(services);
             AddOrchestrationServices(services);
 
-            services.AddSwaggerGen(option =>
+            services.AddSwaggerGen(options =>
             {
-                option.SwaggerDoc(
+                options.SwaggerDoc(
                     name: "v1",
                     info: new OpenApiInfo
                     {
                         Title = "DMX.Core.Api",
                         Version = "v1"
                     });
+
+                options.CustomSchemaIds(type => type.ToString());
             });
         }
 
