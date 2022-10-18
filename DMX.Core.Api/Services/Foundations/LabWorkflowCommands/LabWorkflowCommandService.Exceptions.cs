@@ -41,6 +41,13 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
 
                 throw CreateAndLogCriticalDependencyException(failedLabWorkflowCommandStorageException);
             }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedLabWorkflowCommandException =
+                    new LockedLabWorkflowCommandException(dbUpdateConcurrencyException);
+
+                throw CreateAndLogDependencyValidationException(lockedLabWorkflowCommandException);
+            }
             catch (DbUpdateException dbUpdateException)
             {
                 var failedLabWorkflowCommandStorageException =
@@ -49,6 +56,7 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
                 throw CreateAndLogDependencyException(failedLabWorkflowCommandStorageException);
             }
         }
+
 
         private LabWorkflowCommandDependencyException CreateAndLogCriticalDependencyException(
             Xeption innerException)
@@ -70,6 +78,17 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             this.loggingBroker.LogError(labWorkflowCommandDependencyException);
 
             return labWorkflowCommandDependencyException;
+        }
+
+        private LabWorkflowCommandDependencyValidationException CreateAndLogDependencyValidationException(
+            Xeption exception)
+        {
+            var labWorkflowCommandDependencyValidationException =
+                new LabWorkflowCommandDependencyValidationException(exception);
+
+            this.loggingBroker.LogError(labWorkflowCommandDependencyValidationException);
+
+            return labWorkflowCommandDependencyValidationException;
         }
 
         private LabWorkflowCommandValidationException CreateAndLogValidationException(Xeption exception)
