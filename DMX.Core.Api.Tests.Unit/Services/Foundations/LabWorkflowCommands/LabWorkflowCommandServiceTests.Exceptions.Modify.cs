@@ -54,7 +54,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTime(),
-                    Times.Never);
+                    Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectLabWorkflowCommandByIdAsync(It.IsAny<Guid>()),

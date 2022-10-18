@@ -5,7 +5,9 @@
 using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
+using DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
+using Microsoft.Data.SqlClient;
 using Xeptions;
 
 namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
@@ -32,6 +34,23 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             {
                 throw CreateAndLogValidationException(notFoundLabWorkflowCommandException);
             }
+            catch (SqlException sqlException)
+            {
+                var failedLabWorkflowCommandStorageException = new FailedLabWorkflowCommandStorageException(sqlException);
+
+                throw CreateAndLogCriticalDepedencyException(failedLabWorkflowCommandStorageException);
+            }
+        }
+
+        private LabWorkflowCommandDependencyException CreateAndLogCriticalDepedencyException(
+            Xeption innerException)
+        {
+            var labWorkflowCommandDependencyException =
+                new LabWorkflowCommandDependencyException(innerException);
+
+            this.loggingBroker.LogCritical(labWorkflowCommandDependencyException);
+
+            return labWorkflowCommandDependencyException;
         }
 
         private LabWorkflowCommandValidationException CreateAndLogValidationException(Xeption exception)
