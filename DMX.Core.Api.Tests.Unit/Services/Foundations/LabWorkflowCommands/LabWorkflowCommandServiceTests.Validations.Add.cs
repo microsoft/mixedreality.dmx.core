@@ -134,11 +134,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
 
             invalidLabWorkflowCommandException.AddData(
                 key: nameof(LabWorkflowCommand.Type),
-                values: "Value is not recognized.");
+                values: "Value is not recognized");
 
             invalidLabWorkflowCommandException.AddData(
                 key: nameof(LabWorkflowCommand.Status),
-                values: "Value is not recognized.");
+                values: "Value is not recognized");
 
             var expectedLabWorkflowCommandValidationException =
                 new LabWorkflowCommandValidationException(invalidLabWorkflowCommandException);

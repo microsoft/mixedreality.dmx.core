@@ -21,7 +21,9 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
                 (Rule: IsInvalid(labWorkflowCommand.CreatedBy), Parameter: nameof(LabWorkflowCommand.CreatedBy)),
                 (Rule: IsInvalid(labWorkflowCommand.UpdatedBy), Parameter: nameof(LabWorkflowCommand.UpdatedBy)),
                 (Rule: IsInvalid(labWorkflowCommand.CreatedDate), Parameter: nameof(LabWorkflowCommand.CreatedDate)),
-                (Rule: IsInvalid(labWorkflowCommand.UpdatedDate), Parameter: nameof(LabWorkflowCommand.UpdatedDate)));
+                (Rule: IsInvalid(labWorkflowCommand.UpdatedDate), Parameter: nameof(LabWorkflowCommand.UpdatedDate)),
+                (Rule: IsInvalid(labWorkflowCommand.Type), Parameter: nameof(LabWorkflowCommand.Type)),
+                (Rule: IsInvalid(labWorkflowCommand.Status), Parameter: nameof(LabWorkflowCommand.Status)));
         }
 
         private static void ValidateLabWorkflowCommandIsNotNull(LabWorkflowCommand labWorkflowCommand)
@@ -54,6 +56,18 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
         {
             Condition = date == default,
             Message = "Date is required"
+        };
+
+        private static dynamic IsInvalid(CommandType type) => new
+        {
+            Condition = Enum.IsDefined(type) is false,
+            Message = "Value is not recognized"
+        };
+
+        private static dynamic IsInvalid(CommandStatus status) => new
+        {
+            Condition = Enum.IsDefined(status) is false,
+            Message = "Value is not recognized"
         };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
