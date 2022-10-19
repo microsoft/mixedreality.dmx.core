@@ -71,7 +71,6 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             }
         }
 
-
         private LabWorkflowCommandDependencyException CreateAndLogCriticalDependencyException(
             Xeption innerException)
         {
