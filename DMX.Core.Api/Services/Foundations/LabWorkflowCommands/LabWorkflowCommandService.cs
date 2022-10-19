@@ -18,8 +18,8 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
 
         public LabWorkflowCommandService(
             IStorageBroker storageBroker,
-            IDateTimeBroker dateTimeBroker,
-            ILoggingBroker loggingBroker)
+            ILoggingBroker loggingBroker,
+            IDateTimeBroker dateTimeBroker)
         {
             this.storageBroker = storageBroker;
             this.dateTimeBroker = dateTimeBroker;
@@ -32,6 +32,21 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             ValidateLabWorkflowCommandOnAdd(labWorkflowCommand);
 
             return await this.storageBroker.InsertLabWorkflowCommandAsync(labWorkflowCommand);
+        });
+
+        public ValueTask<LabWorkflowCommand> ModifyLabWorkflowCommand(LabWorkflowCommand labWorkflowCommand) =>
+        TryCatch(async () =>
+        {
+            ValidateLabWorkflowCommandOnModify(labWorkflowCommand);
+
+            LabWorkflowCommand maybeLabWorkflowCommand =
+                await this.storageBroker.SelectLabWorkflowCommandByIdAsync(labWorkflowCommand.Id);
+
+            ValidateLabWorkflowCommandAgainstStorageLabWorkflowCommand(
+                labWorkflowCommand,
+                maybeLabWorkflowCommand);
+
+            return await this.storageBroker.UpdateLabWorkflowCommandAsync(labWorkflowCommand);
         });
     }
 }

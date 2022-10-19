@@ -9,10 +9,9 @@ namespace DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions
 {
     public class FailedLabWorkflowCommandServiceException : Xeption
     {
-        public FailedLabWorkflowCommandServiceException(Exception innerException)
-            : base(message: "Failed lab workflow command service error occurred, contact support.",
-                  innerException)
-        {
-        }
+        public FailedLabWorkflowCommandServiceException(Exception exception)
+            : base(message: "Failed lab workflow command exception occurred. Please contact support.",
+                  exception)
+        { }
     }
 }

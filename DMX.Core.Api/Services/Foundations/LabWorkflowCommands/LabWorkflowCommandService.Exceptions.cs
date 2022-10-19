@@ -15,13 +15,13 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
 {
     public partial class LabWorkflowCommandService
     {
-        private delegate ValueTask<LabWorkflowCommand> ReturningLabWorkflowCommandFunction();
+        public delegate ValueTask<LabWorkflowCommand> ReturningLabWorkflowCommandFunction();
 
-        private async ValueTask<LabWorkflowCommand> TryCatch(ReturningLabWorkflowCommandFunction returningLabWorkflowFunction)
+        public async ValueTask<LabWorkflowCommand> TryCatch(ReturningLabWorkflowCommandFunction returningLabWorkflowCommandFunction)
         {
             try
             {
-                return await returningLabWorkflowFunction();
+                return await returningLabWorkflowCommandFunction();
             }
             catch (NullLabWorkflowCommandException nullLabWorkflowCommandException)
             {
@@ -31,19 +31,22 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             {
                 throw CreateAndLogValidationException(invalidLabWorkflowCommandException);
             }
+            catch (NotFoundLabWorkflowCommandException notFoundLabWorkflowCommandException)
+            {
+                throw CreateAndLogValidationException(notFoundLabWorkflowCommandException);
+            }
             catch (SqlException sqlException)
             {
-                var failedLabWorkflowCommandStorageException =
-                    new FailedLabWorkflowCommandStorageException(sqlException);
+                var failedLabWorkflowCommandStorageException = new FailedLabWorkflowCommandStorageException(sqlException);
 
                 throw CreateAndLogCriticalDependencyException(failedLabWorkflowCommandStorageException);
             }
-            catch (DuplicateKeyException duplicateKeyException)
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
-                var alreadyExistsLabWorkflowCommandException =
-                    new AlreadyExistsLabWorkflowCommandException(duplicateKeyException);
+                var lockedLabWorkflowCommandException =
+                    new LockedLabWorkflowCommandException(dbUpdateConcurrencyException);
 
-                throw CreateAndLogDependencyValidationException(alreadyExistsLabWorkflowCommandException);
+                throw CreateAndLogDependencyValidationException(lockedLabWorkflowCommandException);
             }
             catch (DbUpdateException dbUpdateException)
             {
@@ -51,6 +54,13 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
                     new FailedLabWorkflowCommandStorageException(dbUpdateException);
 
                 throw CreateAndLogDependencyException(failedLabWorkflowCommandStorageException);
+            }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsLabWorkflowCommandException =
+                    new AlreadyExistsLabWorkflowCommandException(duplicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistsLabWorkflowCommandException);
             }
             catch (Exception exception)
             {
@@ -61,27 +71,30 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             }
         }
 
-        public LabWorkflowCommandValidationException CreateAndLogValidationException(Xeption exception)
-        {
-            var labWorfklowCommandValidationException =
-                new LabWorkflowCommandValidationException(exception);
-
-            this.loggingBroker.LogError(labWorfklowCommandValidationException);
-
-            return labWorfklowCommandValidationException;
-        }
-
-        private LabWorkflowCommandDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
+        private LabWorkflowCommandDependencyException CreateAndLogCriticalDependencyException(
+            Xeption innerException)
         {
             var labWorkflowCommandDependencyException =
-                new LabWorkflowCommandDependencyException(exception);
+                new LabWorkflowCommandDependencyException(innerException);
 
             this.loggingBroker.LogCritical(labWorkflowCommandDependencyException);
 
             return labWorkflowCommandDependencyException;
         }
 
-        private LabWorkflowCommandDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
+        private LabWorkflowCommandDependencyException CreateAndLogDependencyException(
+            Xeption innerException)
+        {
+            var labWorkflowCommandDependencyException =
+                new LabWorkflowCommandDependencyException(innerException);
+
+            this.loggingBroker.LogError(labWorkflowCommandDependencyException);
+
+            return labWorkflowCommandDependencyException;
+        }
+
+        private LabWorkflowCommandDependencyValidationException CreateAndLogDependencyValidationException(
+            Xeption exception)
         {
             var labWorkflowCommandDependencyValidationException =
                 new LabWorkflowCommandDependencyValidationException(exception);
@@ -91,14 +104,14 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             return labWorkflowCommandDependencyValidationException;
         }
 
-        private LabWorkflowCommandDependencyException CreateAndLogDependencyException(Xeption exception)
+        private LabWorkflowCommandValidationException CreateAndLogValidationException(Xeption exception)
         {
-            var labWorkflowCommandDependencyException =
-                new LabWorkflowCommandDependencyException(exception);
+            var labWorkflowCommandValidationException =
+                new LabWorkflowCommandValidationException(exception);
 
-            this.loggingBroker.LogError(labWorkflowCommandDependencyException);
+            this.loggingBroker.LogError(labWorkflowCommandValidationException);
 
-            return labWorkflowCommandDependencyException;
+            return labWorkflowCommandValidationException;
         }
 
         private LabWorkflowCommandServiceException CreateAndLogServiceException(Xeption exception)

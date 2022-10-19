@@ -28,34 +28,13 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
         public LabWorkflowCommandServiceTests()
         {
             this.storageBrokerMock = new Mock<IStorageBroker>();
-            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
+            this.dateTimeBrokerMock = new Mock<IDateTimeBroker>();
 
             this.labWorkflowCommandService = new LabWorkflowCommandService(
-                storageBroker: this.storageBrokerMock.Object,
-                dateTimeBroker: this.dateTimeBrokerMock.Object,
-                loggingBroker: this.loggingBrokerMock.Object);
-        }
-
-        private static LabWorkflowCommand CreateRandomLabWorkflowCommand() =>
-            CreateLabWorkflowCommandFiller(GetRandomDateTimeOffset()).Create();
-
-        private static LabWorkflowCommand CreateRandomLabWorkflowCommand(DateTimeOffset date) =>
-            CreateLabWorkflowCommandFiller(date).Create();
-
-        private static T GetInvalidEnum<T>()
-        {
-            int randomNumber = GetLocalRandomNumber();
-
-            while (Enum.IsDefined(typeof(T), randomNumber))
-            {
-                randomNumber = GetLocalRandomNumber();
-            }
-
-            return (T)(object)randomNumber;
-
-            static int GetLocalRandomNumber() =>
-                new IntRange(min: int.MinValue, max: int.MaxValue).GetValue();
+                this.storageBrokerMock.Object,
+                this.loggingBrokerMock.Object,
+                this.dateTimeBrokerMock.Object);
         }
 
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
@@ -95,13 +74,33 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                 new IntRange(minValue, maxValue).GetValue();
         }
 
-        private static Filler<LabWorkflowCommand> CreateLabWorkflowCommandFiller(DateTimeOffset dateTimeOffset)
+        private static int GetRandomNegativeNumber() =>
+            GetRandomNumber() * -1;
+
+        private static T GetInvalidEnum<T>()
+        {
+            int randomNumber = GetRandomNumber();
+
+            while (Enum.IsDefined(typeof(T), randomNumber))
+            {
+                randomNumber = GetRandomNumber();
+            }
+
+            return (T)(object)randomNumber;
+        }
+
+        private static LabWorkflowCommand CreateRandomLabWorkflowCommand(DateTimeOffset dateTimeOffset) =>
+            CreateRandomLabWorkflowCommandFiller(dateTimeOffset).Create();
+
+        private static LabWorkflowCommand CreateRandomLabWorkflowCommand() =>
+            CreateRandomLabWorkflowCommandFiller(GetRandomDateTimeOffset()).Create();
+
+        private static Filler<LabWorkflowCommand> CreateRandomLabWorkflowCommandFiller(DateTimeOffset dateTimeOffset)
         {
             var filler = new Filler<LabWorkflowCommand>();
 
             filler.Setup()
-                .OnType<DateTimeOffset>()
-                    .Use(dateTimeOffset);
+                .OnType<DateTimeOffset>().Use(dateTimeOffset);
 
             return filler;
         }

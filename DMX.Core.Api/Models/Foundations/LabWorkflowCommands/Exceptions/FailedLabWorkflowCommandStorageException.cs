@@ -10,8 +10,9 @@ namespace DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions
     public class FailedLabWorkflowCommandStorageException : Xeption
     {
         public FailedLabWorkflowCommandStorageException(Exception innerException)
-            : base(message: "Failed lab workflow Command storage error occurred, please contact support.",
+            : base(message: "Failed lab workflow command storage error occured. Please contact support.",
                   innerException)
-        { }
+        {
+        }
     }
 }

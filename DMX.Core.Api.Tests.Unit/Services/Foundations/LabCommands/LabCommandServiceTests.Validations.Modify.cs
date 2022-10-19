@@ -24,7 +24,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
             var nullLabCommandException =
                 new NullLabCommandException();
 
-            var exptectedLabCommandValidationException =
+            var expectedLabCommandValidationException =
                 new LabCommandValidationException(nullLabCommandException);
 
             // when
@@ -37,11 +37,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             // then
             actualLabCommandValidationException.Should().BeEquivalentTo(
-                exptectedLabCommandValidationException);
+                expectedLabCommandValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
-                    exptectedLabCommandValidationException))),
+                    expectedLabCommandValidationException))),
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
@@ -145,9 +145,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             invalidLabCommand.CreatedDate =
                 invalidLabCommand.CreatedDate.AddMinutes(minutesInPast);
-
-            LabCommand updatedLabCommand = invalidLabCommand.DeepClone();
-            LabCommand expectedLabCommand = updatedLabCommand.DeepClone();
 
             var invalidLabCommandException = new InvalidLabCommandException();
 
@@ -268,7 +265,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabCommands
 
             invalidLabCommandException.AddData(
                 key: nameof(LabCommand.UpdatedDate),
-                values: $"Date can not be before {nameof(LabCommand.CreatedDate)}");
+                values: $"Date cannot be before {nameof(LabCommand.CreatedDate)}");
 
             var expectedLabCommandValidationException =
                 new LabCommandValidationException(invalidLabCommandException);
