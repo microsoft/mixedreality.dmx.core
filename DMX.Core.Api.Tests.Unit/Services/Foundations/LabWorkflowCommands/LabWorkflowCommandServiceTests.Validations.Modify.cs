@@ -2,12 +2,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
-using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
-using FluentAssertions;
-using Moq;
 using System;
 using System.Threading.Tasks;
+using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
+using DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions;
+using FluentAssertions;
+using Moq;
 using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
@@ -403,7 +403,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                 key: nameof(LabWorkflowCommand.UpdatedDate),
                 values: "Date is not recent");
 
-            var expectedLabWorkflowCommandValidationException = 
+            var expectedLabWorkflowCommandValidationException =
                 new LabWorkflowCommandValidationException(invalidLabWorkflowCommandException);
 
             this.dateTimeBrokerMock.Setup(broker =>

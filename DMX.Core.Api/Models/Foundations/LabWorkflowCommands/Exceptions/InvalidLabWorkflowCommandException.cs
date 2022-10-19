@@ -4,7 +4,7 @@
 
 using Xeptions;
 
-namespace DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions
+namespace DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions
 {
     public class InvalidLabWorkflowCommandException : Xeption
     {

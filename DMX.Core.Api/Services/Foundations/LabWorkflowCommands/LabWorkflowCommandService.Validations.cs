@@ -2,18 +2,39 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
-using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using System;
-using System.Data;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
+using DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions;
 using CommandType = DMX.Core.Api.Models.Foundations.LabWorkflowCommands.CommandType;
 
 namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
 {
     public partial class LabWorkflowCommandService
     {
+        private void ValidateLabWorkflowCommandOnAdd(LabWorkflowCommand labWorkflowCommand)
+        {
+            ValidateLabWorkflowCommandIsNotNull(labWorkflowCommand);
+
+            Validate(
+                (Rule: IsInvalid(labWorkflowCommand.Id), Parameter: nameof(LabWorkflowCommand.Id)),
+                (Rule: IsInvalid(labWorkflowCommand.WorkflowId), Parameter: nameof(LabWorkflowCommand.WorkflowId)),
+                (Rule: IsInvalid(labWorkflowCommand.Arguments), Parameter: nameof(LabWorkflowCommand.Arguments)),
+                (Rule: IsInvalid(labWorkflowCommand.CreatedBy), Parameter: nameof(LabWorkflowCommand.CreatedBy)),
+                (Rule: IsInvalid(labWorkflowCommand.UpdatedBy), Parameter: nameof(LabWorkflowCommand.UpdatedBy)),
+                (Rule: IsInvalid(labWorkflowCommand.CreatedDate), Parameter: nameof(LabWorkflowCommand.CreatedDate)),
+                (Rule: IsInvalid(labWorkflowCommand.UpdatedDate), Parameter: nameof(LabWorkflowCommand.UpdatedDate)),
+                (Rule: IsInvalid(labWorkflowCommand.Type), Parameter: nameof(LabWorkflowCommand.Type)),
+                (Rule: IsInvalid(labWorkflowCommand.Status), Parameter: nameof(LabWorkflowCommand.Status)),
+
+                (Rule: IsNotSame(
+                    labWorkflowCommand.UpdatedDate,
+                    labWorkflowCommand.CreatedDate,
+                    nameof(LabWorkflowCommand.CreatedDate)),
+                Parameter: nameof(LabWorkflowCommand.UpdatedDate)),
+
+                (Rule: IsNotRecent(labWorkflowCommand.CreatedDate), Parameter: nameof(LabWorkflowCommand.CreatedDate)));
+        }
+
         private void ValidateLabWorkflowCommandOnModify(LabWorkflowCommand labWorkflowCommand)
         {
             ValidateLabWorkflowCommandIsNotNull(labWorkflowCommand);
@@ -42,7 +63,6 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
 
             (Rule: IsNotRecent(labWorkflowCommand.UpdatedDate), nameof(LabWorkflowCommand.UpdatedDate)));
         }
-
 
         private void ValidateLabWorkflowCommandAgainstStorageLabWorkflowCommand(
             LabWorkflowCommand labWorkflowCommand,
@@ -80,6 +100,12 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             Message = "Text is required",
         };
 
+        private static dynamic IsInvalid(ulong userId) => new
+        {
+            Condition = userId == default,
+            Message = "User is required"
+        };
+
         private static dynamic IsInvalid(DateTimeOffset dateTimeOffset) => new
         {
             Condition = dateTimeOffset == default,
@@ -106,6 +132,15 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
                 Condition = firstDate != default && firstDate == secondDate,
                 Message = $"Date is the same as {nameofSecondDate}"
             };
+
+        private static dynamic IsNotSame(
+           DateTimeOffset firstDate,
+           DateTimeOffset secondDate,
+           string nameOfSecondDate) => new
+           {
+               Condition = firstDate != secondDate,
+               Message = $"Date is not the same as {nameOfSecondDate}"
+           };
 
         private static dynamic IsBefore(
             DateTimeOffset firstDate,

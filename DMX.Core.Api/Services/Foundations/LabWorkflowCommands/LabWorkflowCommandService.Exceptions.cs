@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions;
-using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Xeptions;
@@ -55,6 +55,20 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
 
                 throw CreateAndLogDependencyException(failedLabWorkflowCommandStorageException);
             }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsLabWorkflowCommandException =
+                    new AlreadyExistsLabWorkflowCommandException(duplicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistsLabWorkflowCommandException);
+            }
+            catch (Exception exception)
+            {
+                var failedLabWorkflowCommandServiceException =
+                    new FailedLabWorkflowCommandServiceException(exception);
+
+                throw CreateAndLogServiceException(failedLabWorkflowCommandServiceException);
+            }
         }
 
 
@@ -99,6 +113,16 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             this.loggingBroker.LogError(labWorkflowCommandValidationException);
 
             return labWorkflowCommandValidationException;
+        }
+
+        private LabWorkflowCommandServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var labWorkflowCommandServiceException =
+                new LabWorkflowCommandServiceException(exception);
+
+            this.loggingBroker.LogError(labWorkflowCommandServiceException);
+
+            return labWorkflowCommandServiceException;
         }
     }
 }

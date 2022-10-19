@@ -2,17 +2,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
+using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
@@ -122,7 +119,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
         }
 
         [Fact]
-        public async Task 
+        public async Task
             ShouldThrowDependencyValidationExceptionOnModifyIfDbUpdateConcurrencyErrorOccursAndLogItAsync()
         {
             // given
@@ -133,7 +130,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
             var lockedLabWorkflowCommandException =
                 new LockedLabWorkflowCommandException(dbUpdateConcurrencyException);
 
-            var expectedLabWorkflowCommandDependencyValidationException = 
+            var expectedLabWorkflowCommandDependencyValidationException =
                 new LabWorkflowCommandDependencyValidationException(lockedLabWorkflowCommandException);
 
             this.dateTimeBrokerMock.Setup(broker =>

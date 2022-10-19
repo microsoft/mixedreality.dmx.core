@@ -4,7 +4,6 @@
 
 using System;
 using System.Linq.Expressions;
-using System.Numerics;
 using System.Runtime.Serialization;
 using DMX.Core.Api.Brokers.DateTimes;
 using DMX.Core.Api.Brokers.Loggings;
@@ -22,9 +21,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
     public partial class LabWorkflowCommandServiceTests
     {
         private readonly Mock<IStorageBroker> storageBrokerMock;
-        private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly Mock<IDateTimeBroker> dateTimeBrokerMock;
-        private readonly LabWorkflowCommandService labWorkflowCommandService;
+        private readonly Mock<ILoggingBroker> loggingBrokerMock;
+        private readonly ILabWorkflowCommandService labWorkflowCommandService;
 
         public LabWorkflowCommandServiceTests()
         {
@@ -37,6 +36,21 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                 this.loggingBrokerMock.Object,
                 this.dateTimeBrokerMock.Object);
         }
+
+        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
+
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
+
+        private static int GetRandomNumber() =>
+            new IntRange(min: 2, max: 10).GetValue();
+
+        private static DateTimeOffset GetRandomDateTimeOffset() =>
+            new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
+
+        private static SqlException GetSqlException() =>
+           (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
         public static TheoryData InvalidSeconds()
         {
@@ -60,12 +74,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
                 new IntRange(minValue, maxValue).GetValue();
         }
 
-        private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
-            actualException => actualException.SameExceptionAs(expectedException);
-
-        private static int GetRandomNumber() =>
-            new IntRange(min: 2, max: 10).GetValue();
-
         private static int GetRandomNegativeNumber() =>
             GetRandomNumber() * -1;
 
@@ -80,12 +88,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabWorkflowCommands
 
             return (T)(object)randomNumber;
         }
-
-        private static SqlException GetSqlException() =>
-            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
-
-        private static DateTimeOffset GetRandomDateTimeOffset() =>
-            new DateTimeRange(earliestDate: DateTime.UnixEpoch).GetValue();
 
         private static LabWorkflowCommand CreateRandomLabWorkflowCommand(DateTimeOffset dateTimeOffset) =>
             CreateRandomLabWorkflowCommandFiller(dateTimeOffset).Create();

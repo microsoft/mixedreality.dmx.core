@@ -2,20 +2,19 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.DateTimes;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Brokers.Storages;
 using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
-using System;
-using System.Threading.Tasks;
 
 namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
 {
     public partial class LabWorkflowCommandService : ILabWorkflowCommandService
     {
         private readonly IStorageBroker storageBroker;
-        private readonly ILoggingBroker loggingBroker;
         private readonly IDateTimeBroker dateTimeBroker;
+        private readonly ILoggingBroker loggingBroker;
 
         public LabWorkflowCommandService(
             IStorageBroker storageBroker,
@@ -23,9 +22,17 @@ namespace DMX.Core.Api.Services.Foundations.LabWorkflowCommands
             IDateTimeBroker dateTimeBroker)
         {
             this.storageBroker = storageBroker;
-            this.loggingBroker = loggingBroker;
             this.dateTimeBroker = dateTimeBroker;
+            this.loggingBroker = loggingBroker;
         }
+
+        public ValueTask<LabWorkflowCommand> AddLabWorkflowCommandAsync(LabWorkflowCommand labWorkflowCommand) =>
+        TryCatch(async () =>
+        {
+            ValidateLabWorkflowCommandOnAdd(labWorkflowCommand);
+
+            return await this.storageBroker.InsertLabWorkflowCommandAsync(labWorkflowCommand);
+        });
 
         public ValueTask<LabWorkflowCommand> ModifyLabWorkflowCommand(LabWorkflowCommand labWorkflowCommand) =>
         TryCatch(async () =>
