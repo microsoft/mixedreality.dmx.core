@@ -60,7 +60,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.Labs
 
         [Theory]
         [MemberData(nameof(LabDependencyExceptions))]
-        public async Task ShouldThrowDependencyExceptionOnRetrieveByIdDependencyErrorOccursAndLogItAsync(
+        public async Task ShouldThrowDependencyExceptionOnRetrieveByIdIfDependencyErrorOccursAndLogItAsync(
             Xeption dependencyException)
         {
             // given

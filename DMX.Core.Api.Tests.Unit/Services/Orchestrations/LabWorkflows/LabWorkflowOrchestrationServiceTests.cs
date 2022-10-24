@@ -52,6 +52,18 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabWorkflows
             };
         }
 
+        public static TheoryData<Xeption> LabWorkflowDependencyExceptions()
+        {
+            string randomErrorMessage = GetRandomString();
+            var innerException = new Xeption(randomErrorMessage);
+
+            return new TheoryData<Xeption>
+            {
+                new LabWorkflowDependencyException(innerException),
+                new LabWorkflowServiceException(innerException),
+            };
+        }
+
         private Expression<Func<Exception, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
