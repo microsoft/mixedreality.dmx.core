@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Linq.Expressions;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;
 using DMX.Core.Api.Services.Foundations.LabWorkflowCommands;
@@ -11,6 +12,7 @@ using DMX.Core.Api.Services.Foundations.LabWorkflows;
 using DMX.Core.Api.Services.Orchestrations.LabWorkflows;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabWorkflows
 {
@@ -35,6 +37,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabWorkflows
                 labWorkflowEventService: this.labWorkflowEventServiceMock.Object,
                 loggingBroker: this.loggingBrokerMock.Object);
         }
+
+        private Expression<Func<Exception, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         public static LabWorkflow CreateRandomLabWorkflow() =>
             CreateLabWorkflowFiller(GetRandomDateTimeOffset()).Create();
