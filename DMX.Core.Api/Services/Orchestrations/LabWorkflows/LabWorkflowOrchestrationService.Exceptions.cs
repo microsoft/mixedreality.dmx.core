@@ -2,8 +2,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;
+using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using DMX.Core.Api.Models.Orchestrations.LabWorkflows;
 using Xeptions;
 
@@ -23,6 +25,26 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
             {
                 throw CreateAndLogValidationException(invalidLabWorkflowOrchestrationException);
             }
+            catch (LabWorkflowValidationException labWorkflowValidationException)
+            {
+                throw CreateAndLogDependencyValidationException(labWorkflowValidationException);
+            }
+            catch (LabWorkflowDependencyValidationException labWorkflowDependencyValidationException)
+            {
+                throw CreateAndLogDependencyValidationException(labWorkflowDependencyValidationException);
+            }
+        }
+
+        private LabWorkflowOrchestrationDependencyValidationException CreateAndLogDependencyValidationException(
+            Xeption exception)
+        {
+            var labWorkflowOrchestrationDependencyValidationException =
+                new LabWorkflowOrchestrationDependencyValidationException(
+                    exception.InnerException as Xeption);
+
+            this.loggingBroker.LogError(labWorkflowOrchestrationDependencyValidationException);
+
+            return labWorkflowOrchestrationDependencyValidationException;
         }
 
         private LabWorkflowOrchestrationValidationException CreateAndLogValidationException(Xeption exception)
