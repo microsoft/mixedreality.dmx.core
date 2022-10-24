@@ -2,13 +2,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
+using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;
-using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using DMX.Core.Api.Models.Orchestrations.LabWorkflows;
 using FluentAssertions;
 using Moq;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabWorkflows
@@ -21,16 +20,16 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabWorkflows
             // given
             Guid emptyLabWorkflowId = Guid.Empty;
 
-            var invalidLabWorkflowException =
-                new InvalidLabWorkflowException();
+            var invalidLabWorkflowOrchestrationException =
+                new InvalidLabWorkflowOrchestrationException();
+
+            invalidLabWorkflowOrchestrationException.AddData(
+                key: nameof(LabWorkflow.Id),
+                values: "Id is required");
 
             var expectedLabWorkflowOrchestrationValidationException =
                 new LabWorkflowOrchestrationValidationException(
-                    invalidLabWorkflowException);
-
-            this.labWorkflowServiceMock.Setup(service =>
-                service.RetrieveLabWorkflowByIdAsync(It.IsAny<Guid>()))
-                    .ThrowsAsync(invalidLabWorkflowException);
+                    invalidLabWorkflowOrchestrationException);
 
             // when
             ValueTask<LabWorkflow> retrieveLabWorkflowTask =
@@ -46,15 +45,15 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabWorkflows
             actualLabWorkflowOrchestrationValidationException.Should().BeEquivalentTo(
                 expectedLabWorkflowOrchestrationValidationException);
 
-            this.labWorkflowServiceMock.Verify(service =>
-                service.RetrieveLabWorkflowByIdAsync(
-                    It.IsAny<Guid>()),
-                        Times.Once);
-
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLabWorkflowOrchestrationValidationException))),
                         Times.Once);
+
+            this.labWorkflowServiceMock.Verify(service =>
+                service.RetrieveLabWorkflowByIdAsync(
+                    It.IsAny<Guid>()),
+                        Times.Never);
 
             this.labWorkflowServiceMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

@@ -12,7 +12,7 @@ using DMX.Core.Api.Services.Foundations.LabWorkflows;
 
 namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
 {
-    public class LabWorkflowOrchestrationService : ILabWorkflowOrchestrationService
+    public partial class LabWorkflowOrchestrationService : ILabWorkflowOrchestrationService
     {
         private readonly ILabWorkflowService labWorkflowService;
         private readonly ILabWorkflowCommandService labWorkflowCommandService;
@@ -32,6 +32,11 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
         }
 
         public ValueTask<LabWorkflow> RetrieveLabWorkflowByIdAsync(Guid labWorkflowId) =>
-            this.labWorkflowService.RetrieveLabWorkflowByIdAsync(labWorkflowId);
+        TryCatch(async () =>
+        {
+            ValidateLabWorkflowId(labWorkflowId);
+
+            return await this.labWorkflowService.RetrieveLabWorkflowByIdAsync(labWorkflowId);
+        });
     }
 }
