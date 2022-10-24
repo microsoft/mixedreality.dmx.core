@@ -5,7 +5,7 @@
 using System;
 using Xeptions;
 
-namespace DMX.Core.Api.Models.Orchestrations.LabWorkflows
+namespace DMX.Core.Api.Models.Orchestrations.LabWorkflows.Exceptions
 {
     public class LabWorkflowOrchestrationValidationException : Xeption
     {

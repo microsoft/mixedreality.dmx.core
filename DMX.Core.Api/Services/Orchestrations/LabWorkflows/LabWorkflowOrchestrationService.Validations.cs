@@ -4,7 +4,7 @@
 
 using System;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;
-using DMX.Core.Api.Models.Orchestrations.LabWorkflows;
+using DMX.Core.Api.Models.Orchestrations.LabWorkflows.Exceptions;
 
 namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
 {

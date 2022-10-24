@@ -6,7 +6,6 @@ using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
-using DMX.Core.Api.Models.Orchestrations.LabWorkflows;
 using DMX.Core.Api.Models.Orchestrations.LabWorkflows.Exceptions;
 using Xeptions;
 
