@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using DMX.Core.Api.Models.Orchestrations.LabWorkflows;
+using DMX.Core.Api.Models.Orchestrations.LabWorkflows.Exceptions;
 using Xeptions;
 
 namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
@@ -33,6 +34,24 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
             {
                 throw CreateAndLogDependencyValidationException(labWorkflowDependencyValidationException);
             }
+            catch (LabWorkflowDependencyException labWorkflowDependencyException)
+            {
+                throw CreateAndLogDependencyException(labWorkflowDependencyException);
+            }
+            catch (LabWorkflowServiceException labWorkflowServiceException)
+            {
+                throw CreateAndLogDependencyException(labWorkflowServiceException);
+            }
+        }
+
+        private LabWorkflowOrchestrationValidationException CreateAndLogValidationException(Xeption exception)
+        {
+            var labWorkflowOrchestrationValidationException =
+                new LabWorkflowOrchestrationValidationException(exception);
+
+            this.loggingBroker.LogError(labWorkflowOrchestrationValidationException);
+
+            return labWorkflowOrchestrationValidationException;
         }
 
         private LabWorkflowOrchestrationDependencyValidationException CreateAndLogDependencyValidationException(
@@ -47,14 +66,15 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
             return labWorkflowOrchestrationDependencyValidationException;
         }
 
-        private LabWorkflowOrchestrationValidationException CreateAndLogValidationException(Xeption exception)
+        private LabWorkflowOrchestrationDependencyException CreateAndLogDependencyException(Xeption exception)
         {
-            var labWorkflowOrchestrationValidationException =
-                new LabWorkflowOrchestrationValidationException(exception);
+            var labWorkflowOrchestrationDependencyException =
+                new LabWorkflowOrchestrationDependencyException(
+                    exception.InnerException as Xeption);
 
-            this.loggingBroker.LogError(labWorkflowOrchestrationValidationException);
+            this.loggingBroker.LogError(labWorkflowOrchestrationDependencyException);
 
-            return labWorkflowOrchestrationValidationException;
+            return labWorkflowOrchestrationDependencyException;
         }
     }
 }
