@@ -32,6 +32,6 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
         }
 
         public ValueTask<LabWorkflow> RetrieveLabWorkflowByIdAsync(Guid labWorkflowId) =>
-            throw new NotImplementedException();
+            this.labWorkflowService.RetrieveLabWorkflowByIdAsync(labWorkflowId);
     }
 }
