@@ -14,6 +14,7 @@ using DMX.Core.Api.Services.Foundations.LabCommandEvents;
 using DMX.Core.Api.Services.Foundations.LabCommands;
 using DMX.Core.Api.Services.Foundations.Labs;
 using DMX.Core.Api.Services.Foundations.LabWorkflowCommands;
+using DMX.Core.Api.Services.Foundations.LabWorkflowEvents;
 using DMX.Core.Api.Services.Foundations.LabWorkflows;
 using DMX.Core.Api.Services.Orchestrations.LabCommands;
 using DMX.Core.Api.Services.Orchestrations.Labs;
@@ -102,6 +103,7 @@ namespace DMX.Core.Api
             services.AddTransient<ILabCommandEventService, LabCommandEventService>();
             services.AddTransient<ILabWorkflowService, LabWorkflowService>();
             services.AddTransient<ILabWorkflowCommandService, LabWorkflowCommandService>();
+            services.AddTransient<ILabWorkflowEventService, LabWorkflowEventService>();
         }
 
         private static void AddOrchestrationServices(IServiceCollection services)
