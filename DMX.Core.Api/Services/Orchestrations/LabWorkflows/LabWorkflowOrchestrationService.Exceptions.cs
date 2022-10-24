@@ -42,6 +42,13 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
             {
                 throw CreateAndLogDependencyException(labWorkflowServiceException);
             }
+            catch (Exception serviceException)
+            {
+                var failedLabWorkflowOrchestrationServiceException =
+                    new FailedLabWorkflowOrchestrationServiceException(serviceException);
+
+                throw CreateAndLogServiceException(failedLabWorkflowOrchestrationServiceException);
+            }
         }
 
         private LabWorkflowOrchestrationValidationException CreateAndLogValidationException(Xeption exception)
@@ -75,6 +82,16 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
             this.loggingBroker.LogError(labWorkflowOrchestrationDependencyException);
 
             return labWorkflowOrchestrationDependencyException;
+        }
+
+        private LabWorkflowOrchestrationServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var labWorkflowOrchestrationServiceException =
+                new LabWorkflowOrchestrationServiceException(exception);
+
+            this.loggingBroker.LogError(labWorkflowOrchestrationServiceException);
+
+            return labWorkflowOrchestrationServiceException;
         }
     }
 }
