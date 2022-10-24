@@ -103,5 +103,53 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabWorkflows
             this.labWorkflowCommandServiceMock.VerifyNoOtherCalls();
             this.labWorkflowEventServiceMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRetrieveByIdIfServiceErrorOccursAndLogItAsync()
+        {
+            // given
+            Guid someLabId = Guid.NewGuid();
+            string randomMessage = GetRandomString();
+            var exception = new Exception(randomMessage);
+
+            var failedLabWorkflowOrchestrationServiceException =
+                new FailedLabWorkflowOrchestrationServiceException(exception);
+
+            var expectedLabWorkflowOrchestrationServiceException =
+                new LabWorkflowOrchestrationServiceException(
+                    failedLabWorkflowOrchestrationServiceException);
+
+            this.labWorkflowServiceMock.Setup(service =>
+                service.RetrieveLabWorkflowByIdAsync(someLabId))
+                    .ThrowsAsync(exception);
+
+            // when
+            ValueTask<LabWorkflow> retrievedLabWorkflowByIdTask =
+                this.labWorkflowOrchestrationService.RetrieveLabWorkflowByIdAsync(
+                    someLabId);
+
+            LabWorkflowOrchestrationServiceException actualLabWorkflowOrchestrationServiceException =
+                await Assert.ThrowsAsync<LabWorkflowOrchestrationServiceException>(
+                    retrievedLabWorkflowByIdTask.AsTask);
+
+            // then
+            actualLabWorkflowOrchestrationServiceException.Should().BeEquivalentTo(
+                expectedLabWorkflowOrchestrationServiceException);
+
+            this.labWorkflowServiceMock.Verify(service =>
+                service.RetrieveLabWorkflowByIdAsync(
+                    It.IsAny<Guid>()),
+                        Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabWorkflowOrchestrationServiceException))),
+                        Times.Once);
+
+            this.labWorkflowServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.labWorkflowCommandServiceMock.VerifyNoOtherCalls();
+            this.labWorkflowEventServiceMock.VerifyNoOtherCalls();
+        }
     }
 }
