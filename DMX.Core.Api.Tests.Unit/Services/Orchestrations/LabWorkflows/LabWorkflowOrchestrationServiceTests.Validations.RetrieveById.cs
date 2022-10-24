@@ -35,19 +35,21 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabWorkflows
             // when
             ValueTask<LabWorkflow> retrieveLabWorkflowTask =
                 this.labWorkflowOrchestrationService
-                .RetrieveLabWorkflowByIdAsync(emptyLabWorkflowId);
+                    .RetrieveLabWorkflowByIdAsync(emptyLabWorkflowId);
 
-            LabWorkflowOrchestrationValidationException actualLabWorkflowOrchestrationValidationException =
-                await Assert.ThrowsAsync<LabWorkflowOrchestrationValidationException>(
-                    retrieveLabWorkflowTask.AsTask);
+            LabWorkflowOrchestrationValidationException
+                actualLabWorkflowOrchestrationValidationException =
+                    await Assert.ThrowsAsync<LabWorkflowOrchestrationValidationException>(
+                        retrieveLabWorkflowTask.AsTask);
 
             // then
             actualLabWorkflowOrchestrationValidationException.Should().BeEquivalentTo(
                 expectedLabWorkflowOrchestrationValidationException);
 
             this.labWorkflowServiceMock.Verify(service =>
-                service.RetrieveLabWorkflowByIdAsync(It.IsAny<Guid>()),
-                    Times.Once);
+                service.RetrieveLabWorkflowByIdAsync(
+                    It.IsAny<Guid>()),
+                        Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
