@@ -9,7 +9,7 @@ namespace DMX.Core.Api.Models.Orchestrations.LabWorkflows.Exceptions
     public class InvalidLabWorkflowOrchestrationException : Xeption
     {
         public InvalidLabWorkflowOrchestrationException()
-            : base(message: "Invalid lab workflow orchestration error occurred.Please fix the errors and try again.")
+            : base(message: "Invalid lab workflow error occurred.Please fix the errors and try again.")
         { }
     }
 }
