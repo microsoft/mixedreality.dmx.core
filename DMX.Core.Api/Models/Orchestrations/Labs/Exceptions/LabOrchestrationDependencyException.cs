@@ -9,7 +9,7 @@ namespace DMX.Core.Api.Models.Orchestrations.Labs.Exceptions
     public class LabOrchestrationDependencyException : Xeption
     {
         public LabOrchestrationDependencyException(Xeption innerException)
-            : base(message: "Lab orchestration dependency error occurred, please contact support.",
+            : base(message: "Lab dependency error occurred, please contact support.",
                    innerException)
         { }
     }

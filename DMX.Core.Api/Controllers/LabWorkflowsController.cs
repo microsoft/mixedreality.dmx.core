@@ -6,7 +6,9 @@ using System;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
+using DMX.Core.Api.Models.Orchestrations.LabWorkflows.Exceptions;
 using DMX.Core.Api.Services.Foundations.LabWorkflows;
+using DMX.Core.Api.Services.Orchestrations.LabWorkflows;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
@@ -23,9 +25,15 @@ namespace DMX.Core.Api.Controllers
     public class LabWorkflowsController : RESTFulController
     {
         private readonly ILabWorkflowService labWorkflowService;
+        private readonly ILabWorkflowOrchestrationService labWorkflowOrchestrationService;
 
-        public LabWorkflowsController(ILabWorkflowService labWorkflowService) =>
+        public LabWorkflowsController(
+            ILabWorkflowService labWorkflowService,
+            ILabWorkflowOrchestrationService labWorkflowOrchestrationService)
+        {
             this.labWorkflowService = labWorkflowService;
+            this.labWorkflowOrchestrationService = labWorkflowOrchestrationService;
+        }
 
         [HttpPost]
 #if RELEASE
@@ -72,30 +80,30 @@ namespace DMX.Core.Api.Controllers
             try
             {
                 LabWorkflow labWorkflow =
-                    await this.labWorkflowService.RetrieveLabWorkflowByIdAsync(labWorkflowId);
+                    await this.labWorkflowOrchestrationService.RetrieveLabWorkflowByIdAsync(labWorkflowId);
 
                 return Ok(labWorkflow);
             }
-            catch (LabWorkflowValidationException labWorkflowValidationException)
-                when (labWorkflowValidationException.InnerException is NotFoundLabWorkflowException)
+            catch (LabWorkflowOrchestrationDependencyValidationException labWorkflowOrchestrationDependencyValidationException)
+                when (labWorkflowOrchestrationDependencyValidationException.InnerException is NotFoundLabWorkflowException)
             {
-                return NotFound(labWorkflowValidationException.InnerException);
+                return NotFound(labWorkflowOrchestrationDependencyValidationException.InnerException);
             }
-            catch (LabWorkflowValidationException labWorkflowValidationException)
+            catch (LabWorkflowOrchestrationValidationException labWorkflowOrchestrationValidationException)
             {
-                return BadRequest(labWorkflowValidationException.InnerException);
+                return BadRequest(labWorkflowOrchestrationValidationException.InnerException);
             }
-            catch (LabWorkflowDependencyValidationException labWorkflowDependencyValidationException)
+            catch (LabWorkflowOrchestrationDependencyValidationException labWorkflowOrchestrationDependencyValidationException)
             {
-                return BadRequest(labWorkflowDependencyValidationException.InnerException);
+                return BadRequest(labWorkflowOrchestrationDependencyValidationException.InnerException);
             }
-            catch (LabWorkflowDependencyException labWorkflowDependencyException)
+            catch (LabWorkflowOrchestrationDependencyException labWorkflowOrchestrationDependencyException)
             {
-                return InternalServerError(labWorkflowDependencyException);
+                return InternalServerError(labWorkflowOrchestrationDependencyException);
             }
-            catch (LabWorkflowServiceException labWorkflowServiceException)
+            catch (LabWorkflowOrchestrationServiceException labWorkflowOrchestrationServiceException)
             {
-                return InternalServerError(labWorkflowServiceException);
+                return InternalServerError(labWorkflowOrchestrationServiceException);
             }
         }
     }

@@ -10,7 +10,7 @@ namespace DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions
     public class LockedLabWorkflowCommandException : Xeption
     {
         public LockedLabWorkflowCommandException(Exception innerException)
-            : base(message: "Locked lab workflow command error occured. Please try again later.",
+            : base(message: "Locked lab workflow command error occurred. Please try again later.",
                   innerException)
         {
         }
