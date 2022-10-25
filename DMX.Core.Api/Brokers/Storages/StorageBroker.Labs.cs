@@ -20,8 +20,13 @@ namespace DMX.Core.Api.Brokers.Storages
         public IQueryable<Lab> SelectAllLabsWithDevices() =>
             SelectAll<Lab>().Include(lab => lab.Devices);
 
-        public async ValueTask<Lab> SelectLabByIdAsync(Guid labId) =>
-            await FindAsync<Lab>(labId);
+        public async ValueTask<Lab> SelectLabByIdAsync(Guid labId)
+        {
+            Lab lab = await SelectAsync<Lab>(labId);
+            this.Entry(lab).Collection(lab => lab.Devices);
+
+            return lab;
+        }
 
         public async ValueTask<Lab> DeleteLabAsync(Lab lab) =>
             await DeleteAsync(lab);
