@@ -5,6 +5,8 @@
 using System;
 using System.Linq.Expressions;
 using DMX.Core.Api.Brokers.Loggings;
+using DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions;
+using DMX.Core.Api.Models.Foundations.LabWorkflowEvent.Exceptions;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using DMX.Core.Api.Services.Foundations.LabWorkflowCommands;
@@ -48,7 +50,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabWorkflows
             return new TheoryData<Xeption>
             {
                 new LabWorkflowValidationException(innerException),
-                new LabWorkflowDependencyValidationException(innerException)
+                new LabWorkflowDependencyValidationException(innerException),
+                new LabWorkflowCommandValidationException(innerException),
+                new LabWorkflowCommandDependencyValidationException(innerException),
+                new LabWorkflowEventValidationException(innerException),
+                new LabWorkflowEventDependencyValidationException(innerException)
             };
         }
 
