@@ -31,6 +31,9 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
             this.loggingBroker = loggingBroker;
         }
 
+        public ValueTask<LabWorkflow> SubmitLabWorkflowAsync(LabWorkflow labWorkflow) =>
+            throw new NotImplementedException();
+
         public ValueTask<LabWorkflow> RetrieveLabWorkflowByIdAsync(Guid labWorkflowId) =>
         TryCatch(async () =>
         {
