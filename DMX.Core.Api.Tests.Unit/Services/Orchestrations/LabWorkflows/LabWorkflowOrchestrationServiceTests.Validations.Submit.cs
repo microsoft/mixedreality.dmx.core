@@ -15,7 +15,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabWorkflows
     public partial class LabWorkflowOrchestrationServiceTests
     {
         [Fact]
-        public async Task ShouldThrowValidationExceptionIfLabWorkflowIsNullAndLogItAsync()
+        public async Task ShouldThrowValidationExceptionOnSubmitIfLabWorkflowIsNullAndLogItAsync()
         {
             // given
             LabWorkflow nullLabWorkflow = null;

@@ -67,6 +67,10 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabWorkflows
             {
                 new LabWorkflowDependencyException(innerException),
                 new LabWorkflowServiceException(innerException),
+                new LabWorkflowCommandDependencyException(innerException),
+                new LabWorkflowCommandServiceException(innerException),
+                new LabWorkflowEventDependencyException(innerException),
+                new LabWorkflowEventServiceException(innerException)
             };
         }
 

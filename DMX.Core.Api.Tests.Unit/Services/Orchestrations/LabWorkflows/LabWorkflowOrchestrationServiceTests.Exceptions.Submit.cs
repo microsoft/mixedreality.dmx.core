@@ -17,7 +17,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabWorkflows
     {
         [Theory]
         [MemberData(nameof(LabWorkflowDependencyValidationExceptions))]
-        public async Task ShouldThrowDependencyValidationExceptionOnAddIfDependencyValidationErrorOccursAndLogItAsync(
+        public async Task ShouldThrowDependencyValidationExceptionOnSubmitIfDependencyValidationErrorOccursAndLogItAsync(
             Xeption dependencyValidationException)
         {
             // given
@@ -53,6 +53,60 @@ namespace DMX.Core.Api.Tests.Unit.Services.Orchestrations.LabWorkflows
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedLabWorkflowOrchestrationDependencyValidationException))),
+                        Times.Once);
+
+            this.labWorkflowCommandServiceMock.Verify(service =>
+                service.AddLabWorkflowCommandAsync(It.IsAny<LabWorkflowCommand>()),
+                    Times.Never);
+
+            this.labWorkflowEventServiceMock.Verify(service =>
+                service.AddLabWorkflowEventAsync(It.IsAny<LabWorkflow>()),
+                    Times.Never);
+
+            this.labWorkflowServiceMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.labWorkflowCommandServiceMock.VerifyNoOtherCalls();
+            this.labWorkflowEventServiceMock.VerifyNoOtherCalls();
+        }
+
+        [Theory]
+        [MemberData(nameof(LabWorkflowDependencyExceptions))]
+        public async Task ShouldThrowDependencyExceptionOnSubmitIfDependencyErrorOccursAndLogItAsync(
+            Xeption dependencyException)
+        {
+            // given
+            LabWorkflow randomLabWorkflow = CreateRandomLabWorkflow();
+            LabWorkflow someLabWorkflow = randomLabWorkflow;
+
+            var expectedLabWorkflowOrchestrationDependencyException =
+                new LabWorkflowOrchestrationDependencyException(
+                    dependencyException.InnerException as Xeption);
+
+            this.labWorkflowServiceMock.Setup(service =>
+                service.AddLabWorkflowAsync(It.IsAny<LabWorkflow>()))
+                    .ThrowsAsync(dependencyException);
+
+            // when
+            ValueTask<LabWorkflow> actualSubmitLabWorklowTask =
+                this.labWorkflowOrchestrationService.SubmitLabWorkflowAsync(
+                    someLabWorkflow);
+
+            LabWorkflowOrchestrationDependencyException
+                actualLabWorkflowOrchestrationDependencyException =
+                    await Assert.ThrowsAsync<LabWorkflowOrchestrationDependencyException>(
+                        actualSubmitLabWorklowTask.AsTask);
+
+            // then
+            actualLabWorkflowOrchestrationDependencyException.Should().BeEquivalentTo(
+                expectedLabWorkflowOrchestrationDependencyException);
+
+            this.labWorkflowServiceMock.Verify(service =>
+                service.AddLabWorkflowAsync(It.IsAny<LabWorkflow>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabWorkflowOrchestrationDependencyException))),
                         Times.Once);
 
             this.labWorkflowCommandServiceMock.Verify(service =>
