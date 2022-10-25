@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using DMX.Core.Api.Models.Orchestrations.LabWorkflows.Exceptions;
-using DMX.Core.Api.Services.Foundations.LabWorkflows;
 using DMX.Core.Api.Services.Orchestrations.LabWorkflows;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,16 +23,10 @@ namespace DMX.Core.Api.Controllers
     [Route("api/[controller]")]
     public class LabWorkflowsController : RESTFulController
     {
-        private readonly ILabWorkflowService labWorkflowService;
         private readonly ILabWorkflowOrchestrationService labWorkflowOrchestrationService;
 
-        public LabWorkflowsController(
-            ILabWorkflowService labWorkflowService,
-            ILabWorkflowOrchestrationService labWorkflowOrchestrationService)
-        {
-            this.labWorkflowService = labWorkflowService;
+        public LabWorkflowsController(ILabWorkflowOrchestrationService labWorkflowOrchestrationService) =>
             this.labWorkflowOrchestrationService = labWorkflowOrchestrationService;
-        }
 
         [HttpPost]
 #if RELEASE
@@ -43,31 +36,31 @@ namespace DMX.Core.Api.Controllers
         {
             try
             {
-                LabWorkflow addedLabWorkflow =
-                    await this.labWorkflowService.AddLabWorkflowAsync(labWorkflow);
+                LabWorkflow submittedLabWorkflow =
+                    await this.labWorkflowOrchestrationService.SubmitLabWorkflowAsync(labWorkflow);
 
-                return Created(addedLabWorkflow);
+                return Created(submittedLabWorkflow);
             }
-            catch (LabWorkflowValidationException labWorkflowValidationException)
+            catch (LabWorkflowOrchestrationValidationException labWorkflowOrchestrationValidationException)
             {
-                return BadRequest(labWorkflowValidationException.InnerException);
+                return BadRequest(labWorkflowOrchestrationValidationException.InnerException);
             }
-            catch (LabWorkflowDependencyException labWorkflowDependencyException)
+            catch (LabWorkflowOrchestrationDependencyValidationException labWorkflowOrchestrationDependencyValidationException)
+                when (labWorkflowOrchestrationDependencyValidationException.InnerException is AlreadyExistsLabWorkflowException)
             {
-                return InternalServerError(labWorkflowDependencyException);
+                return Conflict(labWorkflowOrchestrationDependencyValidationException.InnerException);
             }
-            catch (LabWorkflowDependencyValidationException labWorkflowDependencyValidationException)
-                when (labWorkflowDependencyValidationException.InnerException is AlreadyExistsLabWorkflowException)
+            catch (LabWorkflowOrchestrationDependencyValidationException labWorkflowOrchestrationDependencyValidationException)
             {
-                return Conflict(labWorkflowDependencyValidationException.InnerException);
+                return BadRequest(labWorkflowOrchestrationDependencyValidationException.InnerException);
             }
-            catch (LabWorkflowDependencyValidationException labWorkflowDependencyValidationException)
+            catch (LabWorkflowOrchestrationDependencyException labWorkflowOrchestrationDependencyException)
             {
-                return BadRequest(labWorkflowDependencyValidationException.InnerException);
+                return InternalServerError(labWorkflowOrchestrationDependencyException.InnerException);
             }
-            catch (LabWorkflowServiceException labWorkflowServiceException)
+            catch (LabWorkflowOrchestrationServiceException labWorkflowOrchestrationServiceException)
             {
-                return InternalServerError(labWorkflowServiceException);
+                return InternalServerError(labWorkflowOrchestrationServiceException);
             }
         }
 
@@ -99,7 +92,7 @@ namespace DMX.Core.Api.Controllers
             }
             catch (LabWorkflowOrchestrationDependencyException labWorkflowOrchestrationDependencyException)
             {
-                return InternalServerError(labWorkflowOrchestrationDependencyException);
+                return InternalServerError(labWorkflowOrchestrationDependencyException.InnerException);
             }
             catch (LabWorkflowOrchestrationServiceException labWorkflowOrchestrationServiceException)
             {
