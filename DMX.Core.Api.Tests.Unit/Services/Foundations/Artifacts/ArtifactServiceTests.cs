@@ -12,6 +12,7 @@ using DMX.Core.Api.Services.Foundations.Artifacts;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
+using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Artifacts
 {
@@ -31,6 +32,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Artifacts
                 loggingBroker: this.loggingBrokerMock.Object);
         }
 
+
+
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
@@ -48,5 +51,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Artifacts
 
             return filler;
         }
+
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
     }
 }
