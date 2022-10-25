@@ -63,6 +63,22 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
             {
                 throw CreateAndLogDependencyException(labWorkflowServiceException);
             }
+            catch (LabWorkflowCommandDependencyException labWorkflowCommandDependencyException)
+            {
+                throw CreateAndLogDependencyException(labWorkflowCommandDependencyException);
+            }
+            catch (LabWorkflowCommandServiceException labWorkflowCommandServiceException)
+            {
+                throw CreateAndLogDependencyException(labWorkflowCommandServiceException);
+            }
+            catch (LabWorkflowEventDependencyException labWorkflowEventDependencyException)
+            {
+                throw CreateAndLogDependencyException(labWorkflowEventDependencyException);
+            }
+            catch (LabWorkflowEventServiceException labWorkflowEventServiceException)
+            {
+                throw CreateAndLogDependencyException(labWorkflowEventServiceException);
+            }
             catch (Exception serviceException)
             {
                 var failedLabWorkflowOrchestrationServiceException =
