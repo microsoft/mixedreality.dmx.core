@@ -9,7 +9,8 @@ namespace DMX.Core.Api.Models.Foundations.LabCommandEvents.Exceptions
     public class LabCommandEventValidationException : Xeption
     {
         public LabCommandEventValidationException(Xeption innerException)
-            : base(message: "Lab command validation exception occured. Please fix and try again.", innerException)
+            : base(message: "Lab command validation exception occurred. Please fix and try again.",
+                  innerException)
         { }
     }
 }

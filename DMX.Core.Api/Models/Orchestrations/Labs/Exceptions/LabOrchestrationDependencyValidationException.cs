@@ -8,9 +8,9 @@ namespace DMX.Core.Api.Models.Orchestrations.Labs.Exceptions
 {
     public class LabOrchestrationDependencyValidationException : Xeption
     {
-        public LabOrchestrationDependencyValidationException(Xeption exception)
-            : base(message: "Lab validation dependency error occured. Please fix and try again.",
-                  exception)
+        public LabOrchestrationDependencyValidationException(Xeption innerException)
+            : base(message: "Lab validation dependency error occurred. Please fix and try again.",
+                  innerException)
         { }
     }
 }
