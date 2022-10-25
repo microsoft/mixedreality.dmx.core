@@ -31,15 +31,18 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<LabWorkflow> SubmitLabWorkflowAsync(LabWorkflow labWorkflow)
+        public ValueTask<LabWorkflow> SubmitLabWorkflowAsync(LabWorkflow labWorkflow) =>
+        TryCatch(async () =>
         {
+            ValidateLabWorkflowOnSubmit(labWorkflow);
+
             await this.labWorkflowService.AddLabWorkflowAsync(labWorkflow);
 
             labWorkflow.Commands.ForEach(async command =>
                 await this.labWorkflowCommandService.AddLabWorkflowCommandAsync(command));
 
             return await this.labWorkflowEventService.AddLabWorkflowEventAsync(labWorkflow);
-        } 
+        });
 
 
         public ValueTask<LabWorkflow> RetrieveLabWorkflowByIdAsync(Guid labWorkflowId) =>

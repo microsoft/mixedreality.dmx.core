@@ -21,6 +21,10 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
             {
                 return await returningLabWorkflowFunction();
             }
+            catch (NullLabWorkflowOrchestrationException nullLabWorkflowOrchestrationException)
+            {
+                throw CreateAndLogValidationException(nullLabWorkflowOrchestrationException);
+            }
             catch (InvalidLabWorkflowOrchestrationException invalidLabWorkflowOrchestrationException)
             {
                 throw CreateAndLogValidationException(invalidLabWorkflowOrchestrationException);
