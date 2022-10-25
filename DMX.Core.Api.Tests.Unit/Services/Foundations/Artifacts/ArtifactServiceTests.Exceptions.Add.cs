@@ -2,17 +2,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System.Threading.Tasks;
 using Azure;
 using DMX.Core.Api.Models.Foundations.Artifacts;
 using DMX.Core.Api.Models.Foundations.Artifacts.Exceptions;
 using FluentAssertions;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xeptions;
 using Xunit;
 
 namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Artifacts
@@ -60,7 +55,6 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Artifacts
 
             this.artifactBroker.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
-
         }
     }
 }

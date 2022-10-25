@@ -2,7 +2,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
+using Azure;
 using DMX.Core.Api.Models.Foundations.Artifacts.Exceptions;
 using Xeptions;
 
@@ -26,6 +28,13 @@ namespace DMX.Core.Api.Services.Foundations.Artifacts
             {
                 throw CreateAndLogValidationException(invalidArtifactException);
             }
+            catch (RequestFailedException requestFailedException)
+            {
+                var failedArtifactDependencyException =
+                    new FailedArtifactDependencyException(requestFailedException);
+
+                throw CreateAndLogDependencyException(failedArtifactDependencyException);
+            }
         }
 
         private ArtifactValidationException CreateAndLogValidationException(Xeption exception)
@@ -36,6 +45,16 @@ namespace DMX.Core.Api.Services.Foundations.Artifacts
             this.loggingBroker.LogError(artifactValidationException);
 
             return artifactValidationException;
+        }
+
+        private ArtifactDependencyException CreateAndLogDependencyException(Xeption exception)
+        {
+            var artifactDependencyException =
+                new ArtifactDependencyException(exception);
+
+            this.loggingBroker.LogError(artifactDependencyException);
+
+            return artifactDependencyException;
         }
     }
 }
