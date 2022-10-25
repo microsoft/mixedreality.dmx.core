@@ -10,7 +10,7 @@ namespace DMX.Core.Api.Models.Orchestrations.LabCommands.Exceptions
     public class FailedLabCommandOrchestrationServiceException : Xeption
     {
         public FailedLabCommandOrchestrationServiceException(Exception exception)
-            : base(message: "Failed Lab command orchestration service error occurred, please contact support.",
+            : base(message: "Failed lab command service error occurred, please contact support.",
                   exception)
         { }
     }

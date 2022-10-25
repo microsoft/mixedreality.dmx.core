@@ -13,8 +13,12 @@ using DMX.Core.Api.Services.Foundations.ExternalLabs;
 using DMX.Core.Api.Services.Foundations.LabCommandEvents;
 using DMX.Core.Api.Services.Foundations.LabCommands;
 using DMX.Core.Api.Services.Foundations.Labs;
+using DMX.Core.Api.Services.Foundations.LabWorkflowCommands;
+using DMX.Core.Api.Services.Foundations.LabWorkflowEvents;
+using DMX.Core.Api.Services.Foundations.LabWorkflows;
 using DMX.Core.Api.Services.Orchestrations.LabCommands;
 using DMX.Core.Api.Services.Orchestrations.Labs;
+using DMX.Core.Api.Services.Orchestrations.LabWorkflows;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,15 +49,17 @@ namespace DMX.Core.Api
             AddFoundationServices(services);
             AddOrchestrationServices(services);
 
-            services.AddSwaggerGen(option =>
+            services.AddSwaggerGen(options =>
             {
-                option.SwaggerDoc(
+                options.SwaggerDoc(
                     name: "v1",
                     info: new OpenApiInfo
                     {
                         Title = "DMX.Core.Api",
                         Version = "v1"
                     });
+
+                options.CustomSchemaIds(type => type.ToString());
             });
         }
 
@@ -95,12 +101,16 @@ namespace DMX.Core.Api
             services.AddTransient<ILabService, LabService>();
             services.AddTransient<ILabCommandService, LabCommandService>();
             services.AddTransient<ILabCommandEventService, LabCommandEventService>();
+            services.AddTransient<ILabWorkflowService, LabWorkflowService>();
+            services.AddTransient<ILabWorkflowCommandService, LabWorkflowCommandService>();
+            services.AddTransient<ILabWorkflowEventService, LabWorkflowEventService>();
         }
 
         private static void AddOrchestrationServices(IServiceCollection services)
         {
             services.AddTransient<ILabOrchestrationService, LabOrchestrationService>();
             services.AddTransient<ILabCommandOrchestrationService, LabCommandOrchestrationService>();
+            services.AddTransient<ILabWorkflowOrchestrationService, LabWorkflowOrchestrationService>();
         }
 
         private void AddAuthentication(IServiceCollection services)
