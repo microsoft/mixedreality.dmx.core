@@ -10,6 +10,7 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
 {
     public interface ILabWorkflowOrchestrationService
     {
+        ValueTask<LabWorkflow> SubmitLabWorkflowAsync(LabWorkflow labWorkflow);
         ValueTask<LabWorkflow> RetrieveLabWorkflowByIdAsync(Guid labWorkflowId);
     }
 }
