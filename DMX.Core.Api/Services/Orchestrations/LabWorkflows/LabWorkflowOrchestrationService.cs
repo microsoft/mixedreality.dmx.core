@@ -44,7 +44,6 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
             return await this.labWorkflowEventService.AddLabWorkflowEventAsync(labWorkflow);
         });
 
-
         public ValueTask<LabWorkflow> RetrieveLabWorkflowByIdAsync(Guid labWorkflowId) =>
         TryCatch(async () =>
         {
