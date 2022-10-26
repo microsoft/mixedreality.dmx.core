@@ -35,6 +35,13 @@ namespace DMX.Core.Api.Services.Foundations.Artifacts
 
                 throw CreateAndLogDependencyException(failedArtifactDependencyException);
             }
+            catch (Exception exception)
+            {
+                var failedArtifactServiceException =
+                    new FailedArtifactServiceException(exception);
+
+                throw CreateAndLogServiceException(failedArtifactServiceException);
+            }
         }
 
         private ArtifactValidationException CreateAndLogValidationException(Xeption exception)
@@ -55,6 +62,16 @@ namespace DMX.Core.Api.Services.Foundations.Artifacts
             this.loggingBroker.LogError(artifactDependencyException);
 
             return artifactDependencyException;
+        }
+
+        private ArtifactServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var artifactServiceException =
+                new ArtifactServiceException(exception);
+
+            this.loggingBroker.LogError(artifactServiceException);
+
+            return artifactServiceException;
         }
     }
 }
