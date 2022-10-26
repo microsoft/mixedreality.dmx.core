@@ -42,26 +42,26 @@ namespace DMX.Core.Api.Controllers
 
                 return Created(addedLab);
             }
-            catch (LabValidationException labValidationException)
+            catch (LabOrchestrationValidationException labOrchestrationValidationException)
             {
-                return BadRequest(labValidationException.InnerException);
+                return BadRequest(labOrchestrationValidationException.InnerException);
             }
-            catch (LabDependencyException labDependencyException)
+            catch (LabOrchestrationDependencyValidationException labOrchestrationDependencyValidationException)
+                when (labOrchestrationDependencyValidationException.InnerException is AlreadyExistsLabException)
             {
-                return InternalServerError(labDependencyException);
+                return Conflict(labOrchestrationDependencyValidationException.InnerException);
             }
-            catch (LabDependencyValidationException labDependencyValidationException)
-                when (labDependencyValidationException.InnerException is AlreadyExistsLabException)
+            catch (LabOrchestrationDependencyValidationException labOrchestrationDependencyValidationException)
             {
-                return Conflict(labDependencyValidationException.InnerException);
+                return BadRequest(labOrchestrationDependencyValidationException.InnerException);
             }
-            catch (LabDependencyValidationException labDependencyValidationException)
+            catch (LabOrchestrationDependencyException labOrchestrationDependencyException)
             {
-                return BadRequest(labDependencyValidationException.InnerException);
+                return InternalServerError(labOrchestrationDependencyException.InnerException);
             }
-            catch (LabServiceException labServiceException)
+            catch (LabOrchestrationServiceException labOrchestrationServiceException)
             {
-                return InternalServerError(labServiceException);
+                return InternalServerError(labOrchestrationServiceException);
             }
         }
 
@@ -101,14 +101,14 @@ namespace DMX.Core.Api.Controllers
 
                 return Ok(lab);
             }
+            catch (LabOrchestrationValidationException labOrchestrationValidationException)
+            {
+                return BadRequest(labOrchestrationValidationException.InnerException);
+            }
             catch (LabOrchestrationDependencyValidationException labOrchestrationDependencyValidationException)
                 when (labOrchestrationDependencyValidationException.InnerException is NotFoundLabException)
             {
                 return NotFound(labOrchestrationDependencyValidationException.InnerException);
-            }
-            catch (LabOrchestrationValidationException labOrchestrationValidationException)
-            {
-                return BadRequest(labOrchestrationValidationException.InnerException);
             }
             catch (LabOrchestrationDependencyValidationException labOrchestrationDependencyValidationException)
             {
@@ -137,31 +137,31 @@ namespace DMX.Core.Api.Controllers
 
                 return Ok(removedLab);
             }
-            catch (LabValidationException labValidationException)
-                when (labValidationException.InnerException is NotFoundLabException)
+            catch (LabOrchestrationValidationException labOrchestrationValidationException)
             {
-                return NotFound(labValidationException.InnerException);
+                return BadRequest(labOrchestrationValidationException.InnerException);
             }
-            catch (LabValidationException labValidationException)
+            catch (LabOrchestrationDependencyValidationException labOrchestrationDependencyValidationException)
+                when (labOrchestrationDependencyValidationException.InnerException is NotFoundLabException)
             {
-                return BadRequest(labValidationException.InnerException);
+                return NotFound(labOrchestrationDependencyValidationException.InnerException);
             }
-            catch (LabDependencyValidationException labDependencyValidationException)
-                when (labDependencyValidationException.InnerException is LockedLabException)
+            catch (LabOrchestrationDependencyValidationException labOrchestrationDependencyValidationException)
+                when (labOrchestrationDependencyValidationException.InnerException is LockedLabException)
             {
-                return Locked(labDependencyValidationException.InnerException);
+                return Locked(labOrchestrationDependencyValidationException.InnerException);
             }
-            catch (LabDependencyValidationException labDependencyValidationException)
+            catch (LabOrchestrationDependencyValidationException labOrchestrationDependencyValidationException)
             {
-                return BadRequest(labDependencyValidationException.InnerException);
+                return BadRequest(labOrchestrationDependencyValidationException.InnerException);
             }
-            catch (LabDependencyException labDependencyException)
+            catch (LabOrchestrationDependencyException labOrchestrationDependencyException)
             {
-                return InternalServerError(labDependencyException);
+                return InternalServerError(labOrchestrationDependencyException);
             }
-            catch (LabServiceException labServiceException)
+            catch (LabOrchestrationServiceException labOrchestrationServiceException)
             {
-                return InternalServerError(labServiceException);
+                return InternalServerError(labOrchestrationServiceException);
             }
         }
     }
