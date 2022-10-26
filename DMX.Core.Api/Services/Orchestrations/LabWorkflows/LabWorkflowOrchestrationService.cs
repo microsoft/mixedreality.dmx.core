@@ -3,8 +3,10 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Loggings;
+using DMX.Core.Api.Models.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;
 using DMX.Core.Api.Services.Foundations.LabWorkflowCommands;
 using DMX.Core.Api.Services.Foundations.LabWorkflowEvents;
@@ -35,11 +37,8 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
         TryCatch(async () =>
         {
             ValidateLabWorkflowOnSubmit(labWorkflow);
-
             await this.labWorkflowService.AddLabWorkflowAsync(labWorkflow);
-
-            labWorkflow.Commands.ForEach(async command =>
-                await this.labWorkflowCommandService.AddLabWorkflowCommandAsync(command));
+            await AddLabWorkflowCommands(labWorkflow.Commands);
 
             return await this.labWorkflowEventService.AddLabWorkflowEventAsync(labWorkflow);
         });
@@ -51,5 +50,13 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
 
             return await this.labWorkflowService.RetrieveLabWorkflowByIdAsync(labWorkflowId);
         });
+
+        private async ValueTask AddLabWorkflowCommands(List<LabWorkflowCommand> labWorkflowCommands)
+        {
+            foreach (LabWorkflowCommand command in labWorkflowCommands)
+            {
+                await this.labWorkflowCommandService.AddLabWorkflowCommandAsync(command);
+            }
+        }
     }
 }
