@@ -26,6 +26,42 @@ namespace DMX.Core.Api.Controllers
         public LabWorkflowCommandsController(ILabWorkflowCommandService labWorkflowCommandService) =>
             this.labWorkflowCommandService = labWorkflowCommandService;
 
+        [HttpPost]
+#if RELEASE
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:PostLabWorkflowCommand")]
+#endif
+        public async ValueTask<ActionResult<LabWorkflowCommand>> PostLabWorkflowCommandAsync(LabWorkflowCommand labWorkflowCommand)
+        {
+            try
+            {
+                LabWorkflowCommand addedLabWorkflowCommand =
+                    await this.labWorkflowCommandService.AddLabWorkflowCommandAsync(labWorkflowCommand);
+
+                return Created(addedLabWorkflowCommand);
+            }
+            catch (LabWorkflowCommandValidationException labWorkflowCommandValidationException)
+            {
+                return BadRequest(labWorkflowCommandValidationException.InnerException);
+            }
+            catch (LabWorkflowCommandDependencyValidationException labWorkflowCommandDependencyValidationException)
+                when (labWorkflowCommandDependencyValidationException.InnerException is AlreadyExistsLabWorkflowCommandException)
+            {
+                return Conflict(labWorkflowCommandDependencyValidationException.InnerException);
+            }
+            catch (LabWorkflowCommandDependencyValidationException labWorkflowCommandDependencyValidationException)
+            {
+                return BadRequest(labWorkflowCommandDependencyValidationException.InnerException);
+            }
+            catch (LabWorkflowCommandDependencyException labWorkflowCommandDependencyException)
+            {
+                return InternalServerError(labWorkflowCommandDependencyException.InnerException);
+            }
+            catch (LabWorkflowCommandServiceException labWorkflowCommandServiceException)
+            {
+                return InternalServerError(labWorkflowCommandServiceException);
+            }
+        }
+
         [HttpPut]
 #if RELEASE
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:PutLabWorkflowCommand")]
