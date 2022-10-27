@@ -4,6 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
+using DMX.Core.Api.Models.Foundations.LabWorkflowCommands.Exceptions;
+using DMX.Core.Api.Models.Foundations.LabWorkflowEvent.Exceptions;
 using DMX.Core.Api.Models.Foundations.LabWorkflows;
 using DMX.Core.Api.Models.Foundations.LabWorkflows.Exceptions;
 using DMX.Core.Api.Models.Orchestrations.LabWorkflows.Exceptions;
@@ -21,6 +23,10 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
             {
                 return await returningLabWorkflowFunction();
             }
+            catch (NullLabWorkflowOrchestrationException nullLabWorkflowOrchestrationException)
+            {
+                throw CreateAndLogValidationException(nullLabWorkflowOrchestrationException);
+            }
             catch (InvalidLabWorkflowOrchestrationException invalidLabWorkflowOrchestrationException)
             {
                 throw CreateAndLogValidationException(invalidLabWorkflowOrchestrationException);
@@ -33,6 +39,22 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
             {
                 throw CreateAndLogDependencyValidationException(labWorkflowDependencyValidationException);
             }
+            catch (LabWorkflowCommandValidationException labWorkflowCommandValidationException)
+            {
+                throw CreateAndLogDependencyValidationException(labWorkflowCommandValidationException);
+            }
+            catch (LabWorkflowCommandDependencyValidationException labWorkflowCommandDependencyValidationException)
+            {
+                throw CreateAndLogDependencyValidationException(labWorkflowCommandDependencyValidationException);
+            }
+            catch (LabWorkflowEventValidationException labWorkflowEventValidationException)
+            {
+                throw CreateAndLogDependencyValidationException(labWorkflowEventValidationException);
+            }
+            catch (LabWorkflowEventDependencyValidationException labWorkflowEventDependencyValidationException)
+            {
+                throw CreateAndLogDependencyValidationException(labWorkflowEventDependencyValidationException);
+            }
             catch (LabWorkflowDependencyException labWorkflowDependencyException)
             {
                 throw CreateAndLogDependencyException(labWorkflowDependencyException);
@@ -40,6 +62,22 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
             catch (LabWorkflowServiceException labWorkflowServiceException)
             {
                 throw CreateAndLogDependencyException(labWorkflowServiceException);
+            }
+            catch (LabWorkflowCommandDependencyException labWorkflowCommandDependencyException)
+            {
+                throw CreateAndLogDependencyException(labWorkflowCommandDependencyException);
+            }
+            catch (LabWorkflowCommandServiceException labWorkflowCommandServiceException)
+            {
+                throw CreateAndLogDependencyException(labWorkflowCommandServiceException);
+            }
+            catch (LabWorkflowEventDependencyException labWorkflowEventDependencyException)
+            {
+                throw CreateAndLogDependencyException(labWorkflowEventDependencyException);
+            }
+            catch (LabWorkflowEventServiceException labWorkflowEventServiceException)
+            {
+                throw CreateAndLogDependencyException(labWorkflowEventServiceException);
             }
             catch (Exception serviceException)
             {

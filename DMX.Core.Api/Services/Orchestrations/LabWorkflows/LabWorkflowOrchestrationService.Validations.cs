@@ -10,9 +10,19 @@ namespace DMX.Core.Api.Services.Orchestrations.LabWorkflows
 {
     public partial class LabWorkflowOrchestrationService : ILabWorkflowOrchestrationService
     {
+        private static void ValidateLabWorkflowOnSubmit(LabWorkflow labWorkflow) =>
+            ValidateLabWorkflowIsNotNull(labWorkflow);
 
         private static void ValidateLabWorkflowId(Guid labWorkflowId) =>
             Validate((Rule: IsInvalid(labWorkflowId), Parameter: nameof(LabWorkflow.Id)));
+
+        private static void ValidateLabWorkflowIsNotNull(LabWorkflow labWorkflow)
+        {
+            if (labWorkflow is null)
+            {
+                throw new NullLabWorkflowOrchestrationException();
+            }
+        }
 
         private static dynamic IsInvalid(Guid id) => new
         {
