@@ -13,7 +13,8 @@ namespace DMX.Core.Api.Brokers.Storages
     {
         ValueTask<Lab> InsertLabAsync(Lab lab);
         IQueryable<Lab> SelectAllLabsWithDevices();
-        ValueTask<Lab> SelectLabByIdAsync(Guid labId);
+        ValueTask<Lab> SelectLabByIdWithoutDevicesAsync(Guid labId);
+        ValueTask<Lab> SelectLabByIdWithDevicesAsync(Guid labId);
         ValueTask<Lab> DeleteLabAsync(Lab lab);
     }
 }
