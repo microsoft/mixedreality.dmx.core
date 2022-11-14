@@ -19,6 +19,9 @@ namespace DMX.Core.Api.Brokers.Storages
         public async ValueTask<LabDevice> SelectLabDeviceByIdAsync(Guid labDeviceId) =>
             await FindAsync<LabDevice>(labDeviceId);
             
+        public async ValueTask<LabDevice> UpdateLabDeviceAsync(LabDevice labDevice) =>
+            await UpdateAsync(labDevice);
+            
         public async ValueTask<LabDevice> DeleteLabDeviceAsync(LabDevice labDevice) =>
             await DeleteAsync(labDevice);
     }
