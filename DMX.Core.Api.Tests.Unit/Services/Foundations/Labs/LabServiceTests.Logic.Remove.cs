@@ -26,7 +26,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             Lab expectedLab = deletedLab.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectLabByIdAsync(inputLabId))
+                broker.SelectLabByIdWithoutDevicesAsync(inputLabId))
                     .ReturnsAsync(selectedLab);
 
             this.storageBrokerMock.Setup(broker =>
@@ -42,7 +42,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             actualLab.Should().BeEquivalentTo(expectedLab);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLabByIdAsync(inputLabId),
+                broker.SelectLabByIdWithoutDevicesAsync(inputLabId),
                     Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
