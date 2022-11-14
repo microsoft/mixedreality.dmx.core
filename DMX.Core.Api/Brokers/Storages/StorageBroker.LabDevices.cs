@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------------
+// ---------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
@@ -12,6 +12,9 @@ namespace DMX.Core.Api.Brokers.Storages
     {
         public DbSet<LabDevice> LabDevices { get; set; }
 
+        public async ValueTask<LabDevice> InsertLabDeviceAsync(LabDevice labDevice) =>
+            await InsertAsync(labDevice);
+            
         public async ValueTask<LabDevice> DeleteLabDeviceAsync(LabDevice labDevice) =>
             await DeleteAsync(labDevice);
     }
