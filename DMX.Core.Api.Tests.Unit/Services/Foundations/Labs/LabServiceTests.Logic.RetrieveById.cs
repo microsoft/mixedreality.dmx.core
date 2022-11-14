@@ -21,12 +21,18 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             Guid randomLabId = Guid.NewGuid();
             Guid inputLabId = randomLabId;
             Lab randomLab = CreateRandomLab();
-            Lab selectedLab = randomLab;
-            Lab expectedLab = selectedLab.DeepClone();
+            Lab selectedLabWithoutDevices = randomLab;
+            selectedLabWithoutDevices.Devices = null;
+            Lab selectedLabWithDevices = randomLab;
+            Lab expectedLab = selectedLabWithDevices.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectLabByIdAsync(inputLabId))
-                    .ReturnsAsync(selectedLab);
+                broker.SelectLabByIdWithoutDevicesAsync(inputLabId))
+                    .ReturnsAsync(selectedLabWithoutDevices);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectLabByIdWithDevicesAsync(inputLabId))
+                    .ReturnsAsync(selectedLabWithDevices);
 
             // when
             Lab actualLab =
@@ -37,7 +43,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
             actualLab.Should().BeEquivalentTo(expectedLab);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLabByIdAsync(inputLabId),
+                broker.SelectLabByIdWithoutDevicesAsync(inputLabId),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectLabByIdWithDevicesAsync(inputLabId),
                     Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();

@@ -33,7 +33,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 new LabDependencyValidationException(lockedLabException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectLabByIdAsync(It.IsAny<Guid>()))
+                broker.SelectLabByIdWithoutDevicesAsync(It.IsAny<Guid>()))
                     .ReturnsAsync(someLab);
 
             this.storageBrokerMock.Setup(broker =>
@@ -53,7 +53,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 expectedLabDependencyValidationException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLabByIdAsync(It.IsAny<Guid>()),
+                broker.SelectLabByIdWithoutDevicesAsync(It.IsAny<Guid>()),
                     Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
@@ -84,7 +84,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 new LabDependencyException(failedLabStorageException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectLabByIdAsync(It.IsAny<Guid>()))
+                broker.SelectLabByIdWithoutDevicesAsync(It.IsAny<Guid>()))
                     .ReturnsAsync(someLab);
 
             this.storageBrokerMock.Setup(broker =>
@@ -104,7 +104,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 expectedLabDependencyException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLabByIdAsync(It.IsAny<Guid>()),
+                broker.SelectLabByIdWithoutDevicesAsync(It.IsAny<Guid>()),
                     Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
@@ -135,7 +135,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 new LabServiceException(failedLabServiceException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectLabByIdAsync(It.IsAny<Guid>()))
+                broker.SelectLabByIdWithoutDevicesAsync(It.IsAny<Guid>()))
                     .ReturnsAsync(someLab);
 
             this.storageBrokerMock.Setup(broker =>
@@ -155,7 +155,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 expectedLabServiceExceptions);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLabByIdAsync(It.IsAny<Guid>()),
+                broker.SelectLabByIdWithoutDevicesAsync(It.IsAny<Guid>()),
                     Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
