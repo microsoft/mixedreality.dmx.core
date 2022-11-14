@@ -46,7 +46,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                         Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLabByIdAsync(It.IsAny<Guid>()),
+                broker.SelectLabByIdWithoutDevicesAsync(It.IsAny<Guid>()),
                     Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
@@ -68,7 +68,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 new LabValidationException(notFoundLabException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectLabByIdAsync(nonExistentLabId))
+                broker.SelectLabByIdWithoutDevicesAsync(nonExistentLabId))
                     .ReturnsAsync(noLab);
 
             // when
@@ -84,7 +84,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Labs
                 expectedLabValidationException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectLabByIdAsync(It.IsAny<Guid>()),
+                broker.SelectLabByIdWithoutDevicesAsync(It.IsAny<Guid>()),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>

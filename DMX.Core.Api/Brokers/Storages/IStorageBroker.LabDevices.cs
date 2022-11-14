@@ -1,4 +1,4 @@
-﻿// ---------------------------------------------------------------
+// ---------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
@@ -10,6 +10,7 @@ namespace DMX.Core.Api.Brokers.Storages
 {
     public partial interface IStorageBroker
     {
+        ValueTask<LabDevice> InsertLabDeviceAsync(LabDevice labDevice);
         ValueTask<LabDevice> SelectLabDeviceByIdAsync(Guid labDeviceId);
         ValueTask<LabDevice> DeleteLabDeviceAsync(LabDevice labDevice);
     }
