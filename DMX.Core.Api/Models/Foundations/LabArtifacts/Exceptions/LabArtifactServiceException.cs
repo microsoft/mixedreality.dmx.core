@@ -4,12 +4,12 @@
 
 using Xeptions;
 
-namespace DMX.Core.Api.Models.Foundations.Artifacts.Exceptions
+namespace DMX.Core.Api.Models.Foundations.LabArtifacts.Exceptions
 {
-    public class ArtifactServiceException : Xeption
+    public class LabArtifactServiceException : Xeption
     {
-        public ArtifactServiceException(Xeption innerException)
-            : base(message: "Artifact service error occurred, contact support.",
+        public LabArtifactServiceException(Xeption innerException)
+            : base(message: "Lab artifact service error occurred, contact support.",
                   innerException)
         { }
     }
