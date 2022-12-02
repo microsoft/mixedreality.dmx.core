@@ -3,29 +3,28 @@
 // ---------------------------------------------------------------
 
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Foundations.Artifacts;
-using Force.DeepCloner;
+using DMX.Core.Api.Models.Foundations.LabArtifacts;
 using Moq;
 using Xunit;
 
-namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Artifacts
+namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
 {
-    public partial class ArtifactServiceTests
+    public partial class LabArtifactServiceTests
     {
         [Fact]
         public async Task ShouldAddArtifactAsync()
         {
             // given
-            Artifact randomArtifact = CreateRandomArtifact();
-            Artifact inputArtifact = randomArtifact;
-            Artifact uploadedArtifact = inputArtifact;
+            LabArtifact randomArtifact = CreateRandomArtifact();
+            LabArtifact inputArtifact = randomArtifact;
+            LabArtifact uploadedArtifact = inputArtifact;
 
             // when
-            await this.artifactService.AddArtifactAsync(inputArtifact);
+            await this.labArtifactService.AddLabArtifactAsync(inputArtifact);
 
             // then
             this.artifactBroker.Verify(broker =>
-                broker.UploadArtifactAsync(inputArtifact),
+                broker.UploadLabArtifactAsync(inputArtifact),
                     Times.Once);
 
             this.artifactBroker.VerifyNoOtherCalls();

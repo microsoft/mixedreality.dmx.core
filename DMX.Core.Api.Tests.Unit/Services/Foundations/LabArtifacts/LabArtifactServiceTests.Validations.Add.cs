@@ -3,32 +3,32 @@
 // ---------------------------------------------------------------
 
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Foundations.Artifacts;
-using DMX.Core.Api.Models.Foundations.Artifacts.Exceptions;
+using DMX.Core.Api.Models.Foundations.LabArtifacts;
+using DMX.Core.Api.Models.Foundations.LabArtifacts.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Artifacts
+namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
 {
-    public partial class ArtifactServiceTests
+    public partial class LabArtifactServiceTests
     {
         [Fact]
         public async Task ShouldThrowValidationExceptionOnAddIfNullAndLogItAsync()
         {
             // given
-            Artifact nullArtifact = null;
-            var nullArtifactException = new NullArtifactException();
+            LabArtifact nullArtifact = null;
+            var nullArtifactException = new NullLabArtifactException();
 
             var exptectedArtifactValidationException =
-                new ArtifactValidationException(nullArtifactException);
+                new LabArtifactValidationException(nullArtifactException);
 
             // when
             ValueTask addArtifactTask =
-                this.artifactService.AddArtifactAsync(nullArtifact);
+                this.labArtifactService.AddLabArtifactAsync(nullArtifact);
 
-            ArtifactValidationException actualArtifactValidationException =
-                await Assert.ThrowsAsync<ArtifactValidationException>(
+            LabArtifactValidationException actualArtifactValidationException =
+                await Assert.ThrowsAsync<LabArtifactValidationException>(
                     addArtifactTask.AsTask);
 
             // then
@@ -41,7 +41,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Artifacts
                         Times.Once);
 
             this.artifactBroker.Verify(broker =>
-                broker.UploadArtifactAsync(It.IsAny<Artifact>()),
+                broker.UploadLabArtifactAsync(It.IsAny<LabArtifact>()),
                     Times.Never);
 
             this.artifactBroker.VerifyNoOtherCalls();
@@ -56,31 +56,31 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Artifacts
             string invalidString)
         {
             // given
-            var invalidArtifact = new Artifact
+            var invalidArtifact = new LabArtifact
             {
                 Name = invalidString,
                 Content = null
             };
 
-            var invalidArtifactException = new InvalidArtifactException();
+            var invalidArtifactException = new InvalidLabArtifactException();
 
             invalidArtifactException.AddData(
-                key: nameof(Artifact.Name),
+                key: nameof(LabArtifact.Name),
                 values: "Text is required");
 
             invalidArtifactException.AddData(
-                key: nameof(Artifact.Content),
+                key: nameof(LabArtifact.Content),
                 values: "Content is required");
 
             var expectedArtifactValidationException =
-                new ArtifactValidationException(invalidArtifactException);
+                new LabArtifactValidationException(invalidArtifactException);
 
             // when
             ValueTask addArtifactTask =
-                this.artifactService.AddArtifactAsync(invalidArtifact);
+                this.labArtifactService.AddLabArtifactAsync(invalidArtifact);
 
-            ArtifactValidationException actualArtifactValidationException =
-                await Assert.ThrowsAsync<ArtifactValidationException>(
+            LabArtifactValidationException actualArtifactValidationException =
+                await Assert.ThrowsAsync<LabArtifactValidationException>(
                     addArtifactTask.AsTask);
 
             // then
@@ -93,8 +93,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.Artifacts
                         Times.Once);
 
             this.artifactBroker.Verify(broker =>
-                broker.UploadArtifactAsync(
-                    It.IsAny<Artifact>()),
+                broker.UploadLabArtifactAsync(
+                    It.IsAny<LabArtifact>()),
                         Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
