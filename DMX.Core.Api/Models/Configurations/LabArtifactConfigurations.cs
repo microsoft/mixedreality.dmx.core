@@ -4,9 +4,9 @@
 
 namespace DMX.Core.Api.Models.Configurations
 {
-    public class LocalConfigurations
+    public class LabArtifactConfigurations
     {
-        public ApiConfigurations ApiConfigurations { get; set; }
-        public LabArtifactConfigurations LabArtifactConfigurations { get; set; }
+        public string ConnectionString { get; set; }
+        public string ContainerName { get; set; }
     }
 }
