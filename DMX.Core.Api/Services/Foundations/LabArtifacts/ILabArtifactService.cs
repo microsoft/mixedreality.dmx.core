@@ -3,12 +3,12 @@
 // ---------------------------------------------------------------
 
 using System.Threading.Tasks;
-using DMX.Core.Api.Models.Foundations.Artifacts;
+using DMX.Core.Api.Models.Foundations.LabArtifacts;
 
-namespace DMX.Core.Api.Services.Foundations.Artifacts
+namespace DMX.Core.Api.Services.Foundations.LabArtifacts
 {
-    public interface IArtifactService
+    public interface ILabArtifactService
     {
-        ValueTask AddArtifactAsync(Artifact artifact);
+        ValueTask AddLabArtifactAsync(LabArtifact labArtifact);
     }
 }

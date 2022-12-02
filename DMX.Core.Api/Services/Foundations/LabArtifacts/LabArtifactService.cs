@@ -3,31 +3,31 @@
 // ---------------------------------------------------------------
 
 using System.Threading.Tasks;
-using DMX.Core.Api.Brokers.Artifacts;
+using DMX.Core.Api.Brokers.Blobs;
 using DMX.Core.Api.Brokers.Loggings;
-using DMX.Core.Api.Models.Foundations.Artifacts;
+using DMX.Core.Api.Models.Foundations.LabArtifacts;
 
-namespace DMX.Core.Api.Services.Foundations.Artifacts
+namespace DMX.Core.Api.Services.Foundations.LabArtifacts
 {
-    public partial class ArtifactService : IArtifactService
+    public partial class LabArtifactService : ILabArtifactService
     {
-        private readonly IArtifactsBroker artifactsBroker;
+        private readonly IBlobBroker artifactsBroker;
         private readonly ILoggingBroker loggingBroker;
 
-        public ArtifactService(
-            IArtifactsBroker artifactsBroker,
+        public LabArtifactService(
+            IBlobBroker artifactsBroker,
             ILoggingBroker loggingBroker)
         {
             this.artifactsBroker = artifactsBroker;
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask AddArtifactAsync(Artifact artifact) =>
+        public ValueTask AddLabArtifactAsync(LabArtifact labArtifact) =>
         TryCatch(async () =>
         {
-            ValidateArtifactOnAdd(artifact);
+            ValidateLabArtifactOnAdd(labArtifact);
 
-            await this.artifactsBroker.UploadArtifactAsync(artifact);
+            await this.artifactsBroker.UploadLabArtifactAsync(labArtifact);
         });
     }
 }
