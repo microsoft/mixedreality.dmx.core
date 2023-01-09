@@ -11,7 +11,6 @@ namespace DMX.Core.Api.Brokers.Blobs
     public partial class BlobBroker : IBlobBroker
     {
         private readonly BlobServiceClient blobServiceClient;
-        private readonly BlobContainerClient blobContainerClient;
         private readonly IConfiguration configuration;
         private readonly string connectionString;
         private readonly string containerName;
@@ -22,7 +21,6 @@ namespace DMX.Core.Api.Brokers.Blobs
             connectionString = GetStorageConnectionString(this.configuration);
             containerName = GetContainerName(this.configuration);
             blobServiceClient = new BlobServiceClient(connectionString);
-            blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
         }
 
         private static string GetStorageConnectionString(IConfiguration configuration)

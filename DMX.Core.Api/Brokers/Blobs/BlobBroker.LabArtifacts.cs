@@ -12,6 +12,7 @@ namespace DMX.Core.Api.Brokers.Blobs
     {
         public async ValueTask UploadLabArtifactAsync(LabArtifact labArtifact)
         {
+            BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
             BlobClient blobClient = blobContainerClient.GetBlobClient(labArtifact.Name);
             await blobClient.UploadAsync(labArtifact.Content);
         }
