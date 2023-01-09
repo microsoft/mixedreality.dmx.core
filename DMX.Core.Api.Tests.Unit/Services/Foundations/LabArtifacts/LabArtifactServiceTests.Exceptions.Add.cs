@@ -60,9 +60,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
         }
 
         [Theory]
-        [InlineData(404)]
         [InlineData(401)]
         [InlineData(403)]
+        [InlineData(404)]
         public async Task ShouldThrowCriticalDependencyExceptionOnAddIfCriticalErrorOccursAndLogItAsync(
             int crititicalStatusCode)
         {
