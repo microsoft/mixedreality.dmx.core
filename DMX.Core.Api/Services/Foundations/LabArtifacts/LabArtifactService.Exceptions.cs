@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using Azure;
 using DMX.Core.Api.Models.Foundations.LabArtifacts.Exceptions;
@@ -29,6 +30,17 @@ namespace DMX.Core.Api.Services.Foundations.LabArtifacts
                 throw CreateAndLogValidationException(invalidLabArtifactException);
             }
             catch (RequestFailedException requestFailedException)
+                when (requestFailedException.Status 
+                    is (int)HttpStatusCode.Unauthorized
+                    or (int)HttpStatusCode.Forbidden
+                    or (int)HttpStatusCode.NotFound)
+            {
+                var failedLabArtifactDependencyException =
+                    new FailedLabArtifactDependencyException(requestFailedException);
+
+                throw CreateAndLogCriticalDependencyException(failedLabArtifactDependencyException);
+            }
+            catch (RequestFailedException requestFailedException)
             {
                 var failedLabArtifactDependencyException =
                     new FailedLabArtifactDependencyException(requestFailedException);
@@ -52,6 +64,16 @@ namespace DMX.Core.Api.Services.Foundations.LabArtifacts
             this.loggingBroker.LogError(labArtifactValidationException);
 
             return labArtifactValidationException;
+        }
+
+        private LabArtifactDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
+        {
+            var labArtifactDependencyException =
+                new LabArtifactDependencyException(exception);
+
+            this.loggingBroker.LogCritical(labArtifactDependencyException);
+            
+            return labArtifactDependencyException;
         }
 
         private LabArtifactDependencyException CreateAndLogDependencyException(Xeption exception)
