@@ -351,3 +351,4 @@ MigrationBackup/
 DMX.Core.API/appsettings.Development.json
 /DMX.Core.Api.Infrastructure.Provision/Properties/launchSettings.json
 /DMX.Core.Api.Tests.Acceptance/Properties/launchSettings.json
+/DMX.Core.Api.Infrastructure.Build/Properties/launchSettings.json
