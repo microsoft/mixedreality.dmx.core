@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using Azure;
 using DMX.Core.Api.Models.Foundations.LabArtifacts;
@@ -51,6 +52,57 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
+                    expectedArtifactDependencyException))),
+                        Times.Once);
+
+            this.artifactBroker.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Theory]
+        [InlineData(404)]
+        [InlineData(401)]
+        [InlineData(403)]
+        public async Task ShouldThrowCriticalDependencyExceptionOnAddIfCriticalErrorOccursAndLogItAsync(
+            int crititicalStatusCode)
+        {
+            // given
+            LabArtifact someArtifact = CreateRandomArtifact();
+            string randomMessage = GetRandomString();
+
+            var requestFailedException = 
+                new RequestFailedException(
+                    crititicalStatusCode,
+                    randomMessage);
+
+            var failedArtifactDependencyException =
+                new FailedLabArtifactDependencyException(requestFailedException);
+
+            var expectedArtifactDependencyException =
+                new LabArtifactDependencyException(failedArtifactDependencyException);
+
+            this.artifactBroker.Setup(broker =>
+                broker.UploadLabArtifactAsync(It.IsAny<LabArtifact>()))
+                    .Throws(requestFailedException);
+
+            // when
+            ValueTask uploadArtifactTask =
+                this.labArtifactService.AddLabArtifactAsync(someArtifact);
+
+            LabArtifactDependencyException actualArtifactDependencyException =
+                await Assert.ThrowsAsync<LabArtifactDependencyException>(
+                    uploadArtifactTask.AsTask);
+
+            // then
+            actualArtifactDependencyException.Should().BeEquivalentTo(
+                expectedArtifactDependencyException);
+
+            this.artifactBroker.Verify(broker =>
+                broker.UploadLabArtifactAsync(It.IsAny<LabArtifact>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogCritical(It.Is(SameExceptionAs(
                     expectedArtifactDependencyException))),
                         Times.Once);
 
