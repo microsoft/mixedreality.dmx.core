@@ -30,7 +30,7 @@ namespace DMX.Core.Api.Services.Foundations.LabArtifacts
                 throw CreateAndLogValidationException(invalidLabArtifactException);
             }
             catch (RequestFailedException requestFailedException)
-                when (requestFailedException.Status 
+                when (requestFailedException.Status
                     is (int)HttpStatusCode.Unauthorized
                     or (int)HttpStatusCode.Forbidden
                     or (int)HttpStatusCode.NotFound)
@@ -39,6 +39,14 @@ namespace DMX.Core.Api.Services.Foundations.LabArtifacts
                     new FailedLabArtifactDependencyException(requestFailedException);
 
                 throw CreateAndLogCriticalDependencyException(failedLabArtifactDependencyException);
+            }
+            catch (RequestFailedException requestFailedException)
+                when (requestFailedException.Status is (int)HttpStatusCode.Conflict)
+            {
+                var alreadyExistsLabArtifactException =
+                    new AlreadyExistsLabArtifactException(requestFailedException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistsLabArtifactException);
             }
             catch (RequestFailedException requestFailedException)
             {
@@ -72,8 +80,18 @@ namespace DMX.Core.Api.Services.Foundations.LabArtifacts
                 new LabArtifactDependencyException(exception);
 
             this.loggingBroker.LogCritical(labArtifactDependencyException);
-            
+
             return labArtifactDependencyException;
+        }
+
+        private LabArtifactDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
+        {
+            var labArtifactDependencyValidationException =
+                new LabArtifactDependencyValidationException(exception);
+
+            this.loggingBroker.LogError(labArtifactDependencyValidationException);
+
+            return labArtifactDependencyValidationException;
         }
 
         private LabArtifactDependencyException CreateAndLogDependencyException(Xeption exception)
