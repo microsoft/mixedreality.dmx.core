@@ -61,6 +61,11 @@ namespace DMX.Core.Api.Controllers
             {
                 return InternalServerError(labArtifactDependencyException.InnerException);
             }
+            catch (LabArtifactDependencyValidationException labArtifactDependencyValidationException)
+                when (labArtifactDependencyValidationException.InnerException is AlreadyExistsLabArtifactException)
+            {
+                return Conflict(labArtifactDependencyValidationException.InnerException);
+            }
             catch (LabArtifactServiceException labArtifactServiceException)
             {
                 return InternalServerError(labArtifactServiceException);
