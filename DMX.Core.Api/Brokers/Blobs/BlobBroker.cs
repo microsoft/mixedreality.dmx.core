@@ -25,18 +25,18 @@ namespace DMX.Core.Api.Brokers.Blobs
 
         private static string GetStorageConnectionString(IConfiguration configuration)
         {
-            LabArtifactConfigurations labArtifactConfigurations =
-                configuration.Get<LabArtifactConfigurations>();
+            LocalConfigurations localConfigurations =
+                configuration.Get<LocalConfigurations>();
 
-            return labArtifactConfigurations.ConnectionString;
+            return localConfigurations.LabArtifactConfigurations.ConnectionString;
         }
 
         private static string GetContainerName(IConfiguration configuration)
         {
-            LabArtifactConfigurations labArtifactConfigurations =
-                configuration.Get<LabArtifactConfigurations>();
+            LocalConfigurations localConfigurations =
+                configuration.Get<LocalConfigurations>();
 
-            return labArtifactConfigurations.ContainerName;
+            return localConfigurations.LabArtifactConfigurations.ContainerName;
         }
     }
 }

@@ -40,11 +40,11 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
         private static Filler<LabArtifact> CreateArtifactFiller()
         {
             var filler = new Filler<LabArtifact>();
-            Stream stream = new MemoryStream();
+            var memoryStream = new MemoryStream();
 
             filler.Setup()
-                .OnType<Stream>()
-                    .Use(stream);
+                .OnType<MemoryStream>()
+                    .Use(memoryStream);
 
             return filler;
         }

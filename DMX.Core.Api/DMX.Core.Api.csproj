@@ -10,6 +10,7 @@
     <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.11.1" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.14.1" />
     <PackageReference Include="EFxceptions" Version="0.4.5" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.9" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.1" />
     <PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
@@ -26,6 +27,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="WindowsAzure.ServiceBus" Version="6.2.2" />
     <PackageReference Include="Xeption" Version="2.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

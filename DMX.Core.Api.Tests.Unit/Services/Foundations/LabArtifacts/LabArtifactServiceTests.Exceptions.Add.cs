@@ -60,9 +60,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
         }
 
         [Theory]
-        [InlineData(404)]
-        [InlineData(401)]
-        [InlineData(403)]
+        [InlineData((int)HttpStatusCode.Unauthorized)]
+        [InlineData((int)HttpStatusCode.Forbidden)]
+        [InlineData((int)HttpStatusCode.NotFound)]
         public async Task ShouldThrowCriticalDependencyExceptionOnAddIfCriticalErrorOccursAndLogItAsync(
             int crititicalStatusCode)
         {
@@ -70,7 +70,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
             LabArtifact someArtifact = CreateRandomArtifact();
             string randomMessage = GetRandomString();
 
-            var requestFailedException = 
+            var requestFailedException =
                 new RequestFailedException(
                     crititicalStatusCode,
                     randomMessage);
@@ -104,6 +104,55 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(
                     expectedArtifactDependencyException))),
+                        Times.Once);
+
+            this.artifactBroker.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfLabArtifactAlreadyExistsAndLogItAsync()
+        {
+            // given
+            LabArtifact someLabArtifact = CreateRandomArtifact();
+
+            string randomMessage = GetRandomString();
+
+            var requestFailedConflictException =
+                new RequestFailedException(
+                    (int)HttpStatusCode.Conflict,
+                    randomMessage);
+
+            var alreadyExistsLabArtifactException =
+                new AlreadyExistsLabArtifactException(requestFailedConflictException);
+
+            var expectedLabArtifactDependencyValidationException =
+                new LabArtifactDependencyValidationException(alreadyExistsLabArtifactException);
+
+            this.artifactBroker.Setup(broker =>
+                broker.UploadLabArtifactAsync(It.IsAny<LabArtifact>()))
+                    .Throws(requestFailedConflictException);
+
+            // when
+            ValueTask addLabArtifactTask =
+                this.labArtifactService.AddLabArtifactAsync(someLabArtifact);
+
+            LabArtifactDependencyValidationException actualLabArtifactDependencyValidationException =
+                await Assert.ThrowsAsync<LabArtifactDependencyValidationException>(
+                    addLabArtifactTask.AsTask);
+
+            // then
+            actualLabArtifactDependencyValidationException.Should().BeEquivalentTo(
+                expectedLabArtifactDependencyValidationException);
+
+            this.artifactBroker.Verify(broker =>
+                broker.UploadLabArtifactAsync(
+                    It.IsAny<LabArtifact>()),
+                        Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedLabArtifactDependencyValidationException))),
                         Times.Once);
 
             this.artifactBroker.VerifyNoOtherCalls();
