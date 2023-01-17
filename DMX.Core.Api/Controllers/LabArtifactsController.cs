@@ -38,14 +38,14 @@ namespace DMX.Core.Api.Controllers
         {
             try
             {
-                var memoryStream = new MemoryStream();
-                await Request.Body.CopyToAsync(memoryStream);
-                memoryStream.Position = 0;
+                //var memoryStream = new MemoryStream();
+                //await Request.Body.CopyToAsync(memoryStream);
+                //memoryStream.Position = 0;
 
                 var labArtifact = new LabArtifact
                 {
                     Name = streamName,
-                    Content = memoryStream
+                    Content = Request.Body
                 };
 
                 await this.labArtifactService.AddLabArtifactAsync(labArtifact);
