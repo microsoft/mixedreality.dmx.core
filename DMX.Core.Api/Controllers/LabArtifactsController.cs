@@ -8,7 +8,6 @@ using System.Web.Http;
 using DMX.Core.Api.Models.Foundations.LabArtifacts;
 using DMX.Core.Api.Models.Foundations.LabArtifacts.Exceptions;
 using DMX.Core.Api.Services.Foundations.LabArtifacts;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
@@ -26,10 +25,10 @@ namespace DMX.Core.Api.Controllers
     [Route("api/[controller]")]
     public class LabArtifactsController : RESTFulController
     {
-        private readonly ILabArtifactService ILabArtifactService;
+        private readonly ILabArtifactService labArtifactService;
 
-        public LabArtifactsController(ILabArtifactService ILabArtifactService) =>
-            this.ILabArtifactService = ILabArtifactService;
+        public LabArtifactsController(ILabArtifactService labArtifactService) =>
+            this.labArtifactService = labArtifactService;
 
         [HttpPost]
 #if RELEASE
@@ -49,9 +48,9 @@ namespace DMX.Core.Api.Controllers
                     Content = memoryStream
                 };
 
-                await this.ILabArtifactService.AddLabArtifactAsync(labArtifact);
+                await this.labArtifactService.AddLabArtifactAsync(labArtifact);
 
-                return Created(labArtifact.Name);
+                return Accepted();
             }
             catch (LabArtifactValidationException labArtifactValidationException)
             {
