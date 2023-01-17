@@ -26,10 +26,10 @@ namespace DMX.Core.Api.Controllers
     [Route("api/[controller]")]
     public class LabArtifactsController : RESTFulController
     {
-        private readonly ILabArtifactService ILabArtifactService;
+        private readonly ILabArtifactService labArtifactService;
 
-        public LabArtifactsController(ILabArtifactService ILabArtifactService) =>
-            this.ILabArtifactService = ILabArtifactService;
+        public LabArtifactsController(ILabArtifactService labArtifactService) =>
+            this.labArtifactService = labArtifactService;
 
         [HttpPost]
 #if RELEASE
@@ -49,7 +49,7 @@ namespace DMX.Core.Api.Controllers
                     Content = memoryStream
                 };
 
-                await this.ILabArtifactService.AddLabArtifactAsync(labArtifact);
+                await this.labArtifactService.AddLabArtifactAsync(labArtifact);
 
                 return Created(labArtifact.Name);
             }
