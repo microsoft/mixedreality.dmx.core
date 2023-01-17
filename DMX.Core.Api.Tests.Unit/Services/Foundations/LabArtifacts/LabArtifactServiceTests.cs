@@ -43,7 +43,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
             var memoryStream = new MemoryStream();
 
             filler.Setup()
-                .OnType<MemoryStream>()
+                .OnType<Stream>()
                     .Use(memoryStream);
 
             return filler;
