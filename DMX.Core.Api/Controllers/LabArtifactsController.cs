@@ -28,11 +28,11 @@ namespace DMX.Core.Api.Controllers
         public LabArtifactsController(ILabArtifactService labArtifactService) =>
             this.labArtifactService = labArtifactService;
 
-        [HttpPost]
+        [HttpPost("{streamName}")]
 #if RELEASE
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:PostLabArtifact")]
 #endif
-        public async ValueTask<ActionResult<string>> PostLabArtifactAsync([FromUri] string streamName)
+        public async ValueTask<ActionResult<string>> PostLabArtifactAsync(string streamName)
         {
             try
             {
