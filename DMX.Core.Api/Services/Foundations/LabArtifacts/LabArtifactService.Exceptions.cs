@@ -21,10 +21,6 @@ namespace DMX.Core.Api.Services.Foundations.LabArtifacts
             {
                 await returningFunction();
             }
-            catch (NullLabArtifactException nullLabArtifactException)
-            {
-                throw CreateAndLogValidationException(nullLabArtifactException);
-            }
             catch (InvalidLabArtifactException invalidLabArtifactException)
             {
                 throw CreateAndLogValidationException(invalidLabArtifactException);
