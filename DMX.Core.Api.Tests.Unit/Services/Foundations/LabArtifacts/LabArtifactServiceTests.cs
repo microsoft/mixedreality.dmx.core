@@ -9,6 +9,7 @@ using DMX.Core.Api.Brokers.Blobs;
 using DMX.Core.Api.Brokers.Loggings;
 using DMX.Core.Api.Models.Foundations.LabArtifacts;
 using DMX.Core.Api.Services.Foundations.LabArtifacts;
+using KellermanSoftware.CompareNetObjects;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -20,11 +21,13 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
         private readonly Mock<IBlobBroker> artifactBroker;
         private readonly Mock<ILoggingBroker> loggingBrokerMock;
         private readonly ILabArtifactService labArtifactService;
+        private readonly ICompareLogic compareLogic;
 
         public LabArtifactServiceTests()
         {
             this.artifactBroker = new Mock<IBlobBroker>();
             this.loggingBrokerMock = new Mock<ILoggingBroker>();
+            this.compareLogic = new CompareLogic();
 
             this.labArtifactService = new LabArtifactService(
                 artifactsBroker: this.artifactBroker.Object,
@@ -33,6 +36,14 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
 
         private static Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
+
+        private Expression<Func<LabArtifact, bool>> SameLabArtifactAs(LabArtifact expectedLabArtifact)
+        {
+            return actualLabArtifact =>
+                this.compareLogic.Compare(
+                    expectedLabArtifact,
+                    actualLabArtifact).AreEqual;
+        }
 
         private static LabArtifact CreateRandomArtifact() =>
             CreateArtifactFiller().Create();

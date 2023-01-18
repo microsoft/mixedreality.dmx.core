@@ -10,21 +10,11 @@ namespace DMX.Core.Api.Services.Foundations.LabArtifacts
 {
     public partial class LabArtifactService
     {
-        private static void ValidateLabArtifactOnAdd(LabArtifact labArtifact)
+        private static void ValidateLabArtifactPropertiesOnAdd(string labArtifactName, Stream labArtifactContent)
         {
-            ValidateLabArtifactIsNotNull(labArtifact);
-
             Validate(
-                (Rule: IsInvalid(labArtifact.Name), Parameter: nameof(LabArtifact.Name)),
-                (Rule: IsInvalid(labArtifact.Content), Parameter: nameof(LabArtifact.Content)));
-        }
-
-        private static void ValidateLabArtifactIsNotNull(LabArtifact labArtifact)
-        {
-            if (labArtifact is null)
-            {
-                throw new NullLabArtifactException();
-            }
+                (Rule: IsInvalid(labArtifactName), Parameter: nameof(LabArtifact.Name)),
+                (Rule: IsInvalid(labArtifactContent), Parameter: nameof(LabArtifact.Content)));
         }
 
         private static dynamic IsInvalid(string text) => new

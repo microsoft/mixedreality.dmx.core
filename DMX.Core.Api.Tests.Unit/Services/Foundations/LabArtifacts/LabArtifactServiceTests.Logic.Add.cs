@@ -21,13 +21,14 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
 
             // when
             await this.labArtifactService.AddLabArtifactAsync(
-                    labArtifactName: randomArtifact.Name,
-                    labArtifactContent: randomArtifact.Content);
+                    labArtifactName: inputArtifact.Name,
+                    labArtifactContent: inputArtifact.Content);
 
             // then
             this.artifactBroker.Verify(broker =>
-                broker.UploadLabArtifactAsync(inputArtifact),
-                    Times.Once);
+                broker.UploadLabArtifactAsync(
+                    It.Is(SameLabArtifactAs(uploadedArtifact))),
+                        Times.Once);
 
             this.artifactBroker.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

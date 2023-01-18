@@ -18,7 +18,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
         public async Task ShouldThrowValidationExceptionOnAddIfNullAndLogItAsync()
         {
             // given
-            LabArtifact nullArtifact = null;
+            string nullArtifactName = null;
+            Stream nullArtifactStream = null;
+
             var nullArtifactException = new NullLabArtifactException();
 
             var exptectedArtifactValidationException =
@@ -26,7 +28,7 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
 
             // when
             ValueTask addArtifactTask =
-                this.labArtifactService.AddLabArtifactAsync(nullArtifact);
+                this.labArtifactService.AddLabArtifactAsync(nullArtifactName, nullArtifactStream);
 
             LabArtifactValidationException actualArtifactValidationException =
                 await Assert.ThrowsAsync<LabArtifactValidationException>(
