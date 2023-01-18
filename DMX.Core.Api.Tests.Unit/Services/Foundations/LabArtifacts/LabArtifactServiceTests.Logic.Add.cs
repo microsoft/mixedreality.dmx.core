@@ -20,7 +20,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
             LabArtifact uploadedArtifact = inputArtifact;
 
             // when
-            await this.labArtifactService.AddLabArtifactAsync(inputArtifact);
+            await this.labArtifactService.AddLabArtifactAsync(
+                    labArtifactName: randomArtifact.Name,
+                    labArtifactContent: randomArtifact.Content);
 
             // then
             this.artifactBroker.Verify(broker =>

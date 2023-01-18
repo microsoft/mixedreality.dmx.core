@@ -2,10 +2,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
-using System.IO;
 using System.Threading.Tasks;
 using System.Web.Http;
-using DMX.Core.Api.Models.Foundations.LabArtifacts;
 using DMX.Core.Api.Models.Foundations.LabArtifacts.Exceptions;
 using DMX.Core.Api.Services.Foundations.LabArtifacts;
 using Microsoft.AspNetCore.Mvc;
@@ -38,17 +36,9 @@ namespace DMX.Core.Api.Controllers
         {
             try
             {
-                //var memoryStream = new MemoryStream();
-                //await Request.Body.CopyToAsync(memoryStream);
-                //memoryStream.Position = 0;
-
-                var labArtifact = new LabArtifact
-                {
-                    Name = streamName,
-                    Content = Request.Body
-                };
-
-                await this.labArtifactService.AddLabArtifactAsync(labArtifact);
+                await this.labArtifactService.AddLabArtifactAsync(
+                    labArtifactName: streamName,
+                    labArtifactContent: Request.Body);
 
                 return Accepted();
             }

@@ -22,10 +22,15 @@ namespace DMX.Core.Api.Services.Foundations.LabArtifacts
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask AddLabArtifactAsync(LabArtifact labArtifact) =>
+        public ValueTask AddLabArtifactAsync(string labArtifactName, Stream labArtifactContent) =>
         TryCatch(async () =>
         {
             ValidateLabArtifactOnAdd(labArtifact);
+            var labArtifact = new LabArtifact
+            {
+                Name = labArtifactName,
+                Content = labArtifactContent
+            };
 
             await this.artifactsBroker.UploadLabArtifactAsync(labArtifact);
         });

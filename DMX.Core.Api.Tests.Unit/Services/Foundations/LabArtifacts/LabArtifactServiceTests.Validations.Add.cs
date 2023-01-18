@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System.IO;
 using System.Threading.Tasks;
 using DMX.Core.Api.Models.Foundations.LabArtifacts;
 using DMX.Core.Api.Models.Foundations.LabArtifacts.Exceptions;
@@ -56,11 +57,8 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
             string invalidString)
         {
             // given
-            var invalidArtifact = new LabArtifact
-            {
-                Name = invalidString,
-                Content = null
-            };
+            string invalidLabArtifactName = invalidString;
+            Stream invalidLabArtifactContent = null;
 
             var invalidArtifactException = new InvalidLabArtifactException();
 
@@ -77,7 +75,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
 
             // when
             ValueTask addArtifactTask =
-                this.labArtifactService.AddLabArtifactAsync(invalidArtifact);
+                this.labArtifactService.AddLabArtifactAsync(
+                    invalidLabArtifactName,
+                    invalidLabArtifactContent);
 
             LabArtifactValidationException actualArtifactValidationException =
                 await Assert.ThrowsAsync<LabArtifactValidationException>(

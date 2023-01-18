@@ -36,7 +36,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
 
             // when
             ValueTask uploadArtifactTask =
-                this.labArtifactService.AddLabArtifactAsync(someArtifact);
+                this.labArtifactService.AddLabArtifactAsync(
+                    labArtifactName: someArtifact.Name,
+                    labArtifactContent: someArtifact.Content);
 
             LabArtifactDependencyException actualArtifactDependencyException =
                 await Assert.ThrowsAsync<LabArtifactDependencyException>(
@@ -87,7 +89,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
 
             // when
             ValueTask uploadArtifactTask =
-                this.labArtifactService.AddLabArtifactAsync(someArtifact);
+                this.labArtifactService.AddLabArtifactAsync(
+                    labArtifactName: someArtifact.Name,
+                    labArtifactContent: someArtifact.Content);
 
             LabArtifactDependencyException actualArtifactDependencyException =
                 await Assert.ThrowsAsync<LabArtifactDependencyException>(
@@ -135,7 +139,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
 
             // when
             ValueTask addLabArtifactTask =
-                this.labArtifactService.AddLabArtifactAsync(someLabArtifact);
+                this.labArtifactService.AddLabArtifactAsync(
+                    labArtifactName: someLabArtifact.Name,
+                    labArtifactContent: someLabArtifact.Content);
 
             LabArtifactDependencyValidationException actualLabArtifactDependencyValidationException =
                 await Assert.ThrowsAsync<LabArtifactDependencyValidationException>(
@@ -179,7 +185,9 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
 
             // when
             ValueTask addArtifactTask =
-                this.labArtifactService.AddLabArtifactAsync(someArtifact);
+                this.labArtifactService.AddLabArtifactAsync(
+                    labArtifactName: someArtifact.Name,
+                    labArtifactContent: someArtifact.Content);
 
             LabArtifactServiceException actualArtifactServiceException =
                 await Assert.ThrowsAsync<LabArtifactServiceException>(
