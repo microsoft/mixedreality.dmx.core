@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ---------------------------------------------------------------
 
+using System.IO;
 using System.Threading.Tasks;
 using DMX.Core.Api.Brokers.Blobs;
 using DMX.Core.Api.Brokers.Loggings;
@@ -22,10 +23,16 @@ namespace DMX.Core.Api.Services.Foundations.LabArtifacts
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask AddLabArtifactAsync(LabArtifact labArtifact) =>
+        public ValueTask AddLabArtifactAsync(string labArtifactName, Stream labArtifactContent) =>
         TryCatch(async () =>
         {
-            ValidateLabArtifactOnAdd(labArtifact);
+            ValidateLabArtifactPropertiesOnAdd(labArtifactName, labArtifactContent);
+
+            var labArtifact = new LabArtifact
+            {
+                Name = labArtifactName,
+                Content = labArtifactContent
+            };
 
             await this.artifactsBroker.UploadLabArtifactAsync(labArtifact);
         });

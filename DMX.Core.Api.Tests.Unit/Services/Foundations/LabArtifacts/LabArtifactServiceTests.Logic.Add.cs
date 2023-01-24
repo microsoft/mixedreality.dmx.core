@@ -20,12 +20,15 @@ namespace DMX.Core.Api.Tests.Unit.Services.Foundations.LabArtifacts
             LabArtifact uploadedArtifact = inputArtifact;
 
             // when
-            await this.labArtifactService.AddLabArtifactAsync(inputArtifact);
+            await this.labArtifactService.AddLabArtifactAsync(
+                    labArtifactName: inputArtifact.Name,
+                    labArtifactContent: inputArtifact.Content);
 
             // then
             this.artifactBroker.Verify(broker =>
-                broker.UploadLabArtifactAsync(inputArtifact),
-                    Times.Once);
+                broker.UploadLabArtifactAsync(
+                    It.Is(SameLabArtifactAs(uploadedArtifact))),
+                        Times.Once);
 
             this.artifactBroker.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
